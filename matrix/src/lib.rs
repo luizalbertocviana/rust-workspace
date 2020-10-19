@@ -35,4 +35,19 @@ mod tests {
         assert_eq!(*m.at(2, 2), true);
         assert_eq!(*m.at(1, 1), false);
     }
+
+    #[test]
+    fn upper_triangular_matrix_instantiation(){
+        let mut m: UpperTriangularMatrix<bool> = UpperTriangularMatrix::new(4);
+
+        assert_eq!(m.num_rows(), 4);
+        assert_eq!(m.num_cols(), 4);
+
+        *m.at(2, 2) = true;
+        assert_eq!(*m.at(2, 2), true);
+
+        assert_eq!(*m.at(3, 3), false);
+        *m.at(3, 3) = true;
+        assert_eq!(*m.at(3, 3), true);
+    }
 }
