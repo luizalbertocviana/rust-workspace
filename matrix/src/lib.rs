@@ -2,6 +2,7 @@ mod matrix;
 pub use crate::matrix::Matrix;
 
 mod triangular_matrix;
+pub use crate::triangular_matrix::UpperTriangularMatrix;
 
 #[cfg(test)]
 mod tests {
