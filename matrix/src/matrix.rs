@@ -36,6 +36,10 @@ impl<T> Matrix<T> {
         &mut self.data[position]
     }
 
+    pub fn const_at(&self, i: usize, j: usize) -> &T {
+        &self.data[self.index(i, j)]
+    }
+
     fn index(&self, i: usize, j: usize) -> usize {
         self.num_cols() * i + j
     }
