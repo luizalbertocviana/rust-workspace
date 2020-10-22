@@ -4,6 +4,7 @@ mod graph;
 pub use crate::digraph::Digraph;
 pub use crate::graph::Graph;
 
+type Result<'a> = std::result::Result<(), &'a str>;
 
 #[cfg(test)]
 mod tests {
