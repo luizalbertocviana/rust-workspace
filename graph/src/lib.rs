@@ -11,7 +11,7 @@ mod tests {
     use super::*;
     
     #[test]
-    fn digraph_instantiation() {
+    fn digraph_test() {
         let mut d = Digraph::new(6);
 
         assert_eq!(d.num_verts(), 6);
