@@ -1,4 +1,5 @@
 mod digraph;
+mod graph;
 
 use crate::digraph::Digraph;
 
