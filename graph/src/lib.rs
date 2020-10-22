@@ -1,7 +1,9 @@
 mod digraph;
 mod graph;
 
-use crate::digraph::Digraph;
+pub use crate::digraph::Digraph;
+pub use crate::graph::Graph;
+
 
 #[cfg(test)]
 mod tests {
