@@ -1,5 +1,7 @@
 use matrix::Matrix;
 
+use crate::Result;
+
 pub struct Digraph {
     data: Matrix<bool>,
 
@@ -33,9 +35,7 @@ impl Digraph {
 
 }
 
-type Result<'a> = std::result::Result<(), &'a str>;
-
-// modificators
+// modifiers
 impl Digraph {
     pub fn add_edge(&mut self, i: usize, j: usize) -> Result {
         if self.has_edge(i, j) {
