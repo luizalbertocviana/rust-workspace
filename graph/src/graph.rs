@@ -19,6 +19,18 @@ impl Graph {
 
         Self {data, num_verts, num_edges}
     }
+
+    pub fn complete(num_verts: usize) -> Self {
+        let mut g = Self::new(num_verts);
+
+        for u in 0..num_verts - 1 {
+            for v in u + 1..num_verts {
+                g.add_edge(u, v).unwrap();
+            }
+        }
+
+        g
+    }
 }
 
 fn adjust_endpoints(i: &mut usize, j: &mut usize) {
