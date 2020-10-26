@@ -61,4 +61,57 @@ mod tests {
         assert_eq!(g.has_edge(5, 3), false);
         assert!(g.remove_edge(5, 3).is_err());
     }
+
+    #[test]
+    fn subgraph_test() {
+        let g = Graph::complete(5);
+
+        assert_eq!(g.num_verts(), 5);
+        assert_eq!(g.num_edges(), 10);
+
+        let mut sg = Subgraph::from_graph(&g);
+
+        assert_eq!(sg.num_verts(), 5);
+        assert_eq!(sg.num_edges(), 10);
+
+        assert_eq!(g.has_edge(1, 2), true);
+        assert_eq!(sg.has_edge(1, 2), true);
+
+        sg.remove_edge(1,2).unwrap();
+
+        assert_eq!(g.has_edge(1, 2), true);
+        assert_eq!(sg.has_edge(1, 2), false);
+        assert_eq!(sg.remove_edge(1, 2).is_err(), true);
+
+        sg.add_edge(1, 2).unwrap();
+
+        assert_eq!(g.has_edge(1, 2), true);
+        assert_eq!(sg.has_edge(1, 2), true);
+        assert_eq!(sg.add_edge(1, 2).is_err(), true);
+
+        let g = Graph::new(10);
+
+        assert_eq!(g.num_verts(), 10);
+        assert_eq!(g.num_edges(), 0);
+
+        let mut sg = Subgraph::from_graph(&g);
+
+        assert_eq!(sg.num_verts(), 10);
+        assert_eq!(sg.num_edges(), 0);
+
+        assert_eq!(g.has_edge(1, 2), false);
+        assert_eq!(sg.has_edge(1, 2), false);
+
+        sg.add_edge(1,2).unwrap();
+
+        assert_eq!(g.has_edge(1, 2), false);
+        assert_eq!(sg.has_edge(1, 2), true);
+        assert_eq!(sg.add_edge(1, 2).is_err(), true);
+
+        sg.remove_edge(1, 2).unwrap();
+
+        assert_eq!(g.has_edge(1, 2), false);
+        assert_eq!(sg.has_edge(1, 2), false);
+        assert_eq!(sg.remove_edge(1, 2).is_err(), true);
+    }
 }
