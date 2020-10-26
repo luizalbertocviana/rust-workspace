@@ -1,8 +1,10 @@
 mod digraph;
 mod graph;
+mod subgraph;
 
 pub use crate::digraph::Digraph;
 pub use crate::graph::Graph;
+pub use crate::subgraph::Subgraph;
 
 type Result<'a> = std::result::Result<(), &'a str>;
 
