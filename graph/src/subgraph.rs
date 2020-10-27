@@ -20,6 +20,13 @@ impl<'a> Subgraph<'a> {
 
         Self {parent, included_edges, removed_edges}
     }
+    pub fn from_subgraph(parent: &Self) -> Self {
+        let included_edges = parent.included_edges.clone();
+        let removed_edges = parent.removed_edges.clone();
+        let parent = parent.parent;
+
+        Self {parent, included_edges, removed_edges}
+    }
 }
 
 // accessors
