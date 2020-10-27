@@ -1,5 +1,5 @@
 [workspace]
 
 members = [
-        "matrix", "graph"
+        "matrix", "graph", "branch-bound"
 ]
