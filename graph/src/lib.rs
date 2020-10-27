@@ -113,5 +113,15 @@ mod tests {
         assert_eq!(g.has_edge(1, 2), false);
         assert_eq!(sg.has_edge(1, 2), false);
         assert_eq!(sg.remove_edge(1, 2).is_err(), true);
+
+        let mut sg2 = Subgraph::from_subgraph(&sg);
+
+        assert_eq!(sg2.remove_edge(1, 2).is_err(), true);
+
+        sg2.add_edge(1, 2).unwrap();
+
+        assert_eq!(g.has_edge(1, 2), false);
+        assert_eq!(sg.has_edge(1, 2), false);
+        assert_eq!(sg2.has_edge(1, 2), true);
     }
 }
