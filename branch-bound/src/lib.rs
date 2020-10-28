@@ -1,21 +1,24 @@
+mod solving_status;
 mod traits;
 
-use crate::traits::{BBProblem, Solution};
+pub use crate::traits::{BBProblem, Solution, SolutionCost};
+use crate::solving_status::SolvingStatus;
 
-fn branch_and_bound<T: BBProblem>(problem: &T) -> T::Sol {
+type Result<'a> = std::result::Result<(), &'a str>;
+
+pub fn branch_and_bound<T: BBProblem>(problem: &T) -> T::Sol {
     let root_relaxed_solution = problem.solve_relaxation();
 
     if root_relaxed_solution.is_feasible() {
         root_relaxed_solution
     }
     else {
-        type SolutionCost<T> = <<T as BBProblem>::Sol as Solution>::SolutionCost;
+        let mut status: SolvingStatus<T> = SolvingStatus::new();
+        status.set_lower_bound(root_relaxed_solution.get_cost()).unwrap();
 
-        let lower_bound: SolutionCost<T>  = root_relaxed_solution.get_cost();
-        let upper_bound: Option<SolutionCost<T>> = None;
+        let subproblems = problem.get_subproblems();
 
-        while upper_bound.is_none() || lower_bound < upper_bound.unwrap_or() {
-
+        while !status.finished() {
         }
 
         root_relaxed_solution
