@@ -19,8 +19,8 @@ pub trait Solution {
 
 pub trait BBProblem {
     type Sol: Solution;
-    type SubproblemIterator: Iterator;
-    
+    type SubproblemIterator: Iterator<Item = Box<Self>>;
+
     fn solve_relaxation(&self) -> Self::Sol;
 
     fn get_subproblems(&self) -> Self::SubproblemIterator;
