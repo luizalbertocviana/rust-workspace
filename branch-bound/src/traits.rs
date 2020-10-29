@@ -25,3 +25,11 @@ pub trait BBProblem {
 
     fn get_subproblems(&self) -> Self::SubproblemIterator;
 }
+
+pub trait ProblemPool {
+    type Prob: BBProblem;
+
+    fn new() -> Self;
+    fn add(&mut self, p: Self::Prob);
+    fn extract(&mut self) -> Option<Self::Prob>;
+}
