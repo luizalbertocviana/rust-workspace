@@ -1,28 +1,36 @@
-mod solving_status;
 mod traits;
 
-pub use crate::traits::{BBProblem, Solution, SolutionCost};
-use crate::solving_status::SolvingStatus;
+pub use crate::traits::{ProblemPool, BBProblem, Solution, SolutionCost};
 
-type Result<'a> = std::result::Result<(), &'a str>;
+// type Result<'a> = std::result::Result<(), &'a str>;
 
-pub fn branch_and_bound<T: BBProblem>(problem: &T) -> T::Sol {
-    let root_relaxed_solution = problem.solve_relaxation();
+pub fn branch_and_bound<T: BBProblem, P: ProblemPool<Prob = T>>(problem: T) -> Option<T::Sol> {
+    let mut unsolved_problems = P::new();
+    unsolved_problems.add(problem);
 
-    if root_relaxed_solution.is_feasible() {
-        root_relaxed_solution
-    }
-    else {
-        let mut status: SolvingStatus<T> = SolvingStatus::new();
-        status.set_lower_bound(root_relaxed_solution.get_cost()).unwrap();
+    let mut best_solution: Option<T::Sol> = None;
 
-        let subproblems = problem.get_subproblems();
+    while let Some(problem) = unsolved_problems.extract() {
+        let solution = problem.solve_relaxation();
 
-        while !status.finished() {
+        if solution.is_feasible() {
+            if let Some(sol) = &best_solution {
+                if solution.get_cost() < sol.get_cost() {
+                    best_solution = Some(solution);
+                }
+            }
+            else {
+                best_solution = Some(solution);
+            }
         }
-
-        root_relaxed_solution
+        else {
+            for subp in problem.get_subproblems() {
+                unsolved_problems.add(*subp);
+            }
+        }
     }
+
+    best_solution
 }
 
 #[cfg(test)]
