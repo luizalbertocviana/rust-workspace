@@ -2,7 +2,7 @@ pub trait Variable {
     type ValueType;
 }
 
-pub trait SolutionCost: PartialOrd {
+pub trait SolutionCost: Ord {
     fn max_value() -> Self;
     fn min_value() -> Self;
 }
