@@ -1,3 +1,9 @@
+type Var<T> = <T as Solution>::Var;
+type ValType<T> = <Var<T> as Variable>::ValueType;
+
+type Prob<T> = <T as RelaxedProblemPool>::Prob;
+type Sol<T> = <Prob<T> as BBProblem>::Sol;
+
 pub trait Variable {
     type ValueType;
 }
