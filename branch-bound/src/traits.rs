@@ -32,10 +32,12 @@ pub trait BBProblem {
     fn get_subproblems(&self) -> Self::SubproblemIterator;
 }
 
-pub trait ProblemPool {
+pub trait RelaxedProblemPool {
     type Prob: BBProblem;
 
     fn new() -> Self;
-    fn add(&mut self, p: Self::Prob);
-    fn extract(&mut self) -> Option<Self::Prob>;
+    fn add(&mut self, p: Self::Prob, s: Sol<Self>);
+    fn empty(&self) -> bool;
+    fn extract(&mut self) -> Option<(Self::Prob, Sol<Self>)>;
+    fn min_relaxed_solution(&self) -> Option<&Sol<Self>>;
 }
