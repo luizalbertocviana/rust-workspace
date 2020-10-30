@@ -1,36 +1,53 @@
+mod solving_status;
 mod traits;
 
-pub use crate::traits::{ProblemPool, BBProblem, Solution, SolutionCost};
+pub use crate::traits::{BBProblem, RelaxedProblemPool, Solution, SolutionCost};
 
-// type Result<'a> = std::result::Result<(), &'a str>;
+use crate::solving_status::SolvingStatus;
 
-pub fn branch_and_bound<T: BBProblem, P: ProblemPool<Prob = T>>(problem: T) -> Option<T::Sol> {
-    let mut unsolved_problems = P::new();
-    unsolved_problems.add(problem);
+type Result<'a> = std::result::Result<(), &'a str>;
 
-    let mut best_solution: Option<T::Sol> = None;
+pub fn branch_and_bound<T: BBProblem, P: RelaxedProblemPool<Prob = T>>(
+    problem: T,
+) -> Option<T::Sol> {
+    let mut relaxed_problems = P::new();
+    let root_relaxed_sol = problem.solve_relaxation();
 
-    while let Some(problem) = unsolved_problems.extract() {
-        let solution = problem.solve_relaxation();
+    relaxed_problems.add(problem, root_relaxed_sol);
 
-        if solution.is_feasible() {
-            if let Some(sol) = &best_solution {
-                if solution.get_cost() < sol.get_cost() {
-                    best_solution = Some(solution);
+    let mut status: SolvingStatus<T> = SolvingStatus::new();
+
+    while !status.finished() && !relaxed_problems.empty() {
+        if let Some((problem, relaxed_sol)) = relaxed_problems.extract() {
+            if relaxed_sol.is_feasible() {
+                if let Some(best_sol) = status.best_solution() {
+                    if relaxed_sol.get_cost() < best_sol.get_cost() {
+                        status.set_best_solution(relaxed_sol);
+                    }
+                } else {
+                    status.set_best_solution(relaxed_sol);
+                }
+            } else {
+                for subproblem in problem.get_subproblems() {
+                    let relaxed_sol = subproblem.solve_relaxation();
+
+                    if let Some(best_sol) = status.best_solution() {
+                        if relaxed_sol.get_cost() <= best_sol.get_cost() {
+                            relaxed_problems.add(*subproblem, relaxed_sol);
+                        }
+                    } else {
+                        relaxed_problems.add(*subproblem, relaxed_sol);
+                    }
                 }
             }
-            else {
-                best_solution = Some(solution);
-            }
         }
-        else {
-            for subp in problem.get_subproblems() {
-                unsolved_problems.add(*subp);
-            }
+
+        if let Some(min_relax_sol) = relaxed_problems.min_relaxed_solution() {
+            status.set_lower_bound(min_relax_sol.get_cost());
         }
     }
 
-    best_solution
+    status.extract_best_solution()
 }
 
 #[cfg(test)]
