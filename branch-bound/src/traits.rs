@@ -20,7 +20,7 @@ pub trait Solution {
     fn is_feasible(&self) -> bool;
 
     fn get_cost(&self) -> Self::SolCost;
-    fn get_value(var: &Self::Var) -> <<Self as Solution>::Var as Variable>::ValueType;
+    fn get_value(var: &Self::Var) -> ValType<Self>;
 }
 
 pub trait BBProblem {
