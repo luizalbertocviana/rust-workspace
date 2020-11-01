@@ -32,3 +32,5 @@
 /graph/src/.#digraph.rs
 /graph/src/.#graph.rs
 /graph/src/.#subgraph.rs
+/branch-bound/src/.#lib.rs
+/branch-bound/src/.#traits.rs
