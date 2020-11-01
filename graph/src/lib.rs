@@ -11,7 +11,7 @@ type Result<'a> = std::result::Result<(), &'a str>;
 #[cfg(test)]
 mod tests {
     use super::*;
-    
+
     #[test]
     fn digraph_test() {
         let mut d = Digraph::new(6);
@@ -77,7 +77,7 @@ mod tests {
         assert_eq!(g.has_edge(1, 2), true);
         assert_eq!(sg.has_edge(1, 2), true);
 
-        sg.remove_edge(1,2).unwrap();
+        sg.remove_edge(1, 2).unwrap();
 
         assert_eq!(g.has_edge(1, 2), true);
         assert_eq!(sg.has_edge(1, 2), false);
@@ -102,7 +102,7 @@ mod tests {
         assert_eq!(g.has_edge(1, 2), false);
         assert_eq!(sg.has_edge(1, 2), false);
 
-        sg.add_edge(1,2).unwrap();
+        sg.add_edge(1, 2).unwrap();
 
         assert_eq!(g.has_edge(1, 2), false);
         assert_eq!(sg.has_edge(1, 2), true);

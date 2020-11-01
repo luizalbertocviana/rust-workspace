@@ -8,7 +8,7 @@ pub struct Graph {
     data: UpperTriangularMatrix<bool>,
 
     num_verts: usize,
-    num_edges: usize
+    num_edges: usize,
 }
 
 // constructors
@@ -17,7 +17,11 @@ impl Graph {
         let data = UpperTriangularMatrix::new(num_verts);
         let num_edges = 0;
 
-        Self {data, num_verts, num_edges}
+        Self {
+            data,
+            num_verts,
+            num_edges,
+        }
     }
 
     pub fn complete(num_verts: usize) -> Self {
@@ -61,10 +65,9 @@ impl Graph {
     pub fn add_edge(&mut self, mut i: usize, mut j: usize) -> Result {
         adjust_endpoints(&mut i, &mut j);
 
-        if self.has_edge(i, j){
+        if self.has_edge(i, j) {
             Err("Graph: attempting to add an existent edge")
-        }
-        else{
+        } else {
             *self.data.at(i, j) = true;
             self.num_edges += 1;
 
@@ -80,8 +83,7 @@ impl Graph {
             self.num_edges -= 1;
 
             Ok(())
-        }
-        else {
+        } else {
             Err("Graph: attempting to remove a nonexistent edge")
         }
     }

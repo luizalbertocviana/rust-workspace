@@ -6,16 +6,20 @@ pub struct Digraph {
     data: Matrix<bool>,
 
     num_verts: usize,
-    num_edges: usize
+    num_edges: usize,
 }
 
 // constructors
 impl Digraph {
-    pub fn new(num_verts: usize) -> Self{
+    pub fn new(num_verts: usize) -> Self {
         let data = Matrix::square(num_verts);
         let num_edges = 0;
 
-        Self {data, num_verts, num_edges}
+        Self {
+            data,
+            num_verts,
+            num_edges,
+        }
     }
 }
 
@@ -32,7 +36,6 @@ impl Digraph {
     pub fn has_edge(&self, i: usize, j: usize) -> bool {
         *self.data.const_at(i, j)
     }
-
 }
 
 // modifiers
@@ -40,8 +43,7 @@ impl Digraph {
     pub fn add_edge(&mut self, i: usize, j: usize) -> Result {
         if self.has_edge(i, j) {
             Err("Digraph: attempting to add existent edge")
-        }
-        else {
+        } else {
             *self.data.at(i, j) = true;
             self.num_edges += 1;
 
@@ -55,8 +57,7 @@ impl Digraph {
             self.num_edges -= 1;
 
             Ok(())
-        }
-        else {
+        } else {
             Err("Digraph: attempting to remove nonexistent edge")
         }
     }
