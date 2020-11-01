@@ -1,5 +1,5 @@
-use crate::Result;
 use crate::traits::{BBProblem, Solution};
+use crate::Result;
 
 type Sol<T> = <T as BBProblem>::Sol;
 type SolCost<T> = <Sol<T> as Solution>::SolCost;
@@ -7,16 +7,19 @@ type SolCost<T> = <Sol<T> as Solution>::SolCost;
 pub struct SolvingStatus<T: BBProblem> {
     lower_bound: Option<SolCost<T>>,
 
-    best_solution: Option<Sol<T>>
+    best_solution: Option<Sol<T>>,
 }
 
 // constructors
 impl<T: BBProblem> SolvingStatus<T> {
     pub fn new() -> Self {
-        let lower_bound   = None;
+        let lower_bound = None;
         let best_solution = None;
 
-        Self {lower_bound, best_solution}
+        Self {
+            lower_bound,
+            best_solution,
+        }
     }
 }
 
@@ -26,7 +29,7 @@ impl<T: BBProblem> SolvingStatus<T> {
         match (&self.lower_bound, &self.best_solution) {
             (None, _) => false,
             (_, None) => false,
-            (Some(lb), Some(sol)) => *lb == sol.get_cost()
+            (Some(lb), Some(sol)) => *lb == sol.get_cost(),
         }
     }
 
@@ -45,14 +48,12 @@ impl<T: BBProblem> SolvingStatus<T> {
         if let Some(sol) = &self.best_solution {
             if lb > sol.get_cost() {
                 Err("SolvingStatus: attempt to set a lower bound greater than current upper bound")
-            }
-            else {
+            } else {
                 self.lower_bound.replace(lb);
 
                 Ok(())
             }
-        }
-        else {
+        } else {
             self.lower_bound.replace(lb);
 
             Ok(())
@@ -65,12 +66,10 @@ impl<T: BBProblem> SolvingStatus<T> {
                 self.best_solution.replace(sol);
 
                 Ok(())
-            }
-            else {
+            } else {
                 Err("SolvingStatus: attempt to set a solution worse than current best solution")
             }
-        }
-        else {
+        } else {
             self.best_solution.replace(sol);
 
             Ok(())

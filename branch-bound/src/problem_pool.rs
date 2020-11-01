@@ -6,7 +6,7 @@ type SolCost<T> = <Sol<T> as Solution>::SolCost;
 type QueuedProblem<T: BBProblem> = (T, Option<Sol<T>>);
 
 pub struct ProblemPool<T: BBProblem> {
-    problems: Vec<QueuedProblem<T>>
+    problems: Vec<QueuedProblem<T>>,
 }
 
 // constructors
@@ -14,14 +14,15 @@ impl<T: BBProblem> ProblemPool<T> {
     pub fn new() -> Self {
         let problems = Vec::new();
 
-        Self {problems}
+        Self { problems }
     }
 }
 
 // accessors
 impl<T: BBProblem> ProblemPool<T> {
     pub fn min_solution_cost(&self) -> Option<SolCost<T>> {
-        self.problems.iter()
+        self.problems
+            .iter()
             .filter(|(_prb, sol)| sol.is_some())
             .map(|(_prb, sol)| sol.as_ref().unwrap().get_cost())
             .min()
