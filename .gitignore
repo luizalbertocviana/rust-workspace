@@ -34,3 +34,5 @@
 /graph/src/.#subgraph.rs
 /branch-bound/src/.#lib.rs
 /branch-bound/src/.#traits.rs
+/disjoint-set/src/.#disjoint_set.rs
+/disjoint-set/src/.#lib.rs
