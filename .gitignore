@@ -27,3 +27,8 @@
 /branch-bound/#%20markdown-code-fontification%3Arustic-mode#vEd0gJ#
 /branch-bound/src/solving_status.rs~
 /branch-bound/src/problem_pool.rs~
+/disjoint-set/src/disjoint_set.rs~
+/disjoint-set/src/lib.rs~
+/graph/src/.#digraph.rs
+/graph/src/.#graph.rs
+/graph/src/.#subgraph.rs
