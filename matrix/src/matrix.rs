@@ -3,7 +3,7 @@ pub struct Matrix<T> {
     num_cols: usize,
 
     data: Vec<T>,
-}   
+}
 
 // constructors
 impl<T: Clone + Default> Matrix<T> {
@@ -12,7 +12,11 @@ impl<T: Clone + Default> Matrix<T> {
 
         data.resize(num_rows * num_cols, Default::default());
 
-        Self {num_rows, num_cols, data}
+        Self {
+            num_rows,
+            num_cols,
+            data,
+        }
     }
 
     pub fn square(dimension: usize) -> Self {
@@ -32,7 +36,7 @@ impl<T> Matrix<T> {
 
     pub fn at(&mut self, i: usize, j: usize) -> &mut T {
         let position = self.index(i, j);
-        
+
         &mut self.data[position]
     }
 

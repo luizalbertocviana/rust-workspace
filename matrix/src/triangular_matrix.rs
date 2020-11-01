@@ -5,8 +5,8 @@ use crate::matrix::Matrix;
 pub struct UpperTriangularMatrix<T> {
     dimension: usize,
     number_rows: usize,
-    
-    data: Matrix<T>
+
+    data: Matrix<T>,
 }
 
 // constructors
@@ -15,7 +15,11 @@ impl<T: Clone + Default> UpperTriangularMatrix<T> {
         let number_rows = (dimension / 2) + (dimension % 2);
         let data = Matrix::new(number_rows, dimension + 1);
 
-        Self {dimension, number_rows, data}
+        Self {
+            dimension,
+            number_rows,
+            data,
+        }
     }
 }
 
@@ -35,7 +39,12 @@ impl<T: Default> UpperTriangularMatrix<T> {
         let col_index = j;
         let dummy_t_member = Default::default();
 
-        Reference {parent, row_index, col_index, dummy_t_member}
+        Reference {
+            parent,
+            row_index,
+            col_index,
+            dummy_t_member,
+        }
     }
 
     pub fn const_at(&self, i: usize, j: usize) -> ConstReference<T> {
@@ -44,7 +53,12 @@ impl<T: Default> UpperTriangularMatrix<T> {
         let col_index = j;
         let dummy_t_member = Default::default();
 
-        ConstReference {parent, row_index, col_index, dummy_t_member}
+        ConstReference {
+            parent,
+            row_index,
+            col_index,
+            dummy_t_member,
+        }
     }
 }
 
@@ -53,9 +67,9 @@ impl<T: Default> UpperTriangularMatrix<T> {
 trait ElementReference {
     type Target;
 
-    fn parent(&self)        -> &UpperTriangularMatrix<Self::Target>;
-    fn row_index(&self)     -> usize;
-    fn col_index(&self)     -> usize;
+    fn parent(&self) -> &UpperTriangularMatrix<Self::Target>;
+    fn row_index(&self) -> usize;
+    fn col_index(&self) -> usize;
     fn dummy_element(&self) -> &Self::Target;
 }
 
@@ -65,7 +79,7 @@ pub struct Reference<'a, T> {
     row_index: usize,
     col_index: usize,
 
-    dummy_t_member: T
+    dummy_t_member: T,
 }
 
 impl<'a, T> ElementReference for Reference<'a, T> {
@@ -99,12 +113,10 @@ fn resolve_reference<T: ElementReference>(r: &T) -> &T::Target {
         let dummy_reference = r.dummy_element();
 
         dummy_reference
-    }
-    else {
+    } else {
         if row < parent.number_rows {
             parent.data.const_at(row, 1 + col)
-        }
-        else {
+        } else {
             parent.data.const_at((n - 1) - row, (n - 1) - col)
         }
     }
@@ -124,13 +136,13 @@ impl<'a, T> DerefMut for Reference<'a, T> {
 
         if self.row_index > self.col_index {
             &mut self.dummy_t_member
-        }
-        else {
+        } else {
             if self.row_index < self.parent.number_rows {
                 self.parent.data.at(self.row_index, 1 + self.col_index)
-            }
-            else {
-                self.parent.data.at((n - 1) - self.row_index, (n - 1) - self.col_index)
+            } else {
+                self.parent
+                    .data
+                    .at((n - 1) - self.row_index, (n - 1) - self.col_index)
             }
         }
     }
@@ -142,7 +154,7 @@ pub struct ConstReference<'a, T> {
     row_index: usize,
     col_index: usize,
 
-    dummy_t_member: T
+    dummy_t_member: T,
 }
 
 impl<'a, T> ElementReference for ConstReference<'a, T> {

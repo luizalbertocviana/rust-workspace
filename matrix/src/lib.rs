@@ -37,7 +37,7 @@ mod tests {
     }
 
     #[test]
-    fn upper_triangular_matrix_instantiation(){
+    fn upper_triangular_matrix_instantiation() {
         let mut m: UpperTriangularMatrix<bool> = UpperTriangularMatrix::new(4);
 
         assert_eq!(m.num_rows(), 4);
