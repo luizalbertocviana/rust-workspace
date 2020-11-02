@@ -1,10 +1,12 @@
 mod digraph;
 mod graph;
 mod subgraph;
+mod traits;
 
 pub use crate::digraph::Digraph;
 pub use crate::graph::Graph;
 pub use crate::subgraph::Subgraph;
+pub use crate::traits::GraphImpl;
 
 type Result<'a> = std::result::Result<(), &'a str>;
 type Edge = (usize, usize);
