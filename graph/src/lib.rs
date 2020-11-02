@@ -39,6 +39,11 @@ mod tests {
         assert_eq!(d.num_edges(), 2);
         assert_eq!(d.has_edge(5, 3), false);
         assert!(d.remove_edge(5, 3).is_err());
+
+        let mut it = d.edges();
+        assert_eq!(it.next(), Some((1,2)));
+        assert_eq!(it.next(), Some((3,5)));
+        assert_eq!(it.next(), None);
     }
 
     #[test]
