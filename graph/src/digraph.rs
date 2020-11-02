@@ -1,5 +1,8 @@
 use matrix::Matrix;
 
+use crate::traits::GraphImpl;
+
+use crate::Edge;
 use crate::Result;
 
 pub struct Digraph {
@@ -23,12 +26,20 @@ impl Digraph {
     }
 }
 
-// accessors
-impl Digraph {
-    pub fn num_verts(&self) -> usize {
+impl<'a> GraphImpl<'a> for Digraph {
+    type EdgeIterator = EdgeIterator<'a>;
+
+    fn num_verts(&self) -> usize {
         self.num_verts
     }
 
+    fn edges(&'a self) -> EdgeIterator<'a> {
+        EdgeIterator::new(self)
+    }
+}
+
+// accessors
+impl Digraph {
     pub fn num_edges(&self) -> usize {
         self.num_edges
     }
@@ -59,6 +70,67 @@ impl Digraph {
             Ok(())
         } else {
             Err("Digraph: attempting to remove nonexistent edge")
+        }
+    }
+}
+
+pub struct EdgeIterator<'a> {
+    parent: &'a Digraph,
+
+    current_i: usize,
+    current_j: usize,
+}
+
+// constructors
+impl<'a> EdgeIterator<'a> {
+    fn new(parent: &'a Digraph) -> Self {
+        let current_i = 0;
+        let current_j = 0;
+
+        Self {
+            parent,
+            current_i,
+            current_j,
+        }
+    }
+}
+
+// accessors
+impl<'a> EdgeIterator<'a> {
+    fn stop(&self) -> bool {
+        self.current_j == 0 && self.current_i == self.parent.num_verts()
+    }
+}
+
+// modifiers
+impl<'a> EdgeIterator<'a> {
+    fn next_pair(&mut self) {
+        self.current_j += 1;
+
+        if self.current_j == self.parent.num_verts() {
+            self.current_j = 0;
+
+            self.current_i += 1;
+        }
+    }
+}
+
+impl<'a> Iterator for EdgeIterator<'a> {
+    type Item = Edge;
+
+    fn next(&mut self) -> Option<Edge> {
+        if self.stop() {
+            None
+        } else {
+            let pair = (self.current_i, self.current_j);
+
+            self.next_pair();
+
+            if self.parent.has_edge(pair.0, pair.1) {
+                Some(pair)
+            } else {
+                self.next()
+            }
         }
     }
 }
