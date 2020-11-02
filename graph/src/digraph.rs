@@ -33,19 +33,16 @@ impl<'a> GraphImpl<'a> for Digraph {
         self.num_verts
     }
 
-    fn edges(&'a self) -> EdgeIterator<'a> {
-        EdgeIterator::new(self)
-    }
-}
-
-// accessors
-impl Digraph {
-    pub fn num_edges(&self) -> usize {
+    fn num_edges(&self) -> usize {
         self.num_edges
     }
 
-    pub fn has_edge(&self, i: usize, j: usize) -> bool {
+    fn has_edge(&self, i: usize, j: usize) -> bool {
         *self.data.const_at(i, j)
+    }
+
+    fn edges(&'a self) -> EdgeIterator<'a> {
+        EdgeIterator::new(self)
     }
 }
 
