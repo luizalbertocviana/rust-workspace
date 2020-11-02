@@ -7,6 +7,7 @@ pub use crate::graph::Graph;
 pub use crate::subgraph::Subgraph;
 
 type Result<'a> = std::result::Result<(), &'a str>;
+type Edge = (usize, usize);
 
 #[cfg(test)]
 mod tests {
