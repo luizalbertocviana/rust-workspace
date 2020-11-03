@@ -5,8 +5,12 @@ pub trait GraphImpl<'a> {
 
     fn num_verts(&self) -> usize;
     fn num_edges(&self) -> usize;
+
     fn has_edge(&self, u: usize, v: usize) -> bool;
     fn edges(&'a self) -> Self::EdgeIterator;
+
+    fn add_edge(&mut self, i: usize, j: usize) -> Result;
+    fn remove_edge(&mut self, i: usize, j: usize) -> Result;
 }
 
 pub trait EdgeIterable<'a> {
