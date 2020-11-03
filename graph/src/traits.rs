@@ -22,9 +22,9 @@ pub trait EdgeIterable<'a> {
     fn next_pair(&mut self);
 
     fn stop(&self) -> bool {
-        let (i, j) = self.current_pair();
+        let (i, _) = self.current_pair();
 
-        j == 0 && i == self.parent().num_verts()
+        i == self.parent().num_verts()
     }
 
     fn next_edge(&mut self) -> Option<Edge> {
