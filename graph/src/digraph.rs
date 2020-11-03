@@ -107,7 +107,6 @@ impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
 
         if self.current_j == self.parent.num_verts() {
             self.current_j = 0;
-
             self.current_i += 1;
         }
     }
