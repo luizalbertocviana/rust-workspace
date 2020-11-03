@@ -43,11 +43,8 @@ impl<'a> GraphImpl<'a> for Digraph {
     fn edges(&'a self) -> EdgeIterator<'a> {
         EdgeIterator::new(self)
     }
-}
 
-// modifiers
-impl Digraph {
-    pub fn add_edge(&mut self, i: usize, j: usize) -> Result {
+    fn add_edge(&mut self, i: usize, j: usize) -> Result {
         if self.has_edge(i, j) {
             Err("Digraph: attempting to add existent edge")
         } else {
@@ -58,7 +55,7 @@ impl Digraph {
         }
     }
 
-    pub fn remove_edge(&mut self, i: usize, j: usize) -> Result {
+    fn remove_edge(&mut self, i: usize, j: usize) -> Result {
         if self.has_edge(i, j) {
             *self.data.at(i, j) = false;
             self.num_edges -= 1;
