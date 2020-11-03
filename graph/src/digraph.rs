@@ -70,20 +70,17 @@ impl<'a> GraphImpl<'a> for Digraph {
 pub struct EdgeIterator<'a> {
     parent: &'a Digraph,
 
-    current_i: usize,
-    current_j: usize,
+    current_pair: (usize, usize),
 }
 
 // constructors
 impl<'a> EdgeIterator<'a> {
     fn new(parent: &'a Digraph) -> Self {
-        let current_i = 0;
-        let current_j = 0;
+        let current_pair = (0, 0);
 
         Self {
             parent,
-            current_i,
-            current_j,
+            current_pair,
         }
     }
 }
@@ -96,15 +93,15 @@ impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
     }
 
     fn current_pair(&self) -> (usize, usize) {
-        (self.current_i, self.current_j)
+        self.current_pair
     }
 
     fn next_pair(&mut self) {
-        self.current_j += 1;
+        self.current_pair.1 += 1;
 
-        if self.current_j == self.parent.num_verts() {
-            self.current_j = 0;
-            self.current_i += 1;
+        if self.current_pair.1 == self.parent.num_verts() {
+            self.current_pair.1 = 0;
+            self.current_pair.0 += 1;
         }
     }
 }
