@@ -1,4 +1,4 @@
-use crate::Edge;
+use crate::{Edge, Result};
 
 pub trait GraphImpl<'a> {
     type EdgeIterator: Iterator<Item = Edge>;
