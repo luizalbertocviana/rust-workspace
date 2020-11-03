@@ -13,27 +13,28 @@ pub trait EdgeIterable<'a> {
     type Parent: GraphImpl<'a>;
 
     fn parent(&self) -> &Self::Parent;
-    fn current_i(&self) -> usize;
-    fn current_j(&self) -> usize;
+    fn current_pair(&self) -> (usize, usize);
 
     fn next_pair(&mut self);
 
     fn stop(&self) -> bool {
-        self.current_j() == 0 && self.current_i() == self.parent().num_verts()
+        let (i, j) = self.current_pair();
+
+        j == 0 && i == self.parent().num_verts()
     }
 
-    fn next(&mut self) -> Option<Edge> {
+    fn next_edge(&mut self) -> Option<Edge> {
         if self.stop() {
             None
         } else {
-            let pair = (self.current_i(), self.current_j());
+            let pair = self.current_pair();
 
             self.next_pair();
 
             if self.parent().has_edge(pair.0, pair.1) {
                 Some(pair)
             } else {
-                self.next()
+                self.next_edge()
             }
         }
     }
