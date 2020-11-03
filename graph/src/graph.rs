@@ -2,7 +2,9 @@ use std::mem::swap;
 
 use matrix::UpperTriangularMatrix;
 
-use crate::Result;
+use crate::traits::{EdgeIterable, GraphImpl};
+
+use crate::{Result, Edge};
 
 pub struct Graph {
     data: UpperTriangularMatrix<bool>,
