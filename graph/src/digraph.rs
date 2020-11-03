@@ -40,7 +40,7 @@ impl<'a> GraphImpl<'a> for Digraph {
         *self.data.const_at(i, j)
     }
 
-    fn edges(&'a self) -> EdgeIterator<'a> {
+    fn edges(&'a self) -> EdgeIterator {
         EdgeIterator::new(self)
     }
 
