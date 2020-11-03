@@ -45,26 +45,28 @@ fn adjust_endpoints(i: &mut usize, j: &mut usize) {
     }
 }
 
-// accessors
-impl Graph {
-    pub fn num_verts(&self) -> usize {
+impl<'a> GraphImpl<'a> for Graph {
+    type EdgeIterator = EdgeIterator<'a>;
+
+    fn num_verts(&self) -> usize {
         self.num_verts
     }
 
-    pub fn num_edges(&self) -> usize {
+    fn num_edges(&self) -> usize {
         self.num_edges
     }
 
-    pub fn has_edge(&self, mut i: usize, mut j: usize) -> bool {
+    fn has_edge(&self, mut i: usize, mut j: usize) -> bool {
         adjust_endpoints(&mut i, &mut j);
 
         *self.data.const_at(i, j)
     }
-}
 
-// modifiers
-impl Graph {
-    pub fn add_edge(&mut self, mut i: usize, mut j: usize) -> Result {
+    fn edges(&self) -> EdgeIterator {
+        EdgeIterator::new(self)
+    }
+
+    fn add_edge(&mut self, mut i: usize, mut j: usize) -> Result {
         adjust_endpoints(&mut i, &mut j);
 
         if self.has_edge(i, j) {
@@ -77,7 +79,7 @@ impl Graph {
         }
     }
 
-    pub fn remove_edge(&mut self, mut i: usize, mut j: usize) -> Result {
+    fn remove_edge(&mut self, mut i: usize, mut j: usize) -> Result {
         adjust_endpoints(&mut i, &mut j);
 
         if self.has_edge(i, j) {
