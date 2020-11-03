@@ -92,3 +92,52 @@ impl<'a> GraphImpl<'a> for Graph {
         }
     }
 }
+
+pub struct EdgeIterator<'a> {
+    parent: &'a Graph,
+
+    current_i: usize,
+    current_j: usize,
+}
+
+impl<'a> EdgeIterator<'a> {
+    pub fn new(parent: &'a Graph) -> Self {
+        let current_i = 0;
+        let current_j = 0;
+
+        Self {
+            parent,
+            current_i,
+            current_j,
+        }
+    }
+}
+
+impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
+    type Parent = Graph;
+
+    fn parent(&self) -> &Graph {
+        self.parent
+    }
+
+    fn current_pair(&self) -> (usize, usize) {
+        (self.current_i, self.current_j)
+    }
+
+    fn next_pair(&mut self) {
+        self.current_j += 1;
+
+        if self.current_j == self.parent.num_verts() {
+            self.current_i += 1;
+            self.current_j = self.current_i;
+        }
+    }
+}
+
+impl<'a> Iterator for EdgeIterator<'a> {
+    type Item = Edge;
+
+    fn next(&mut self) -> Option<Edge> {
+        self.next_edge()
+    }
+}
