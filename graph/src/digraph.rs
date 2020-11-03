@@ -1,9 +1,8 @@
 use matrix::Matrix;
 
-use crate::traits::GraphImpl;
+use crate::traits::{EdgeIterable, GraphImpl};
 
-use crate::Edge;
-use crate::Result;
+use crate::{Edge, Result};
 
 pub struct Digraph {
     data: Matrix<bool>,
