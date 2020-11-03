@@ -1,9 +1,10 @@
 use std::collections::HashSet;
 
+use crate::traits::GraphImpl;
+
 use crate::graph::Graph;
 
-use crate::Edge;
-use crate::Result;
+use crate::{Result, Edge};
 
 pub struct Subgraph<'a> {
     parent: &'a Graph,
