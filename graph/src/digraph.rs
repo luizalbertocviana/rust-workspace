@@ -91,15 +91,17 @@ impl<'a> EdgeIterator<'a> {
     }
 }
 
-// accessors
-impl<'a> EdgeIterator<'a> {
-    fn stop(&self) -> bool {
-        self.current_j == 0 && self.current_i == self.parent.num_verts()
-    }
-}
+impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
+    type Parent = Digraph;
 
-// modifiers
-impl<'a> EdgeIterator<'a> {
+    fn parent(&self) -> &Digraph {
+        self.parent
+    }
+
+    fn current_pair(&self) -> (usize, usize) {
+        (self.current_i, self.current_j)
+    }
+
     fn next_pair(&mut self) {
         self.current_j += 1;
 
@@ -115,18 +117,6 @@ impl<'a> Iterator for EdgeIterator<'a> {
     type Item = Edge;
 
     fn next(&mut self) -> Option<Edge> {
-        if self.stop() {
-            None
-        } else {
-            let pair = (self.current_i, self.current_j);
-
-            self.next_pair();
-
-            if self.parent.has_edge(pair.0, pair.1) {
-                Some(pair)
-            } else {
-                self.next()
-            }
-        }
+        self.next_edge()
     }
 }
