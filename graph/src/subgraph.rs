@@ -123,3 +123,55 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
         }
     }
 }
+
+pub struct EdgeIterator<'a> {
+    parent: &'a Subgraph<'a>,
+
+    current_pair: (usize, usize),
+
+    edge_it: Chain<Copied<hash_set::Iter<'a, Edge>>, crate::graph::EdgeIterator<'a>>,
+}
+
+impl<'a> EdgeIterator<'a> {
+    fn new(parent: &'a Subgraph) -> Self {
+        let mut edge_it = parent.included_edges.iter().copied().chain(parent.parent.edges());
+        let current_pair = match edge_it.next() {
+            Some(pair) => pair,
+            None => (parent.num_verts(), 0),
+        };
+
+        Self {parent, current_pair, edge_it}
+    }
+}
+
+impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
+    type Parent = Subgraph<'a>;
+
+    fn parent(&self) -> &Subgraph<'a> {
+        self.parent
+    }
+
+    fn current_pair(&self) -> (usize, usize) {
+        self.current_pair
+    }
+
+    fn next_pair(&mut self) {
+        if let Some(pair) = self.edge_it.next() {
+            if self.parent.removed_edges.contains(&pair) {
+                self.next_pair()
+            } else {
+                self.current_pair = pair;
+            }
+        } else {
+            self.current_pair = (self.parent.num_verts(), 0);
+        }
+    }
+}
+
+impl<'a> Iterator for EdgeIterator<'a> {
+    type Item = Edge;
+
+    fn next(&mut self) -> Option<Edge> {
+        self.next_edge()
+    }
+}
