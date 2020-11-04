@@ -28,6 +28,7 @@ impl<'a> Subgraph<'a> {
             removed_edges,
         }
     }
+
     pub fn from_subgraph(parent: &Self) -> Self {
         let included_edges = parent.included_edges.clone();
         let removed_edges = parent.removed_edges.clone();
