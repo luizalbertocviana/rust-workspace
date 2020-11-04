@@ -1,11 +1,12 @@
+// disjoint_set module
 mod disjoint_set;
-
+// DisjointSet type
 pub use crate::disjoint_set::DisjointSet;
-
+// unit tests
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    /// tests DisjointSet instantiation and its operations
     #[test]
     fn disjoint_set_test() {
         let n = 10;
