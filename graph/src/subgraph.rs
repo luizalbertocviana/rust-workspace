@@ -42,13 +42,14 @@ impl<'a> Subgraph<'a> {
     }
 }
 
-// accessors
-impl<'a> Subgraph<'a> {
-    pub fn num_verts(&self) -> usize {
+impl<'a> GraphImpl<'a> for Subgraph<'a> {
+    type EdgeIterator = EdgeIterator<'a>;
+
+    fn num_verts(&self) -> usize {
         self.parent.num_verts()
     }
 
-    pub fn num_edges(&self) -> usize {
+    fn num_edges(&self) -> usize {
         let parent_edges = self.parent.num_edges();
         let plus_edges = self.included_edges.len();
         let minus_edges = self.removed_edges.len();
@@ -56,7 +57,7 @@ impl<'a> Subgraph<'a> {
         parent_edges + plus_edges - minus_edges
     }
 
-    pub fn has_edge(&self, i: usize, j: usize) -> bool {
+    fn has_edge(&self, i: usize, j: usize) -> bool {
         let edge = (i, j);
 
         if self.included_edges.contains(&edge) {
@@ -67,11 +68,12 @@ impl<'a> Subgraph<'a> {
             self.parent.has_edge(i, j)
         }
     }
-}
 
-// modifiers
-impl<'a> Subgraph<'a> {
-    pub fn add_edge(&mut self, i: usize, j: usize) -> Result {
+    fn edges(&self) -> EdgeIterator {
+        EdgeIterator::new(self)
+    }
+
+    fn add_edge(&mut self, i: usize, j: usize) -> Result {
         let edge = (i, j);
 
         let rem_edges = &mut self.removed_edges;
@@ -96,7 +98,7 @@ impl<'a> Subgraph<'a> {
         }
     }
 
-    pub fn remove_edge(&mut self, i: usize, j: usize) -> Result {
+    fn remove_edge(&mut self, i: usize, j: usize) -> Result {
         let edge = (i, j);
 
         let rem_edges = &mut self.removed_edges;
