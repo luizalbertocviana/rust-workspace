@@ -1,10 +1,13 @@
+use std::collections::hash_set;
 use std::collections::HashSet;
 
-use crate::traits::GraphImpl;
+use std::iter::{Chain, Copied};
+
+use crate::traits::{EdgeIterable, GraphImpl};
 
 use crate::graph::Graph;
 
-use crate::{Result, Edge};
+use crate::{Edge, Result};
 
 pub struct Subgraph<'a> {
     parent: &'a Graph,
