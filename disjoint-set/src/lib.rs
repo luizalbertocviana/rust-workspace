@@ -12,6 +12,8 @@ mod tests {
         let n = 10;
         let mut ds = DisjointSet::new(n);
 
+        assert_eq!(ds.num_sets(), n);
+
         for e in 0..n {
             assert_eq!(ds.representative(e), Some(e));
         }
@@ -20,13 +22,19 @@ mod tests {
 
         ds.join(0, 1).unwrap();
         assert_eq!(ds.representative(0), ds.representative(1));
+        assert_eq!(ds.num_sets(), n - 1);
 
         ds.join(1, 2).unwrap();
         assert_eq!(ds.representative(0), ds.representative(2));
+        assert_eq!(ds.num_sets(), n - 2);
 
         ds.join(0, 4).unwrap();
         assert_eq!(ds.representative(1), ds.representative(4));
+        assert_eq!(ds.num_sets(), n - 3);
 
         assert_ne!(ds.representative(1), ds.representative(3));
+
+        ds.join(0, 4).unwrap();
+        assert_eq!(ds.num_sets(), n - 3);
     }
 }
