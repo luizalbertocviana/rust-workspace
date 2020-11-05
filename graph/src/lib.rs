@@ -68,6 +68,16 @@ mod tests {
         assert_eq!(g.num_edges(), 1);
         assert_eq!(g.has_edge(5, 3), false);
         assert!(g.remove_edge(5, 3).is_err());
+
+        g.add_edge(2, 3).unwrap();
+        g.add_edge(1, 0).unwrap();
+
+        let mut it = g.edges();
+
+        assert_eq!(it.next(), Some((0, 1)));
+        assert_eq!(it.next(), Some((1, 2)));
+        assert_eq!(it.next(), Some((2, 3)));
+        assert_eq!(it.next(), None);
     }
 
     #[test]
@@ -96,6 +106,20 @@ mod tests {
         assert_eq!(g.has_edge(1, 2), true);
         assert_eq!(sg.has_edge(1, 2), true);
         assert_eq!(sg.add_edge(1, 2).is_err(), true);
+
+        let mut it = sg.edges();
+
+        assert_eq!(it.next(), Some((0, 1)));
+        assert_eq!(it.next(), Some((0, 2)));
+        assert_eq!(it.next(), Some((0, 3)));
+        assert_eq!(it.next(), Some((0, 4)));
+        assert_eq!(it.next(), Some((1, 2)));
+        assert_eq!(it.next(), Some((1, 3)));
+        assert_eq!(it.next(), Some((1, 4)));
+        assert_eq!(it.next(), Some((2, 3)));
+        assert_eq!(it.next(), Some((2, 4)));
+        assert_eq!(it.next(), Some((3, 4)));
+        assert_eq!(it.next(), None);
 
         let g = Graph::new(10);
 
@@ -131,5 +155,10 @@ mod tests {
         assert_eq!(g.has_edge(1, 2), false);
         assert_eq!(sg.has_edge(1, 2), false);
         assert_eq!(sg2.has_edge(1, 2), true);
+
+        let mut it = sg2.edges();
+
+        assert_eq!(it.next(), Some((1, 2)));
+        assert_eq!(it.next(), None);
     }
 }
