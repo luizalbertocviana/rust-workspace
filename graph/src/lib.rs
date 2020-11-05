@@ -3,6 +3,8 @@ mod graph;
 mod subgraph;
 mod traits;
 
+pub mod properties;
+
 pub use crate::digraph::Digraph;
 pub use crate::graph::Graph;
 pub use crate::subgraph::Subgraph;
