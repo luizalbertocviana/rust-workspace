@@ -26,3 +26,6 @@ pub fn number_components<'a, T: GraphImpl<'a>>(graph: &'a T) -> usize {
     components.num_sets()
 }
 
+pub fn is_connected<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
+    number_components(graph) == 1
+}
