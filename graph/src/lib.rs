@@ -163,4 +163,17 @@ mod tests {
         assert_eq!(it.next(), Some((1, 2)));
         assert_eq!(it.next(), None);
     }
+
+    #[test]
+    fn properties_test() {
+        let g = Graph::complete(3);
+
+        assert_eq!(properties::is_acyclic(&g), false);
+
+        let mut sg = Subgraph::from_graph(&g);
+
+        sg.remove_edge(0, 1).unwrap();
+
+        assert_eq!(properties::is_acyclic(&sg), true);
+    }
 }
