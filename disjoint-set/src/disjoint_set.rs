@@ -7,11 +7,12 @@ pub struct DisjointSet {
     parent: Vec<usize>,
     // each element has a rank, that is, an upper bound to its height
     rank: Vec<usize>,
+    // number of disjoint sets
+    num_sets: usize,
 }
 // alias used to represent the return value of functions that can
 // return an error
 type Result<'a> = std::result::Result<(), &'a str>;
-
 // constructor
 impl DisjointSet {
     /// creates a DisjointSet with num_elements elements, each one
@@ -19,17 +20,22 @@ impl DisjointSet {
     pub fn new(num_elements: usize) -> Self {
         let mut parent = Vec::new();
         let mut rank = Vec::new();
+        let num_sets = num_elements;
         // each elements starts as a representative ...
+        parent.reserve(num_elements);
         for e in 0..num_elements {
             parent.push(e);
         }
         // ... and with zero rank
         rank.resize(num_elements, 0);
 
-        Self { parent, rank }
+        Self {
+            parent,
+            rank,
+            num_sets,
+        }
     }
 }
-
 // auxiliar functions
 impl DisjointSet {
     // determines whether element is valid for this DisjointSet
@@ -42,9 +48,12 @@ impl DisjointSet {
         self.parent[rep_a] = rep_b;
     }
 }
-
 // accessors
 impl DisjointSet {
+    /// returns current number of disjoint sets
+    pub fn num_sets(&self) -> usize {
+        self.num_sets
+    }
     /// returns representative of element, in case element is valid
     /// for this DisjointSet. This method gets a mutable reference in
     /// order to implement path compression
@@ -70,7 +79,6 @@ impl DisjointSet {
         }
     }
 }
-
 // modifiers
 impl DisjointSet {
     /// turns disjoint sets containing element_a and element_b into an
@@ -81,19 +89,23 @@ impl DisjointSet {
             // get their representatives
             let rep_a = self.representative(element_a).unwrap();
             let rep_b = self.representative(element_b).unwrap();
+            // if representatives are distinct, we perform the join operation
+            if rep_a != rep_b {
+                // lower rank representative becomes represented by higher
+                // rank representative
+                if self.rank[rep_a] < self.rank[rep_b] {
+                    self.make_represented_by(rep_a, rep_b);
+                } else if self.rank[rep_a] > self.rank[rep_b] {
+                    self.make_represented_by(rep_b, rep_a);
+                } else {
+                    // in case of equal rank, rep_b continues to be a
+                    // representative ...
+                    self.make_represented_by(rep_a, rep_b);
+                    // ... but its rank increases
+                    self.rank[rep_b] += 1;
+                }
 
-            // lower rank representative becomes represented by higher
-            // rank representative
-            if self.rank[rep_a] < self.rank[rep_b] {
-                self.make_represented_by(rep_a, rep_b);
-            } else if self.rank[rep_a] > self.rank[rep_b] {
-                self.make_represented_by(rep_b, rep_a);
-            } else {
-                // in case of equal rank, rep_b continues to be a
-                // representative ...
-                self.make_represented_by(rep_a, rep_b);
-                // ... but its rank increases
-                self.rank[rep_b] += 1;
+                self.num_sets -= 1;
             }
 
             Ok(())
