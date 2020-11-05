@@ -15,3 +15,14 @@ pub fn is_acyclic<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
 
     true
 }
+
+pub fn number_components<'a, T: GraphImpl<'a>>(graph: &'a T) -> usize {
+    let mut components = DisjointSet::new(graph.num_verts());
+
+    for (u, v) in graph.edges() {
+        components.join(u, v).unwrap();
+    }
+
+    components.num_sets()
+}
+
