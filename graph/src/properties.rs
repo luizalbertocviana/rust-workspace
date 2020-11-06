@@ -38,8 +38,8 @@ pub fn number_components<'a, T: GraphImpl<'a>>(graph: &'a T) -> usize {
     components.num_sets()
 }
 /// determines whether an instance of a GraphImpl T is
-/// connected. Notice that, in case T has directed edges, this whether
-/// the instance is weakly connected
+/// connected. Notice that, in case T has directed edges, this
+/// determines whether the instance is weakly connected
 pub fn is_connected<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
     number_components(graph) == 1
 }
