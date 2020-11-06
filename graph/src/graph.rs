@@ -1,20 +1,24 @@
+// we use swap to adjust edge endpoints passed as arguments in order
+// to ensure that they correspond to an upper triangle position
 use std::mem::swap;
-
+// we use UpperTriangularMatrix to represent our graphs
 use matrix::UpperTriangularMatrix;
-
+// Graph (and related types) implements these two traits
 use crate::traits::{EdgeIterable, GraphImpl};
-
+// type aliases we use in these implementations
 use crate::{Result, Edge};
-
+/// represents an undirected graph
 pub struct Graph {
+    // edges are represented in the upper triangle of an upper
+    // triangular matrix
     data: UpperTriangularMatrix<bool>,
-
+    // number of vertices and undirected edges
     num_verts: usize,
     num_edges: usize,
 }
-
 // constructors
 impl Graph {
+    /// returns a Graph with num_verts vertices and no edges
     pub fn new(num_verts: usize) -> Self {
         let data = UpperTriangularMatrix::new(num_verts);
         let num_edges = 0;
@@ -25,7 +29,8 @@ impl Graph {
             num_edges,
         }
     }
-
+    /// returns a Graph with num_verts vertices and one edge between
+    /// each pair of vertices
     pub fn complete(num_verts: usize) -> Self {
         let mut g = Self::new(num_verts);
 
@@ -38,13 +43,14 @@ impl Graph {
         g
     }
 }
-
+// swaps its arguments in case they do not represent an upper triangle
+// position
 fn adjust_endpoints(i: &mut usize, j: &mut usize) {
     if i > j {
         swap(i, j);
     }
 }
-
+// GraphImpl implementation
 impl<'a> GraphImpl<'a> for Graph {
     type EdgeIterator = EdgeIterator<'a>;
 
@@ -92,13 +98,14 @@ impl<'a> GraphImpl<'a> for Graph {
         }
     }
 }
-
+/// controls iteration through the edges of a Graph
 pub struct EdgeIterator<'a> {
+    // reference to the Graph whose edges are being iterated through
     parent: &'a Graph,
 
     current_pair: (usize, usize),
 }
-
+// constructors
 impl<'a> EdgeIterator<'a> {
     // returns a new EdgeIterator
     fn new(parent: &'a Graph) -> Self {
@@ -110,7 +117,7 @@ impl<'a> EdgeIterator<'a> {
         }
     }
 }
-
+// EdgeIterable implementation
 impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
     type Parent = Graph;
 
@@ -131,7 +138,7 @@ impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
         }
     }
 }
-
+// Iterator implementation for EdgeIterator
 impl<'a> Iterator for EdgeIterator<'a> {
     type Item = Edge;
 

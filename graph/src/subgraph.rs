@@ -1,23 +1,28 @@
+// we use HashSet to represent subgraph edges
 use std::collections::hash_set;
 use std::collections::HashSet;
-
+// we use these for some iterator combination
 use std::iter::{Chain, Copied};
-
+// Subgraph (and its related types) implements these traits
 use crate::traits::{EdgeIterable, GraphImpl};
-
+// currently we implement Subgraph as subgraphs of Graph type. We see
+// this can be further generalized
 use crate::graph::Graph;
-
+// some type aliases we use in these implementations
 use crate::{Edge, Result};
-
+/// represents a subgraph of an undirected graph
 pub struct Subgraph<'a> {
+    // supergraph reference
     parent: &'a Graph,
-
+    // edges (either included or removed) that distinguish this
+    // subgraph from its supergraph
     included_edges: HashSet<Edge>,
     removed_edges: HashSet<Edge>,
 }
-
 // constructors
 impl<'a> Subgraph<'a> {
+    /// returns a subgraph of parent with the same vertex and edge
+    /// sets
     pub fn from_graph(parent: &'a Graph) -> Self {
         let included_edges = HashSet::new();
         let removed_edges = HashSet::new();
@@ -28,7 +33,8 @@ impl<'a> Subgraph<'a> {
             removed_edges,
         }
     }
-
+    /// returns a subgraph of parent with the same vertex and edge
+    /// sets
     pub fn from_subgraph(parent: &Self) -> Self {
         let included_edges = parent.included_edges.clone();
         let removed_edges = parent.removed_edges.clone();
@@ -41,7 +47,7 @@ impl<'a> Subgraph<'a> {
         }
     }
 }
-
+// GraphImpl implementation
 impl<'a> GraphImpl<'a> for Subgraph<'a> {
     type EdgeIterator = EdgeIterator<'a>;
 
@@ -123,16 +129,19 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
         }
     }
 }
-
+/// controls iteration through the edges of a Subgraph
 pub struct EdgeIterator<'a> {
+    // reference to the Subgraph whose edges are being iterated through
     parent: &'a Subgraph<'a>,
 
     current_pair: (usize, usize),
-
+    // iterator that combines iterators of the included edges HashSet
+    // and the Subgraph
     edge_it: Chain<Copied<hash_set::Iter<'a, Edge>>, crate::graph::EdgeIterator<'a>>,
 }
-
+// constructors
 impl<'a> EdgeIterator<'a> {
+    // returns a new EdgeIterator
     fn new(parent: &'a Subgraph) -> Self {
         let mut edge_it = parent.included_edges.iter().copied().chain(parent.parent.edges());
         let current_pair = match edge_it.next() {
@@ -143,7 +152,7 @@ impl<'a> EdgeIterator<'a> {
         Self {parent, current_pair, edge_it}
     }
 }
-
+// EdgeIterable implementation
 impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
     type Parent = Subgraph<'a>;
 
@@ -167,7 +176,7 @@ impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
         }
     }
 }
-
+// Iterator implementation for EdgeIterator
 impl<'a> Iterator for EdgeIterator<'a> {
     type Item = Edge;
 

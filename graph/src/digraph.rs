@@ -1,18 +1,20 @@
+// we use Matrix as the internal representation of our digraphs
 use matrix::Matrix;
-
+// Digraph (and related types) implements these two traits
 use crate::traits::{EdgeIterable, GraphImpl};
-
+// type aliases we use in these implementations
 use crate::{Edge, Result};
-
+/// represents a directed graph
 pub struct Digraph {
+    // arcs are represented by an adjacency matrix
     data: Matrix<bool>,
-
+    // number of vertices and edges (arcs)
     num_verts: usize,
     num_edges: usize,
 }
-
 // constructors
 impl Digraph {
+    /// creates a new Digraph with num_verts vertices and no arcs
     pub fn new(num_verts: usize) -> Self {
         let data = Matrix::square(num_verts);
         let num_edges = 0;
@@ -24,7 +26,7 @@ impl Digraph {
         }
     }
 }
-
+// GraphImpl implementation
 impl<'a> GraphImpl<'a> for Digraph {
     type EdgeIterator = EdgeIterator<'a>;
 
@@ -66,15 +68,16 @@ impl<'a> GraphImpl<'a> for Digraph {
         }
     }
 }
-
+/// controls iteration through the arcs of a Digraph
 pub struct EdgeIterator<'a> {
+    // reference to the Digraph whose arcs are being iterated through
     parent: &'a Digraph,
-
+    // current arc being visited
     current_pair: (usize, usize),
 }
-
 // constructors
 impl<'a> EdgeIterator<'a> {
+    // returns a new EdgeIterator
     fn new(parent: &'a Digraph) -> Self {
         let current_pair = (0, 0);
 
@@ -84,7 +87,7 @@ impl<'a> EdgeIterator<'a> {
         }
     }
 }
-
+// EdgeIterable implementation
 impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
     type Parent = Digraph;
 
@@ -105,7 +108,7 @@ impl<'a> EdgeIterable<'a> for EdgeIterator<'a> {
         }
     }
 }
-
+// Iterator implementation for EdgeIterator
 impl<'a> Iterator for EdgeIterator<'a> {
     type Item = Edge;
 

@@ -1,22 +1,32 @@
+// digraph module
 mod digraph;
+// graph module
 mod graph;
+// subgraph module
 mod subgraph;
+// traits module
 mod traits;
-
+/// properties module: contains functions regarding some graph properties
 pub mod properties;
-
+/// a digraph representation
 pub use crate::digraph::Digraph;
+/// a graph representation
 pub use crate::graph::Graph;
+/// a subgraph representation
 pub use crate::subgraph::Subgraph;
+/// this trait provides a common interface to our graph related types
 pub use crate::traits::GraphImpl;
-
+// type alias to represent the return of a function that can return an
+// error
 type Result<'a> = std::result::Result<(), &'a str>;
+// type alias for an edge
 type Edge = (usize, usize);
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    // tests for the Digraph type
     #[test]
     fn digraph_test() {
         let mut d = Digraph::new(6);
@@ -47,7 +57,7 @@ mod tests {
         assert_eq!(it.next(), Some((3,5)));
         assert_eq!(it.next(), None);
     }
-
+    // tests for the Graph type
     #[test]
     fn graph_test() {
         let mut g = Graph::new(8);
@@ -81,7 +91,7 @@ mod tests {
         assert_eq!(it.next(), Some((2, 3)));
         assert_eq!(it.next(), None);
     }
-
+    // tests for the Subgraph type
     #[test]
     fn subgraph_test() {
         let g = Graph::complete(5);
@@ -163,7 +173,7 @@ mod tests {
         assert_eq!(it.next(), Some((1, 2)));
         assert_eq!(it.next(), None);
     }
-
+    // tests for the functions of properties module
     #[test]
     fn properties_test() {
         let g = Graph::complete(3);
