@@ -100,7 +100,8 @@ pub struct EdgeIterator<'a> {
 }
 
 impl<'a> EdgeIterator<'a> {
-    pub fn new(parent: &'a Graph) -> Self {
+    // returns a new EdgeIterator
+    fn new(parent: &'a Graph) -> Self {
         let current_pair = (0, 0);
 
         Self {
