@@ -43,3 +43,24 @@ pub fn number_components<'a, T: GraphImpl<'a>>(graph: &'a T) -> usize {
 pub fn is_connected<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
     number_components(graph) == 1
 }
+/// determines whether an instance of a GraphImpl T is a spanning
+/// tree. Notice that, in case T has directed edges, their direction
+/// is ignored
+pub fn is_spanning_tree<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
+    // we begin with one disjoint set for each vertex
+    let mut components = DisjointSet::new(graph.num_verts());
+    // for each edge
+    for (u, v) in graph.edges() {
+        // if its endpoints have the same representative, the graph is
+        // cyclic, therefore not a spanning tree
+        if components.representative(u) == components.representative(v) {
+            return false;
+        } else {
+            // otherwise we join the components containing these endpoints
+            components.join(u, v).unwrap();
+        }
+    }
+    // if we reach this, the graph is acyclic. Then, if it has exactly
+    // one component, it is also connected, thus a spanning tree
+    components.num_sets() == 1
+}
