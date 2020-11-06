@@ -185,5 +185,14 @@ mod tests {
         sg.remove_edge(0, 1).unwrap();
 
         assert_eq!(properties::is_acyclic(&sg), true);
+
+        sg.remove_edge(0, 2).unwrap();
+        assert_eq!(properties::is_acyclic(&sg), true);
+        assert_eq!(properties::is_connected(&sg), false);
+        assert_eq!(properties::is_spanning_tree(&sg), false);
+
+        sg.add_edge(0, 1).unwrap();
+        assert_eq!(properties::is_connected(&sg), true);
+        assert_eq!(properties::is_spanning_tree(&sg), true);
     }
 }
