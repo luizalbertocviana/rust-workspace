@@ -1,10 +1,9 @@
-// we use swap to adjust edge endpoints passed as arguments in order
-// to ensure that they correspond to an upper triangle position
-use std::mem::swap;
 // we use UpperTriangularMatrix to represent our graphs
 use matrix::UpperTriangularMatrix;
 // Graph (and related types) implements these two traits
 use crate::traits::{EdgeIterable, GraphImpl};
+// utility function for adjusting endpoints of an edge
+use crate::utils::adjust_endpoints;
 // type aliases we use in these implementations
 use crate::{Result, Edge};
 /// represents an undirected graph
@@ -41,13 +40,6 @@ impl Graph {
         }
 
         g
-    }
-}
-// swaps its arguments in case they do not represent an upper triangle
-// position
-fn adjust_endpoints(i: &mut usize, j: &mut usize) {
-    if i > j {
-        swap(i, j);
     }
 }
 // GraphImpl implementation
