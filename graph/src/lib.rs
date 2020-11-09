@@ -4,6 +4,8 @@ mod digraph;
 mod graph;
 // subgraph module
 mod subgraph;
+// weighted graph module
+mod weighted_graph;
 // traits module
 mod traits;
 // utility functions
@@ -16,6 +18,8 @@ pub use crate::digraph::Digraph;
 pub use crate::graph::Graph;
 /// a subgraph representation
 pub use crate::subgraph::Subgraph;
+/// a weighted graph representation
+pub use crate::weighted_graph::WeightedGraph;
 /// this trait provides a common interface to our graph related types
 pub use crate::traits::GraphImpl;
 // type alias to represent the return of a function that can return an
