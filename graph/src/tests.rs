@@ -192,3 +192,41 @@ fn properties_test() {
     assert_eq!(properties::is_connected(&sg), true);
     assert_eq!(properties::is_spanning_tree(&sg), true);
 }
+#[test]
+fn algorithms_test() {
+    let mut wg: WeightedGraph<usize> = WeightedGraph::new(6);
+
+    let weighted_edges = vec![
+        (0, 1, 1),
+        (0, 2, 9),
+        (0, 5, 14),
+        (1, 2, 10),
+        (1, 3, 15),
+        (2, 3, 11),
+        (2, 5, 2),
+        (3, 4, 6),
+        (4, 5, 9),
+    ];
+
+    for (u, v, w) in weighted_edges {
+        wg.add_edge(u, v).unwrap();
+        wg.set_edge_weight(u, v, w);
+    }
+
+    let mst_edges = algorithms::kruskal(&wg);
+
+    assert_eq!(mst_edges.len(), 5);
+    assert_eq!(
+        mst_edges
+            .iter()
+            .map(|(u, v)| wg.get_edge_weight(*u, *v).unwrap())
+            .sum::<usize>(),
+        27
+    );
+
+    let solution = vec![(0, 1), (0, 2), (2, 5), (3, 4), (4, 5)];
+
+    for edge in solution {
+        assert_eq!(mst_edges.contains(&edge), true);
+    }
+}
