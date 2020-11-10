@@ -5,6 +5,8 @@ use std::collections::HashSet;
 use std::iter::{Chain, Copied};
 // Subgraph (and its related types) implements these traits
 use crate::traits::{EdgeIterable, GraphImpl};
+// utility function for adjusting endpoints of an edge
+use crate::utils::adjust_endpoints;
 // currently we implement Subgraph as subgraphs of Graph type. We see
 // this can be further generalized
 use crate::graph::Graph;
@@ -64,14 +66,15 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
     }
 
     fn has_edge(&self, i: usize, j: usize) -> bool {
-        let edge = (i, j);
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
         if self.included_edges.contains(&edge) {
             true
         } else if self.removed_edges.contains(&edge) {
             false
         } else {
-            self.parent.has_edge(i, j)
+            self.parent.has_edge(edge.0, edge.1)
         }
     }
 
@@ -80,7 +83,8 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
     }
 
     fn add_edge(&mut self, i: usize, j: usize) -> Result {
-        let edge = (i, j);
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
         let rem_edges = &mut self.removed_edges;
         let inc_edges = &mut self.included_edges;
@@ -91,7 +95,7 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
             rem_edges.remove(&edge);
 
             Ok(())
-        } else if self.parent.has_edge(i, j) {
+        } else if self.parent.has_edge(edge.0, edge.1) {
             error
         } else {
             if inc_edges.contains(&edge) {
@@ -105,7 +109,8 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
     }
 
     fn remove_edge(&mut self, i: usize, j: usize) -> Result {
-        let edge = (i, j);
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
         let rem_edges = &mut self.removed_edges;
         let inc_edges = &mut self.included_edges;
@@ -116,7 +121,7 @@ impl<'a> GraphImpl<'a> for Subgraph<'a> {
             inc_edges.remove(&edge);
 
             Ok(())
-        } else if !self.parent.has_edge(i, j) {
+        } else if !self.parent.has_edge(edge.0, edge.1) {
             error
         } else {
             if rem_edges.contains(&edge) {
