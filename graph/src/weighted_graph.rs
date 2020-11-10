@@ -46,10 +46,12 @@ impl<'a, W: Default> GraphImpl<'a> for WeightedGraph<W> {
         self.graph.edges()
     }
 
-    fn add_edge(&mut self, mut i: usize, mut j: usize) -> Result {
+    fn add_edge(&mut self, i: usize, j: usize) -> Result {
         if self.graph.add_edge(i, j).is_ok() {
-            adjust_endpoints(&mut i, &mut j);
-            self.weight_map.insert((i, j), Default::default());
+            let mut edge = (i, j);
+            adjust_endpoints(&mut edge.0, &mut edge.1);
+
+            self.weight_map.insert((edge.0, edge.1), Default::default());
 
             Ok(())
         } else {
@@ -57,10 +59,12 @@ impl<'a, W: Default> GraphImpl<'a> for WeightedGraph<W> {
         }
     }
 
-    fn remove_edge(&mut self, mut i: usize, mut j: usize) -> Result {
+    fn remove_edge(&mut self, i: usize, j: usize) -> Result {
         if self.graph.remove_edge(i, j).is_ok() {
-            adjust_endpoints(&mut i, &mut j);
-            self.weight_map.remove(&(i, j));
+            let mut edge = (i, j);
+            adjust_endpoints(&mut edge.0, &mut edge.1);
+
+            self.weight_map.remove(&(edge.0, edge.1));
 
             Ok(())
         } else {
@@ -73,17 +77,20 @@ impl<'a, W: Default> GraphImpl<'a> for WeightedGraph<W> {
 impl<W: Default> WeightedGraph<W> {
     /// gets weight of edge (i, j) ((j, i), in case i > j). Returns
     /// None in case edge does not exist
-    pub fn get_edge_weight(&self, mut i: usize, mut j: usize) -> Option<&W> {
-        adjust_endpoints(&mut i, &mut j);
-        self.weight_map.get(&(i, j))
+    pub fn get_edge_weight(&self, i: usize, j: usize) -> Option<&W> {
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
+
+        self.weight_map.get(&(edge.0, edge.1))
     }
     /// sets weight of edge (i, j) to w. Returns old weight in case
     /// edge exists, otherwise returns None
-    pub fn set_edge_weight(&mut self, mut i: usize, mut j: usize, w: W) -> Option<W> {
+    pub fn set_edge_weight(&mut self, i: usize, j: usize, w: W) -> Option<W> {
         if self.graph.has_edge(i, j) {
-            adjust_endpoints(&mut i, &mut j);
+            let mut edge = (i, j);
+            adjust_endpoints(&mut edge.0, &mut edge.1);
 
-            self.weight_map.insert((i, j), w)
+            self.weight_map.insert((edge.0, edge.1), w)
         } else {
             None
         }

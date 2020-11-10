@@ -54,34 +54,37 @@ impl<'a> GraphImpl<'a> for Graph {
         self.num_edges
     }
 
-    fn has_edge(&self, mut i: usize, mut j: usize) -> bool {
-        adjust_endpoints(&mut i, &mut j);
+    fn has_edge(&self, i: usize, j: usize) -> bool {
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
-        *self.data.const_at(i, j)
+        *self.data.const_at(edge.0, edge.1)
     }
 
     fn edges(&self) -> EdgeIterator {
         EdgeIterator::new(self)
     }
 
-    fn add_edge(&mut self, mut i: usize, mut j: usize) -> Result {
-        adjust_endpoints(&mut i, &mut j);
+    fn add_edge(&mut self, i: usize, j: usize) -> Result {
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
-        if self.has_edge(i, j) {
+        if self.has_edge(edge.0, edge.1) {
             Err("Graph: attempting to add an existent edge")
         } else {
-            *self.data.at(i, j) = true;
+            *self.data.at(edge.0, edge.1) = true;
             self.num_edges += 1;
 
             Ok(())
         }
     }
 
-    fn remove_edge(&mut self, mut i: usize, mut j: usize) -> Result {
-        adjust_endpoints(&mut i, &mut j);
+    fn remove_edge(&mut self, i: usize, j: usize) -> Result {
+        let mut edge = (i, j);
+        adjust_endpoints(&mut edge.0, &mut edge.1);
 
-        if self.has_edge(i, j) {
-            *self.data.at(i, j) = false;
+        if self.has_edge(edge.0, edge.1) {
+            *self.data.at(edge.0, edge.1) = false;
             self.num_edges -= 1;
 
             Ok(())
