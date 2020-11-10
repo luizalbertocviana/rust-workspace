@@ -10,6 +10,8 @@ mod weighted_graph;
 mod traits;
 // utility functions
 mod utils;
+/// algorithms module: contains implementations of some graph algorithms
+pub mod algorithms;
 /// properties module: contains functions regarding some graph properties
 pub mod properties;
 /// a digraph representation
