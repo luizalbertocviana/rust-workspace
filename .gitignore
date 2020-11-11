@@ -42,3 +42,6 @@
 /graph/src/utils.rs~
 /graph/src/weighted_graph.rs~
 /graph/src/algorithms.rs~
+/branch-bound/src/parallel.rs~
+/branch-bound/src/serial.rs~
+/graph/src/todo.org~
