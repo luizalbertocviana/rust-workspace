@@ -85,6 +85,18 @@ impl<'a, W: Default> GraphImpl<'a> for WeightedGraph<W> {
 
 // weight related functions
 impl<W: Default> WeightedGraph<W> {
+    /// adds edge with endpoints i and j to WeightedGraph, also
+    /// setting its weight to w. In case edge already exists, an error
+    /// is returned
+    pub fn add_weighted_edge(&mut self, i: usize, j: usize, w: W) -> Result {
+        if self.add_edge(i, j).is_ok() {
+            self.set_edge_weight(i, j, w);
+
+            Ok(())
+        } else {
+            Err("WeightedGraph: attempt to add an existent edge")
+        }
+    }
     /// gets weight of edge (i, j) ((j, i), in case i > j). Returns
     /// None in case edge does not exist
     pub fn get_edge_weight(&self, i: usize, j: usize) -> Option<&W> {
