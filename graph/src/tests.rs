@@ -194,8 +194,6 @@ fn properties_test() {
 }
 #[test]
 fn algorithms_test() {
-    let mut wg: WeightedGraph<usize> = WeightedGraph::new(6);
-
     let weighted_edges = vec![
         (0, 1, 1),
         (0, 2, 9),
@@ -208,10 +206,7 @@ fn algorithms_test() {
         (4, 5, 9),
     ];
 
-    for (u, v, w) in weighted_edges {
-        wg.add_edge(u, v).unwrap();
-        wg.set_edge_weight(u, v, w);
-    }
+    let wg = WeightedGraph::from_weighted_edges(6, weighted_edges);
 
     let mst_edges = algorithms::kruskal(&wg);
 
