@@ -4,6 +4,8 @@ mod solving_status;
 mod traits;
 // serial branch and bound module
 mod serial;
+// parallel branch and bound
+mod parallel;
 // some exported traits
 pub use crate::traits::{BBProblem, RelaxedProblemPool, Solution, SolutionCost};
 // alias to return type of functions that can return an error
