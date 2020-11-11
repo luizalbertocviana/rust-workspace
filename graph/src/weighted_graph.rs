@@ -18,7 +18,7 @@ pub struct WeightedGraph<W: Default> {
 }
 // constructors
 impl<W: Default> WeightedGraph<W> {
-    /// returns an WeightedGraph with num_verts vertices and no edges
+    /// returns a WeightedGraph with num_verts vertices and no edges
     pub fn new(num_verts: usize) -> Self {
         let graph = Graph::new(num_verts);
         let weight_map = HashMap::new();
