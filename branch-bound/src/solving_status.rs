@@ -38,10 +38,6 @@ impl<T: BBProblem> SolvingStatus<T> {
             (Some(lb), Some(sol)) => *lb == sol.get_cost(),
         }
     }
-    /// gets reference to Option possibly containing lower bound
-    pub fn lower_bound(&self) -> &Option<SolCost<T>> {
-        &self.lower_bound
-    }
     /// gets reference to Option possibly containing best solution
     pub fn best_solution(&self) -> &Option<Sol<T>> {
         &self.best_solution
