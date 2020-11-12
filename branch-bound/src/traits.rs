@@ -1,3 +1,5 @@
+use std::marker::Send;
+
 // type aliases to extract Var and ValueType out of Solution T
 type Var<T> = <T as Solution>::Var;
 type ValType<T> = <Var<T> as Variable>::ValueType;
@@ -33,8 +35,9 @@ pub trait Solution {
 /// trait for types representing problem instances suitable for branch
 /// and bound
 pub trait BBProblem {
-    /// solution type
-    type Sol: Solution;
+    /// solution type: needs to implement Send trait in order to be
+    /// used by parallel branch and bound
+    type Sol: Solution + Send;
     /// subproblem iterator type
     type SubproblemIterator: Iterator<Item = Box<Self>>;
     /// solves problem relaxation, returning its relaxed solution
