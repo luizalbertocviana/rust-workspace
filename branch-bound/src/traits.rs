@@ -13,12 +13,7 @@ pub trait Variable {
 }
 /// trait for types representing solution costs. Those types should
 /// also implement Ord trait
-pub trait SolutionCost: Ord {
-    /// maximum possible value of the type
-    fn max_value() -> Self;
-    /// minimum possible value of the type
-    fn min_value() -> Self;
-}
+pub trait SolutionCost: Ord {}
 /// trait for types representing a solution
 pub trait Solution {
     /// variable type
