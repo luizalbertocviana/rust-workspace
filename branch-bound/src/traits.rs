@@ -1,3 +1,4 @@
+use std::hash::Hash;
 use std::marker::Send;
 
 // type aliases to extract Var and ValueType out of Solution T
@@ -19,7 +20,7 @@ pub trait Solution {
     /// variable type
     type Var: Variable;
     /// solution cost type
-    type SolCost: SolutionCost;
+    type SolCost: SolutionCost + Hash;
     /// determines whether solution is feasible
     fn is_feasible(&self) -> bool;
     /// returns cost of solution
