@@ -20,7 +20,7 @@ pub trait Solution {
     /// variable type
     type Var: Variable;
     /// solution cost type
-    type SolCost: SolutionCost + Hash;
+    type SolCost: SolutionCost + Hash + Send;
     /// determines whether solution is feasible
     fn is_feasible(&self) -> bool;
     /// returns cost of solution
