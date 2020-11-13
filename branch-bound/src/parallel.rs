@@ -12,23 +12,23 @@ type SolCost<T> = <Sol<T> as Solution>::SolCost;
 
 enum Message<T: BBProblem> {
     Finish,
-    Solve(T),
+    Treat(T, T::Sol),
 }
 
 enum SolvingInformation<T: BBProblem> {
-    Feasible(SolCost<T>, T::Sol),
-    Branched(SolCost<T>, Vec<(T, T::Sol)>),
+    Feasible(T::Sol),
+    Branched(Vec<(T, T::Sol)>),
 }
 
 type ChannelFromWorker<T: BBProblem> = (
-    mpsc::Sender<SolvingInformation<T>>,
-    mpsc::Receiver<SolvingInformation<T>>,
+    mpsc::Sender<(SolCost<T>, SolvingInformation<T>)>,
+    mpsc::Receiver<(SolCost<T>, SolvingInformation<T>)>,
 );
 
 type ChannelToWorker<T: BBProblem> = (mpsc::Sender<Message<T>>, mpsc::Receiver<Message<T>>);
 
 fn worker<'a, T: BBProblem>(
-    sender: mpsc::Sender<SolvingInformation<T>>,
+    sender: mpsc::Sender<(SolCost<T>, SolvingInformation<T>)>,
     receiver: mpsc::Receiver<Message<T>>,
 ) -> Result<'a> {
     loop {
@@ -36,11 +36,9 @@ fn worker<'a, T: BBProblem>(
             Err(_) => return Err("worker: something went wrong when receiving a message from parallel::branch_and_bound"),
             Ok(msg) => match msg {
                 Message::Finish => return Ok(()),
-                Message::Solve(problem) => {
-                    let relaxed_solution = problem.solve_relaxation();
-
+                Message::Treat(problem, relaxed_solution) => {
                     if relaxed_solution.is_feasible(){
-                        sender.send(SolvingInformation::Feasible(relaxed_solution));
+                        sender.send((relaxed_solution.get_cost(), SolvingInformation::Feasible(relaxed_solution)));
                     } else {
                         let mut relaxed_problems = Vec::new();
 
@@ -50,7 +48,7 @@ fn worker<'a, T: BBProblem>(
                             relaxed_problems.push((*subproblem, relaxed_sol));
                         }
 
-                        sender.send(SolvingInformation::Branched(relaxed_solution.get_cost(), relaxed_problems));
+                        sender.send((relaxed_solution.get_cost(), SolvingInformation::Branched(relaxed_problems)));
                     }
                 }
             }
@@ -58,20 +56,48 @@ fn worker<'a, T: BBProblem>(
     }
 }
 
+struct LowerBoundManager<T: BBProblem> {
+    lower_bounds: HashMap<SolCost<T>, u64>,
+}
+
+impl<T: BBProblem> LowerBoundManager<T> {
+    fn new() -> Self {
+        let lower_bounds = HashMap::new();
+
+        Self { lower_bounds }
+    }
+
+    fn register_lower_bound(&mut self, lb: SolCost<T>) {
+        let count = *self.lower_bounds.get(&lb).unwrap_or(&0);
+
+        self.lower_bounds.insert(lb, count + 1);
+    }
+
+    fn discard_lower_bound(&mut self, lb: SolCost<T>) {
+        match self.lower_bounds.get(&lb).cloned() {
+            None => (),
+            Some(count) => {
+                if count == 1 {
+                    self.lower_bounds.remove(&lb);
+                } else {
+                    self.lower_bounds.insert(lb, count - 1);
+                }
+            }
+        }
+    }
+
+    fn min_lower_bound(&self) -> Option<&SolCost<T>> {
+        self.lower_bounds.keys().min()
+    }
+}
+
 pub fn branch_and_bound<T: 'static + BBProblem + Send>(
     problem: T,
     num_workers: usize,
 ) -> Option<T::Sol> {
-    let lower_bounds: HashMap<SolCost<T>, u64> = HashMap::new();
-    let register_lower_bound = |lb| {
-        if lower_bounds.contains_key(lb) {
-            lower_bounds[lb] += 1;
-        } else {
-            lower_bounds[lb] = 1;
-        }
-    };
-
-    let status: SolvingStatus<T> = SolvingStatus::new();
+    let mut lb_manager: LowerBoundManager<T> = LowerBoundManager::new();
+    
+    let mut status: SolvingStatus<T> = SolvingStatus::new();
 
     let (worker_sender, main_receiver): ChannelFromWorker<T> = mpsc::channel();
 
@@ -80,7 +106,7 @@ pub fn branch_and_bound<T: 'static + BBProblem + Send>(
     main_sender.reserve(num_workers);
     worker_handler.reserve(num_workers);
 
-    for i in 0..num_workers {
+    for _ in 0..num_workers {
         let (sender, receiver): ChannelToWorker<T> = mpsc::channel();
         let clonned_worker_sender = worker_sender.clone();
 
@@ -96,23 +122,44 @@ pub fn branch_and_bound<T: 'static + BBProblem + Send>(
     let mut main_sender_cycle = main_sender.iter().cycle();
     let mut cyclic_send = |msg| main_sender_cycle.next().unwrap().send(msg);
 
-    cyclic_send(Message::Solve(problem));
+    let root_relaxed_sol = problem.solve_relaxation();
+
+    lb_manager.register_lower_bound(root_relaxed_sol.get_cost());
+    status.set_lower_bound(root_relaxed_sol.get_cost());
+
+    cyclic_send(Message::Treat(problem, root_relaxed_sol));
 
     while !status.finished() {
         match main_receiver.recv() {
-            Err(_) => Err("parallel::branch_and_bound: something went wrong when receiving data from the worker threads"),
-            Ok(solving_information) => match solving_information {
-                Feasible(parent_lower_bound, solution) => if let Some(best_sol) = status.best_solution() {
-                    if solution.get_cost < best_sol.get_cost {
-                        status.set_best_solution(solution);
+            Err(_) => return None,
+            Ok((parent_lower_bound, solving_information)) => {
+                lb_manager.discard_lower_bound(parent_lower_bound);
+
+                match solving_information {
+                    SolvingInformation::Feasible(solution) => {
+                        if let Some(best_sol) = status.best_solution() {
+                            if solution.get_cost() < best_sol.get_cost() {
+                                status.set_best_solution(solution);
+                            }
+                        } else {
+                            status.set_best_solution(solution);
+                        }
                     }
-                } else {
-                    status.set_best_solution(solution);
+                    SolvingInformation::Branched(relaxed_subproblems) => {
+                        for (problem, relaxed_sol) in relaxed_subproblems {
+                            lb_manager.register_lower_bound(relaxed_sol.get_cost());
+
+                            cyclic_send(Message::Treat(problem, relaxed_sol));
+                        }
+                    }
                 }
-                // Branched(parent_lower_bound, relaxed_subproblems) => 
             }
         }
 
-        status.extract_best_solution()
+        if let Some(min_lb) = lb_manager.min_lower_bound() {
+            status.set_lower_bound(*min_lb);
+        }
     }
+
+    status.extract_best_solution()
 }
