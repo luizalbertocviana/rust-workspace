@@ -1,3 +1,4 @@
+use std::clone::Clone;
 use std::hash::Hash;
 use std::marker::Send;
 
@@ -20,7 +21,7 @@ pub trait Solution {
     /// variable type
     type Var: Variable;
     /// solution cost type
-    type SolCost: SolutionCost + Hash + Send;
+    type SolCost: SolutionCost + Hash + Send + Clone;
     /// determines whether solution is feasible
     fn is_feasible(&self) -> bool;
     /// returns cost of solution
