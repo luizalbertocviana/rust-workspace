@@ -13,6 +13,8 @@ type Result<'a> = std::result::Result<(), &'a str>;
 
 /// serial bracnh and bound
 pub use serial::branch_and_bound as serial;
+/// parallel branch and bound
+pub use parallel::branch_and_bound as parallel;
 
 #[cfg(test)]
 mod tests {
