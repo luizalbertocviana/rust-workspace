@@ -1,7 +1,15 @@
+// we are going to use these in a constructor
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::path::Path;
 // we use HashMap as a mapping from edges to weights
 use std::collections::HashMap;
 // we use Default to determine the weight of newly inserted edges
 use std::default::Default;
+// these trait are for ensuring that the weight tyoe can be parsed
+// from a string
+use std::fmt::Debug;
+use std::str::FromStr;
 // we use Graph as our internal graph representation
 use crate::graph::Graph;
 // our weighted graph representation implements GraphImpl
@@ -37,6 +45,86 @@ impl<W: Default> WeightedGraph<W> {
         }
 
         wg
+    }
+    /// returns a WeightedGraph built from the content of a file named
+    /// filename. The first line is expected to contain the number of
+    /// vertices, and each subsequent line is expected to contain the
+    /// endpoints of an edge together with its weight
+    pub fn from_file(filename: &str) -> Self
+    where
+        W: FromStr,
+        <W as FromStr>::Err: Debug,
+    {
+        // opens file named filename
+        let file = File::open(Path::new(filename)).expect(
+            format!(
+                "WeightedGraph::from_file: error while attempting to open {}",
+                filename
+            )
+            .as_str(),
+        );
+        // gets a buffer for file
+        let file_buffer = BufReader::new(file);
+        // gets an iterator through the lines of file
+        let mut file_lines = file_buffer.lines().map(|result_line| {
+            result_line
+                .expect("WeightedGraph::from_file: something went wrong while reading lines of a file")
+        });
+        // gets the first line of file
+        let first_line = file_lines
+            .next()
+            .expect(format!("WeightedGraph::from_file: too few lines in {}", filename).as_str());
+        // converts first_line into the number of vertices of the digraph
+        let num_verts: usize = first_line
+            .parse()
+            .expect("WeightedGraph::from_file: expected a nonnegative integer as the number of vertices");
+        // this is to store some weighted edges
+        let mut weighted_edges = Vec::new();
+        // for each line of file
+        for line in file_lines {
+            // split line into words
+            let mut words = line.split_whitespace();
+            // take the first three words: the first two being
+            // endpoints and the last one as the edge weight
+            let opt_u = words.next();
+            let opt_v = words.next();
+            let opt_w = words.next();
+            // parse each endpoint and weight
+            let u: usize = opt_u
+                .expect(
+                    format!(
+                        "WeightedGraph::from_file: too few words in some line of {}",
+                        filename
+                    )
+                    .as_str(),
+                )
+                .parse()
+                .expect("WeightedGraph::from_file: error while parsing a weighted edge");
+            let v: usize = opt_v
+                .expect(
+                    format!(
+                        "WeightedGraph::from_file: too few words in some line of {}",
+                        filename
+                    )
+                    .as_str(),
+                )
+                .parse()
+                .expect("WeightedGraph::from_file: expected nonnegative integer as endpoint");
+            let w: W = opt_w
+                .expect(
+                    format!(
+                        "WeightedGraph::from_file: too few words in some line of {}",
+                        filename
+                    )
+                    .as_str(),
+                )
+                .parse()
+                .expect("WeightedGraph::from_file: expected nonnegative integer as endpoint");
+
+            weighted_edges.push((u, v, w));
+        }
+
+        Self::from_weighted_edges(num_verts, weighted_edges)
     }
 }
 // GraphImpl implementation
