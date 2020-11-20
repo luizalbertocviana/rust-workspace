@@ -26,7 +26,10 @@ impl<W: Default> WeightedGraph<W> {
         Self { graph, weight_map }
     }
     /// returns a WeightedGraph with num_verts vertices and edges
-    pub fn from_weighted_edges(num_verts: usize, edges: impl IntoIterator<Item = (usize, usize, W)>) -> Self {
+    pub fn from_weighted_edges(
+        num_verts: usize,
+        edges: impl IntoIterator<Item = (usize, usize, W)>,
+    ) -> Self {
         let mut wg = Self::new(num_verts);
 
         for (u, v, w) in edges {
