@@ -1,3 +1,7 @@
+// we are going to use these in a constructor
+use std::fs::File;
+use std::io::{BufRead, BufReader};
+use std::path::Path;
 // we use UpperTriangularMatrix to represent our graphs
 use matrix::UpperTriangularMatrix;
 // Graph (and related types) implements these two traits
@@ -40,6 +44,65 @@ impl Graph {
         }
 
         g
+    }
+    /// creates a new Graph from file named filename. The first line
+    /// is expected to contain the number of vertices, and each
+    /// subsequent line is expected to contain the endpoints of an
+    /// edge
+    pub fn from_file(filename: &str) -> Self {
+        // opens file named filename
+        let file = File::open(Path::new(filename)).expect(
+            format!(
+                "Graph::from_file: error while attempting to open {}",
+                filename
+            )
+            .as_str(),
+        );
+        // gets a buffer for file
+        let file_buffer = BufReader::new(file);
+        // gets an iterator through the lines of file
+        let mut file_lines = file_buffer.lines().map(|result_line| {
+            result_line
+                .expect("Graph::from_file: something went wrong while reading lines of a file")
+        });
+        // gets the first line of file
+        let first_line = file_lines
+            .next()
+            .expect(format!("Graph::from_file: too few lines in {}", filename).as_str());
+        // converts first_line into the number of vertices of the graph
+        let num_verts: usize = first_line
+            .parse()
+            .expect("Graph::from_file: expected a nonnegative integer as the number of vertices");
+        // creates a graph object with num_verts vertices
+        let mut graph = Self::new(num_verts);
+        // for each subsequent line of file
+        for line in file_lines {
+            // splits line into words
+            let words = line.split_whitespace();
+            // transforms each word of words into usize
+            let mut endpoints = words.map(|w| {
+                w.parse::<usize>()
+                    .expect("Graph::from_file: expected a nonnegative integer as endpoint")
+            });
+            // this function gets an element from endpoints, panicking
+            // when there are too few elements in endpoints
+            let mut get_endpoint = || {
+                endpoints.next().expect(
+                    format!(
+                        "Graph::from_file: too few endpoints in some line of {}",
+                        filename
+                    )
+                    .as_str(),
+                )
+            };
+            // gets the edge endpoints
+            let u = get_endpoint();
+            let v = get_endpoint();
+            // adds edge with the taken endpoints to graph
+            graph.add_edge(u, v).unwrap();
+        }
+        // returns the built graph
+        graph
     }
 }
 // GraphImpl implementation
