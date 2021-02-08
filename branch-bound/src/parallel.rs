@@ -54,44 +54,40 @@ fn worker<'a, T: BBProblem>(
     // this thread only finishes when it receives the corresponding message
     loop {
         // try receiving a message from the main thread
-        match receiver.recv() {
-            // in case of error, signals it
-            Err(_) => return Err("worker: something went wrong when receiving a message from parallel::branch_and_bound"),
-            // in case nothing went wrong, deal with the message
-            Ok(msg) => match msg {
-                // if message tells to finish execution, returns Ok
-                Message::Finish => return Ok(()),
-                // if message brings a problem and its relaxed
-                // solution, treat that information
-                Message::Treat(problem, relaxed_solution) => {
-                    // if the relaxed solution is feasible
-                    if relaxed_solution.is_feasible(){
-                        // send a message to the main thread telling
-                        // just that
-                        match sender.send((relaxed_solution.get_cost(), SolvingInformation::Feasible(relaxed_solution))) {
-                            Ok(()) => (),
-                            Err(_) => return Err("worker: something went wrong when sending a message to parallel::branch_and_bound"),
-                        }
-                    } else {
-                        // in case relaxed solution is infeasible,
-                        // prepare to branch the subproblem
-                        let mut relaxed_problems = Vec::new();
-                        // for each subproblem, store it and its
-                        // relaxed solution in relaxed_problems
-                        for subproblem in problem.get_subproblems() {
-                            let relaxed_sol = subproblem.solve_relaxation();
+        let msg = receiver.recv().expect(
+            "worker: something went wrong when receiving a message from parallel::branch_and_bound",
+        );
+        match msg {
+            // if message tells to finish execution, returns Ok
+            Message::Finish => return Ok(()),
+            // if message brings a problem and its relaxed
+            // solution, treat that information
+            Message::Treat(problem, relaxed_solution) => {
+                // if the relaxed solution is feasible
+                if relaxed_solution.is_feasible() {
+                    // send a message to the main thread telling
+                    // just that
+                    sender.send((relaxed_solution.get_cost(), SolvingInformation::Feasible(relaxed_solution))).expect(
+                        "worker: something went wrong when sending a message to parallel::branch_and_bound"
+                    );
+                } else {
+                    // in case relaxed solution is infeasible,
+                    // prepare to branch the subproblem
+                    let mut relaxed_problems = Vec::new();
+                    // for each subproblem, store it and its
+                    // relaxed solution in relaxed_problems
+                    for subproblem in problem.get_subproblems() {
+                        let relaxed_sol = subproblem.solve_relaxation();
 
-                            relaxed_problems.push((*subproblem, relaxed_sol));
-                        }
-                        // send a message to the main thread
-                        // containing new subproblems (and their
-                        // relaxad solutions) to be distributed among
-                        // worker threads
-                        match sender.send((relaxed_solution.get_cost(), SolvingInformation::Branched(relaxed_problems))) {
-                            Ok(()) => (),
-                            Err(_) => return Err("worker: something went wrong when sending a message to parallel::branch_and_bound"),
-                        }
+                        relaxed_problems.push((*subproblem, relaxed_sol));
                     }
+                    // send a message to the main thread
+                    // containing new subproblems (and their
+                    // relaxad solutions) to be distributed among
+                    // worker threads
+                    sender.send((relaxed_solution.get_cost(), SolvingInformation::Branched(relaxed_problems))).expect(
+                        "worker: something went wrong when sending a message to parallel::branch_and_bound"
+                    );
                 }
             }
         }
@@ -191,9 +187,10 @@ where
     // an iterator cycling through each worker thread sender
     let mut main_sender_cycle = main_sender.iter().cycle();
     // this lambda sends a message to the next sender in main_sender_cycle
-    let mut cyclic_send = |msg| match main_sender_cycle.next().unwrap().send(msg) {
-        Ok(()) => (),
-        Err(_) => panic!("parallel::branch_and_bound: something went wrong when sending a message to one of the worker threads"),
+    let mut cyclic_send = |msg| {
+        main_sender_cycle.next().unwrap().send(msg).expect(
+            "parallel::branch_and_bound: something went wrong when sending a message to one of the worker threads"
+        );
     };
     // relaxed solution of problem
     let root_relaxed_sol = problem.solve_relaxation();
@@ -209,49 +206,45 @@ where
     // treated by the worker threads
     while !status.finished() && open_subproblems > 0 {
         // tries to receive a message from the working threads
-        match main_receiver.recv() {
-            // in case this does not succed, panics
-            Err(_) => panic!("parallel::branch_and_bound: something went wrong when receiving a message from a worker thread"),
-            // otherwise, treats the received message
-            Ok((parent_relaxed_sol_cost, solving_information)) => {
-                // accounsts from a subproblem that has been reported
-                // back by the worker threads
-                open_subproblems -= 1;
-                // since this reported subproblem has been closed,
-                // discard its relaxed solution cost
-                lb_manager.discard_lower_bound(parent_relaxed_sol_cost);
-                // treats solving_information
-                match solving_information {
-                    // in case reported subproblem is feasible,
-                    // compares its solution with the best solution
-                    // found so far
-                    SolvingInformation::Feasible(solution) => {
-                        if let Some(best_sol) = status.best_solution() {
-                            if solution.get_cost() < best_sol.get_cost() {
-                                status.set_best_solution(solution).unwrap();
-                            }
-                        } else {
-                            status.set_best_solution(solution).unwrap();
-                        }
+        let (parent_relaxed_sol_cost, solving_information) = main_receiver.recv().expect(
+            "parallel::branch_and_bound: something went wrong when receiving a message from a worker thread"
+        );
+        // accounsts from a subproblem that has been reported
+        // back by the worker threads
+        open_subproblems -= 1;
+        // since this reported subproblem has been closed,
+        // discard its relaxed solution cost
+        lb_manager.discard_lower_bound(parent_relaxed_sol_cost);
+        // treats solving_information
+        match solving_information {
+            // in case reported subproblem is feasible,
+            // compares its solution with the best solution
+            // found so far
+            SolvingInformation::Feasible(solution) => {
+                if let Some(best_sol) = status.best_solution() {
+                    if solution.get_cost() < best_sol.get_cost() {
+                        status.set_best_solution(solution).unwrap();
                     }
-                    // in case reported problem is infeasible, treat
-                    // its subproblems
-                    SolvingInformation::Branched(relaxed_subproblems) => {
-                        // for each of its subprolems and the
-                        // corresponding relaxed solution
-                        for (problem, relaxed_sol) in relaxed_subproblems {
-                            // takes the relaxed solution cost into
-                            // account as a lower bound
-                            lb_manager.register_lower_bound(relaxed_sol.get_cost());
-                            // sends the subproblem and the
-                            // corresponding relaxed solution to the
-                            // worker threads
-                            cyclic_send(Message::Treat(problem, relaxed_sol));
-                            // accounts for a subproblem sent to the
-                            // worker threads
-                            open_subproblems += 1;
-                        }
-                    }
+                } else {
+                    status.set_best_solution(solution).unwrap();
+                }
+            }
+            // in case reported problem is infeasible, treat
+            // its subproblems
+            SolvingInformation::Branched(relaxed_subproblems) => {
+                // for each of its subprolems and the
+                // corresponding relaxed solution
+                for (problem, relaxed_sol) in relaxed_subproblems {
+                    // takes the relaxed solution cost into
+                    // account as a lower bound
+                    lb_manager.register_lower_bound(relaxed_sol.get_cost());
+                    // sends the subproblem and the
+                    // corresponding relaxed solution to the
+                    // worker threads
+                    cyclic_send(Message::Treat(problem, relaxed_sol));
+                    // accounts for a subproblem sent to the
+                    // worker threads
+                    open_subproblems += 1;
                 }
             }
         }
