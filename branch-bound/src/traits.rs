@@ -1,7 +1,3 @@
-use std::clone::Clone;
-use std::hash::Hash;
-use std::marker::Send;
-
 // type aliases to extract Var and ValueType out of Solution T
 type Var<T> = <T as Solution>::Var;
 type ValType<T> = <Var<T> as Variable>::ValueType;
@@ -21,7 +17,7 @@ pub trait Solution {
     /// variable type
     type Var: Variable;
     /// solution cost type
-    type SolCost: SolutionCost + Hash + Send + Clone;
+    type SolCost: SolutionCost;
     /// determines whether solution is feasible
     fn is_feasible(&self) -> bool;
     /// returns cost of solution
@@ -34,7 +30,7 @@ pub trait Solution {
 pub trait BBProblem {
     /// solution type: needs to implement Send trait in order to be
     /// used by parallel branch and bound
-    type Sol: Solution + Send;
+    type Sol: Solution;
     /// subproblem iterator type
     type SubproblemIterator: Iterator<Item = Box<Self>>;
     /// solves problem relaxation, returning its relaxed solution

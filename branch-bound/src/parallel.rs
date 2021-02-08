@@ -1,3 +1,5 @@
+// we use this trait to ensure some types can be used as HashMap keys
+use std::hash::Hash;
 // we use a HashMap to store lower bounds inside LowerBoundManager
 use std::collections::HashMap;
 // this trait is implemented (by the compiler) for types which are
@@ -105,7 +107,10 @@ struct LowerBoundManager<T: BBProblem> {
     lower_bounds: HashMap<SolCost<T>, u64>,
 }
 // constructor and methods for LowerBoundManager
-impl<T: BBProblem> LowerBoundManager<T> {
+impl<T: BBProblem> LowerBoundManager<T>
+where
+    SolCost<T>: Hash,
+{
     // returns a new LowerBoundManager
     fn new() -> Self {
         let lower_bounds = HashMap::new();
@@ -149,7 +154,11 @@ impl<T: BBProblem> LowerBoundManager<T> {
 pub fn branch_and_bound<T: 'static + BBProblem + Send>(
     problem: T,
     num_workers: usize,
-) -> Option<T::Sol> {
+) -> Option<T::Sol>
+where
+    Sol<T>: Send,
+    SolCost<T>: Hash + Clone + Send,
+{
     // this is to keep track of the lower bounds
     let mut lb_manager: LowerBoundManager<T> = LowerBoundManager::new();
     // number of subproblems currently being treated by worker threads
