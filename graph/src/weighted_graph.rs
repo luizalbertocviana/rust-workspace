@@ -208,4 +208,10 @@ impl<W: Default> WeightedGraph<W> {
             None
         }
     }
+
+    pub fn set_weighting(&mut self, weighting: HashMap<Edge, W>) {
+        for ((u, v), w) in weighting {
+            self.set_edge_weight(u, v, w);
+        }
+    }
 }
