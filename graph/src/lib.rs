@@ -28,7 +28,7 @@ pub use crate::traits::GraphImpl;
 // error
 type Result<'a> = std::result::Result<(), &'a str>;
 // type alias for an edge
-type Edge = (usize, usize);
+pub type Edge = (usize, usize);
 
 #[cfg(test)]
 mod tests;
