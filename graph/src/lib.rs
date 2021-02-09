@@ -1,3 +1,5 @@
+/// graph library
+
 // digraph module
 mod digraph;
 // graph module
@@ -14,15 +16,15 @@ mod utils;
 pub mod algorithms;
 /// properties module: contains functions regarding some graph properties
 pub mod properties;
-/// a digraph representation
+// a digraph representation
 pub use crate::digraph::Digraph;
-/// a graph representation
+// a graph representation
 pub use crate::graph::Graph;
-/// a subgraph representation
+// a subgraph representation
 pub use crate::subgraph::Subgraph;
-/// a weighted graph representation
+// a weighted graph representation
 pub use crate::weighted_graph::WeightedGraph;
-/// this trait provides a common interface to our graph related types
+// this trait provides a common interface to our graph related types
 pub use crate::traits::GraphImpl;
 // type alias to represent the return of a function that can return an
 // error
