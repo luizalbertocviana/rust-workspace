@@ -5,6 +5,8 @@ use rand::prelude::*;
 
 use graph::*;
 
+/// creates a graph with n vertices such that each possible edge has a
+/// density chance of being added to it
 fn random_graph_density(n: usize, density: f64) -> Graph {
     let mut g = Graph::new(n);
 
@@ -23,6 +25,8 @@ fn random_graph_density(n: usize, density: f64) -> Graph {
     g
 }
 
+/// creates a weighted graph with n vertices such that each of its
+/// possible edges has a density chance of being added to it
 fn random_weighted_graph_density<W: Default>(n: usize, density: f64) -> WeightedGraph<W> {
     let g = random_graph_density(n, density);
 
@@ -35,6 +39,8 @@ fn random_weighted_graph_density<W: Default>(n: usize, density: f64) -> Weighted
     wg
 }
 
+/// creates a mapping from the edge set of wg to weight values
+/// uniformly distributed in the interval [lu, wu]
 fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + SampleUniform>(
     wg: &WeightedGraph<W>,
     lw: W,
@@ -53,6 +59,10 @@ fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + Sampl
     weighting
 }
 
+/// creates a mapping from the edge set of wg to weight values in the
+/// interval [lu, wu] as follows: each weight has a bias_chance chance
+/// of being selected from the subinterval [bias_lw, bias_uw],
+/// otherwise it is selected from [lw, uw] \ [bias_lw, bias_uw]
 fn create_biased_distributed_weighting<W: Default + SampleUniform + PartialOrd + Copy>(
     wg: &WeightedGraph<W>,
     lw: W,
