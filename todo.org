@@ -1,18 +1,22 @@
 * DONE parallel branch-and-bound
   CLOSED: [2020-11-19 qui 17:33]
-* TODO instance representation
-  - (G = (V, E), D, l, u)
-  - w : E -> R? min violated constraints? min num components?
-  - w choosen from [0, 50]:
-    - uniformly distributed
-    - P% in [15, 35] and (100 - p)% in [0, 14] \cup [36, 50]
-    - P \in {60, 80}
-  - G parameters: number of vertices, density (0.25, 0.50, 0.75)
-  - D structures: arborescence, arbitrary dag, k-distant dependencies
-  - for each parameter combination, generate at least five instances
-  - l, u: (0, 0), ({0, 1}, {0, 1}), ({0, 1}, < dep), (< dep, = dep)
-  - l, u: (= dep, = dep), as long as it is not hard to generate
-    feasible instances
+* TODO instance representation [0/5]
+  (G = (V, E), D, l, u)
+  w : E -> R? min violated constraints? min num components?
+** TODO w choosen from [0, 50]: [2/2]
+*** DONE uniformly distributed
+    CLOSED: [2021-02-25 qui 10:36]
+*** DONE P% in [15, 35] and (100 - p)% in [0, 14] \cup [36, 50], P \in {60, 80}
+    CLOSED: [2021-02-25 qui 10:37]
+** TODO G parameters: number of vertices, density (0.25, 0.50, 0.75)
+** TODO D structures: [0/3]
+*** TODO arborescence with controlled branching factor
+*** TODO arbitrary dag
+*** TODO k-distant dependencies
+** TODO l and u [0/2]
+*** TODO l, u: (0, 0), ({0, 1}, {0, 1}), ({0, 1}, < dep), (< dep, = dep)
+*** TODO l, u: (= dep, = dep), as long as it is not hard to generate feasible instances
+** TODO for each parameter combination, generate at least five instances
 * DONE utilities for reading graphs from files
   CLOSED: [2020-11-20 sex 18:14]
 * TODO utility to write a solution and its solving process status to a file
