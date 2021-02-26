@@ -1,7 +1,6 @@
 use rand::Rng;
 
-use crate::weighted_graph::WeightedGraph;
-use crate::{graph::Graph, GraphImpl};
+use crate::{GraphImpl, graph::Graph, weighted_graph::WeightedGraph};
 
 /// creates a graph with n vertices such that each possible edge has a
 /// density chance of being added to it
