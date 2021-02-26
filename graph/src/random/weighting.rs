@@ -1,47 +1,14 @@
 use std::collections::HashMap;
 
 use rand::distributions::uniform::SampleUniform;
-use rand::prelude::*;
+use rand::Rng;
 
-use graph::*;
-
-/// creates a graph with n vertices such that each possible edge has a
-/// density chance of being added to it
-fn random_graph_density(n: usize, density: f64) -> Graph {
-    let mut g = Graph::new(n);
-
-    let mut rng = rand::thread_rng();
-
-    for u in 0..(n - 1) {
-        for v in (u + 1)..n {
-            let chance: f64 = rng.gen();
-
-            if chance <= density {
-                g.add_edge(u, v).unwrap();
-            }
-        }
-    }
-
-    g
-}
-
-/// creates a weighted graph with n vertices such that each of its
-/// possible edges has a density chance of being added to it
-fn random_weighted_graph_density<W: Default>(n: usize, density: f64) -> WeightedGraph<W> {
-    let g = random_graph_density(n, density);
-
-    let mut wg = WeightedGraph::new(n);
-
-    for (u, v) in g.edges() {
-        wg.add_edge(u, v).unwrap();
-    }
-
-    wg
-}
+use crate::{Edge, weighted_graph::WeightedGraph};
+use crate::traits::GraphImpl;
 
 /// creates a mapping from the edge set of wg to weight values
 /// uniformly distributed in the interval [lu, wu]
-fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + SampleUniform>(
+pub fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + SampleUniform>(
     wg: &WeightedGraph<W>,
     lw: W,
     uw: W,
@@ -63,7 +30,7 @@ fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + Sampl
 /// interval [lu, wu] as follows: each weight has a bias_chance chance
 /// of being selected from the subinterval [bias_lw, bias_uw],
 /// otherwise it is selected from [lw, uw] \ [bias_lw, bias_uw]
-fn create_biased_distributed_weighting<W: Default + SampleUniform + PartialOrd + Copy>(
+pub fn create_biased_distributed_weighting<W: Default + SampleUniform + PartialOrd + Copy>(
     wg: &WeightedGraph<W>,
     lw: W,
     uw: W,

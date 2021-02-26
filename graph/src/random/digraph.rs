@@ -1,11 +1,12 @@
-// we are goiing to use this as a queue
 use std::collections::VecDeque;
 
-use rand::{prelude::SliceRandom, thread_rng};
+use rand::prelude::SliceRandom;
+use rand::thread_rng;
+use rand::Rng;
 
-use graph::*;
+use crate::{GraphImpl, digraph::Digraph};
 
-fn random_arborescence(n: usize, branching_factor: usize) -> Digraph {
+pub fn random_arborescence(n: usize, branching_factor: usize) -> Digraph {
     let mut arborescence = Digraph::new(n);
 
     let root = 0;
@@ -34,4 +35,25 @@ fn random_arborescence(n: usize, branching_factor: usize) -> Digraph {
     }
 
     arborescence
+}
+
+pub fn random_dag(n: usize, density: f64) -> Digraph {
+    let mut dag = Digraph::new(n);
+
+    let mut rng = thread_rng();
+
+    let mut topological_sort: Vec<usize> = (0..n).collect();
+    topological_sort.shuffle(&mut rng);
+
+    for u in 0..(n - 1) {
+        for v in (u + 1)..n {
+            let chance: f64 = rng.gen();
+
+            if chance <= density {
+                dag.add_edge(u, v).unwrap();
+            }
+        }
+    }
+
+    dag
 }

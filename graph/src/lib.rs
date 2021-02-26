@@ -8,6 +8,8 @@ mod graph;
 mod subgraph;
 // weighted graph module
 mod weighted_graph;
+// randomly generated graphs
+pub mod random;
 // traits module
 mod traits;
 // utility functions

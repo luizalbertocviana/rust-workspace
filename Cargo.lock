@@ -31,6 +31,7 @@ version = "0.1.0"
 dependencies = [
  "disjoint-set",
  "matrix",
+ "rand",
 ]
 
 [[package]]
@@ -38,7 +39,6 @@ name = "instance-generators"
 version = "0.1.0"
 dependencies = [
  "graph",
- "rand",
 ]
 
 [[package]]
