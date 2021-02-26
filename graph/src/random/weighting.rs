@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use rand::distributions::uniform::SampleUniform;
 use rand::Rng;
 
-use crate::{Edge, weighted_graph::WeightedGraph};
 use crate::traits::GraphImpl;
+use crate::{weighted_graph::WeightedGraph, Edge};
 
 /// creates a mapping from the edge set of wg to weight values
 /// uniformly distributed in the interval [lu, wu]

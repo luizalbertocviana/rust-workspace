@@ -4,7 +4,7 @@ use rand::prelude::SliceRandom;
 use rand::thread_rng;
 use rand::Rng;
 
-use crate::{GraphImpl, digraph::Digraph};
+use crate::{digraph::Digraph, GraphImpl};
 
 pub fn random_arborescence(n: usize, branching_factor: usize) -> Digraph {
     let mut arborescence = Digraph::new(n);
