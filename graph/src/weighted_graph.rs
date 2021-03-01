@@ -67,17 +67,18 @@ impl<W: Default> WeightedGraph<W> {
         let file_buffer = BufReader::new(file);
         // gets an iterator through the lines of file
         let mut file_lines = file_buffer.lines().map(|result_line| {
-            result_line
-                .expect("WeightedGraph::from_file: something went wrong while reading lines of a file")
+            result_line.expect(
+                "WeightedGraph::from_file: something went wrong while reading lines of a file",
+            )
         });
         // gets the first line of file
         let first_line = file_lines
             .next()
             .expect(format!("WeightedGraph::from_file: too few lines in {}", filename).as_str());
         // converts first_line into the number of vertices of the digraph
-        let num_verts: usize = first_line
-            .parse()
-            .expect("WeightedGraph::from_file: expected a nonnegative integer as the number of vertices");
+        let num_verts: usize = first_line.parse().expect(
+            "WeightedGraph::from_file: expected a nonnegative integer as the number of vertices",
+        );
         // this is to store some weighted edges
         let mut weighted_edges = Vec::new();
         // for each line of file
