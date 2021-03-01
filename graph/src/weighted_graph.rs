@@ -1,7 +1,7 @@
 // we are going to use these in a constructor
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::{fmt::Display, io::{BufRead, BufReader}};
 use std::path::Path;
+use std::{fs::File, io::Write};
 // we use HashMap as a mapping from edges to weights
 use std::collections::HashMap;
 // we use Default to determine the weight of newly inserted edges
@@ -46,6 +46,9 @@ impl<W: Default> WeightedGraph<W> {
 
         wg
     }
+}
+// file facilities
+impl<W: Default + Display> WeightedGraph<W> {
     /// returns a WeightedGraph built from the content of a file named
     /// filename. The first line is expected to contain the number of
     /// vertices, and each subsequent line is expected to contain the
@@ -126,6 +129,31 @@ impl<W: Default> WeightedGraph<W> {
         }
 
         Self::from_weighted_edges(num_verts, weighted_edges)
+    }
+    /// writes WeightedGraph to file named filename. The first line
+    /// contains the number of vertices, and each subsequent line
+    /// contains the endpoints of an edge together with its weight
+    pub fn to_file(&self, filename: &str) {
+        let mut file = File::create(filename)
+            .expect(format!("WeightedGraph::to_file: could not create file {}", filename).as_str());
+
+        let mut writer = |s: &str| {
+            writeln!(file, "{}", s).expect(
+                format!(
+                    "WeightedGraph::to_file: error while writing to file {}",
+                    filename
+                )
+                .as_str(),
+            )
+        };
+
+        writer(&self.num_verts().to_string());
+
+        for (u, v) in self.edges() {
+            let w = self.get_edge_weight(u, v).unwrap();
+
+            writer(format!("{} {} {}", u, v, w).as_str());
+        }
     }
 }
 // GraphImpl implementation
