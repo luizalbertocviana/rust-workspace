@@ -1,7 +1,7 @@
 // we are going to use these in a constructor
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
+use std::{fs::File, io::Write};
 // we use Matrix as the internal representation of our digraphs
 use matrix::Matrix;
 // Digraph (and related types) implements these two traits
@@ -87,6 +87,25 @@ impl Digraph {
         }
         // returns the built digraph
         digraph
+    }
+    /// writes Digraph to file named filename. The first line contains
+    /// the number of vertices, and each subsequent line contains the
+    /// endpoints of an edge
+    pub fn to_file(&self, filename: &str) {
+        let mut file = File::create(filename)
+            .expect(format!("Digraph::to_file: could not create file {}", filename).as_str());
+
+        let mut writer = |s: &str| {
+            writeln!(file, "{}", s).expect(
+                format!("Digraph::to_file: error while writing to file {}", filename).as_str(),
+            )
+        };
+
+        writer(&self.num_verts().to_string());
+
+        for (u, v) in self.edges() {
+            writer(format!("{} {}", u, v).as_str());
+        }
     }
 }
 // GraphImpl implementation
