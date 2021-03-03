@@ -5,7 +5,6 @@ use rand::Rng;
 
 use crate::traits::GraphImpl;
 use crate::{weighted_graph::WeightedGraph, Edge};
-
 /// creates a mapping from the edge set of wg to weight values
 /// uniformly distributed in the interval [lu, wu]
 pub fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + SampleUniform>(
@@ -25,7 +24,6 @@ pub fn create_uniformly_distributed_weighting<W: Default + Copy + PartialOrd + S
 
     weighting
 }
-
 /// creates a mapping from the edge set of wg to weight values in the
 /// interval [lu, wu] as follows: each weight has a bias_chance chance
 /// of being selected from the subinterval [bias_lw, bias_uw],
