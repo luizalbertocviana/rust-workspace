@@ -53,6 +53,48 @@ impl Instance {
             writer(format!("{} {} {} {}", i, j, l, u).as_str());
         }
     }
+
+    pub fn from_files(graph_file: &str, dep_file: &str, bounds_file: &str) -> Self {
+        let g = WeightedGraph::from_file(graph_file);
+        let d = Digraph::from_file(dep_file);
+
+        let mut dep_lb = HashMap::new();
+        let mut dep_ub = HashMap::new();
+
+        let file = File::open(bounds_file)
+            .expect(format!("Instance::from_files: could not open file {}", bounds_file).as_str());
+
+        for line_result in BufReader::new(file).lines() {
+            let line = line_result.expect(
+                format!(
+                    "Instance::from_files: error while reading file {}",
+                    bounds_file
+                )
+                .as_str(),
+            );
+
+            let mut words = line.split(' ');
+
+            let mut parser = || -> usize {words.next().unwrap().parse().unwrap()};
+
+            let i = parser();
+            let j = parser();
+            let l = parser();
+            let u = parser();
+
+            let edge = (i, j);
+
+            dep_lb.insert(edge, l);
+            dep_ub.insert(edge, u);
+        }
+
+        Self {
+            graph: g,
+            dependencies: d,
+            dep_lb,
+            dep_ub,
+        }
+    }
 }
 
 fn main() {
