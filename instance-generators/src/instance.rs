@@ -7,25 +7,28 @@ use std::{
 };
 // graph facilities
 use graph::{Digraph, Edge, GraphImpl, WeightedGraph};
+// some type aliases
+pub type WGraph = WeightedGraph<u64>;
+pub type DependencyBound = HashMap<Edge, usize>;
 /// instance representation (G, D, l, u), where G = (V, E, w) is a
 /// weighted graph, D = (E, A) represents the dependency relations
 /// among edges, and l and u set lower and upper bounds, respectively,
 /// to the number of dependencies an edge must satisfy
 pub struct Instance {
-    graph: WeightedGraph<u64>,
+    graph: WGraph,
     dependencies: Digraph,
-    dep_lb: HashMap<Edge, usize>,
-    dep_ub: HashMap<Edge, usize>,
+    dep_lb: DependencyBound,
+    dep_ub: DependencyBound,
 }
 // constructors and file operations
 impl Instance {
     /// creates a new instance from a weighted graph, a digraph and
     /// two mappings from edges to dependency bounds
     pub fn new(
-        g: WeightedGraph<u64>,
+        g: WGraph,
         d: Digraph,
-        l: HashMap<Edge, usize>,
-        u: HashMap<Edge, usize>,
+        l: DependencyBound,
+        u: DependencyBound,
     ) -> Self {
         Self {
             graph: g,
