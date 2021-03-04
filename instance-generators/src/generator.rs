@@ -1,6 +1,7 @@
 use crate::instance::DependencyBound;
 
-type Interval = (u64, u64);
+type Interval = (usize, usize);
+
 
 enum WeightingDistribution {
     // carries distribution interval
