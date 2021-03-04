@@ -14,8 +14,8 @@ struct GraphParameters {
 enum WeightingDistribution {
     // carries distribution interval
     Uniform(Interval),
-    // carries distribution interval and biased subinterval
-    Biased(Interval, Interval),
+    // carries distribution interval, bias chance and biased subinterval
+    Biased(Interval, f64, Interval),
 }
 
 enum DigraphStructure {
