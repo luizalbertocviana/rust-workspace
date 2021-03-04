@@ -8,7 +8,7 @@ use std::{
 // graph facilities
 use graph::{Digraph, Edge, GraphImpl, WeightedGraph};
 // some type aliases
-pub type WGraph = WeightedGraph<u64>;
+pub type WGraph = WeightedGraph<usize>;
 pub type DependencyBound = HashMap<Edge, usize>;
 /// instance representation (G, D, l, u), where G = (V, E, w) is a
 /// weighted graph, D = (E, A) represents the dependency relations
