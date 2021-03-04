@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use rand::Rng;
+
 use graph::GraphImpl;
 
 use crate::instance::{DependencyBound, WGraph};
