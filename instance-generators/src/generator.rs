@@ -6,6 +6,10 @@ use crate::dependency_bounds;
 
 type Interval = (usize, usize);
 
+struct GraphParameters {
+    num_verts: usize,
+    density: f64,
+}
 
 enum WeightingDistribution {
     // carries distribution interval
