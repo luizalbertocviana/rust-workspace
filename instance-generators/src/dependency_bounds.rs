@@ -6,7 +6,7 @@ use graph::GraphImpl;
 
 use crate::instance::{DependencyBound, WGraph};
 
-fn create_constant_bounds(g: WGraph, l: usize, u: usize) -> (DependencyBound, DependencyBound) {
+pub fn create_constant_bounds(g: &WGraph, l: usize, u: usize) -> (DependencyBound, DependencyBound) {
     let mut l_bound = HashMap::new();
     let mut u_bound = HashMap::new();
 
