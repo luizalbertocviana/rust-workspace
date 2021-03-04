@@ -1,4 +1,8 @@
-use crate::instance::DependencyBound;
+use graph::{GraphImpl, random};
+
+use crate::instance::{DependencyBound, Instance};
+
+use crate::dependency_bounds;
 
 type Interval = (usize, usize);
 
