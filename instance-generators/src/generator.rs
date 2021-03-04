@@ -25,9 +25,10 @@ enum DigraphStructure {
     Dag(f64),
 }
 
-struct GraphParameters {
-    num_verts: usize,
-    density: f64,
+enum DependencyBoundsType {
+    Constant(usize, usize),
+    Interval(Interval),
+    Custom(DependencyBound, DependencyBound),
 }
 
 // fn generate_instance(
