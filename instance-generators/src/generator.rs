@@ -1,4 +1,4 @@
-use graph::{GraphImpl, random};
+use graph::{GraphImpl, properties::is_connected, random};
 
 use crate::instance::{DependencyBound, Instance};
 
