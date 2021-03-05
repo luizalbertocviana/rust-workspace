@@ -12,6 +12,12 @@ struct GraphParameters {
 }
 
 enum WeightingDistribution {
+impl GraphParameters {
+    pub fn new(num_verts: usize, density: f64) -> Self {
+        Self { num_verts, density }
+    }
+}
+
     // carries distribution interval
     Uniform(Interval),
     // carries distribution interval, bias chance and biased subinterval
