@@ -1,16 +1,20 @@
 * DONE parallel branch-and-bound
   CLOSED: [2020-11-19 qui 17:33]
-* TODO instance representation [0/5]
+* TODO instance representation [2/5]
   (G = (V, E), D, l, u)
   w : E -> R? min violated constraints? min num components?
-** TODO w choosen from [0, 50]: [2/2]
+** DONE w choosen from [0, 50]: [2/2]
+   CLOSED: [2021-03-05 sex 11:30]
 *** DONE uniformly distributed
     CLOSED: [2021-02-25 qui 10:36]
 *** DONE P% in [15, 35] and (100 - p)% in [0, 14] \cup [36, 50], P \in {60, 80}
     CLOSED: [2021-02-25 qui 10:37]
-** TODO G parameters: [0/2]
-*** TODO number of vertices (30, 60, 90, 120, 150)
-*** TODO density (0.25, 0.50, 0.75)
+** DONE G parameters: [2/2]
+   CLOSED: [2021-03-05 sex 11:29]
+*** DONE number of vertices (30, 60, 90, 120, 150)
+    CLOSED: [2021-03-05 sex 11:29]
+*** DONE density (0.25, 0.50, 0.75)
+    CLOSED: [2021-03-05 sex 11:29]
 ** TODO D structures: [2/3]
 *** DONE arborescence with controlled branching factor
     CLOSED: [2021-02-26 sex 16:15]
