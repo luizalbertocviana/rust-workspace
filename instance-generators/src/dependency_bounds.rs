@@ -40,8 +40,8 @@ pub fn create_interval_bounds(
 }
 
 pub fn create_from_custom_bounds(
-    lb: DependencyBound,
-    ub: DependencyBound,
+    lb: &DependencyBound,
+    ub: &DependencyBound,
 ) -> (DependencyBound, DependencyBound) {
     let mut l_bound = HashMap::new();
     let mut u_bound = HashMap::new();
