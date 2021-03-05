@@ -6,32 +6,32 @@ use crate::dependency_bounds;
 
 type Interval = (usize, usize);
 
-struct GraphParameters {
+pub struct GraphParameters {
     num_verts: usize,
     density: f64,
 }
 
-enum WeightingDistribution {
 impl GraphParameters {
     pub fn new(num_verts: usize, density: f64) -> Self {
         Self { num_verts, density }
     }
 }
 
+pub enum WeightingDistribution {
     // carries distribution interval
     Uniform(Interval),
     // carries distribution interval, bias chance and biased subinterval
     Biased(Interval, f64, Interval),
 }
 
-enum DigraphStructure {
+pub enum DigraphStructure {
     // carries branching factor
     Arborescence(usize),
     // carries density
     Dag(f64),
 }
 
-enum DependencyBoundsType {
+pub enum DependencyBoundsType {
     Constant(usize, usize),
     Interval(Interval),
     Custom(DependencyBound, DependencyBound),
