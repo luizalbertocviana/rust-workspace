@@ -56,7 +56,7 @@ pub enum UpperBoundDependencyType {
 pub enum DependencyBoundsType {
     Constant(usize, usize),
     Interval(Interval),
-    Custom(DependencyBound, DependencyBound),
+    Custom(LowerBoundDependencyType, UpperBoundDependencyType),
 }
 
 pub fn generate_instance(
