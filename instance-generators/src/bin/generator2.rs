@@ -9,7 +9,7 @@ use instance_generators::generator::{
 /// {0.25, 0.50, 0.75}
 /// - D is built as an arborescence with branching factor in {2, 4, 8}
 /// - l and u are functions mapping the edge set into {0, 1}, avoiding
-/// l(e) < u(e)
+/// l(e) > u(e)
 
 fn main() {
     let weighting = WeightingDistribution::Uniform((0, 50));
