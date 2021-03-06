@@ -31,6 +31,28 @@ pub enum DigraphStructure {
     Dag(f64),
 }
 
+pub enum LowerBoundDependencyType {
+    // carries interval from which bounds must be choosen
+    Interval(Interval),
+    // the lower bound of each edge is at most its number of
+    // dependencies minus one
+    NearlyStrong,
+    // the lower bound of each edge is given by the size of its
+    // dependency set
+    Strong,
+}
+
+pub enum UpperBoundDependencyType {
+    // carries interval from which bounds must be choosen
+    Interval(Interval),
+    // the upper bound of each edge is at most its number of
+    // dependencies minus one
+    NearlyWeak,
+    // the upper bound of each edge is given by the size of its
+    // dependency set
+    Weak,
+}
+
 pub enum DependencyBoundsType {
     Constant(usize, usize),
     Interval(Interval),
