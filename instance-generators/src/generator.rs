@@ -67,7 +67,8 @@ pub fn generate_instance(
 ) -> Instance {
     // let mut g = random::graph::random_weighted_graph_density(g_param.num_verts, g_param.density);
     let mut g = {
-        let mut temp = random::graph::random_weighted_graph_density(g_param.num_verts, g_param.density);
+        let mut temp =
+            random::graph::random_weighted_graph_density(g_param.num_verts, g_param.density);
 
         while !is_connected(&temp) {
             temp = random::graph::random_weighted_graph_density(g_param.num_verts, g_param.density);
@@ -108,8 +109,8 @@ pub fn generate_instance(
         DependencyBoundsType::Interval((lb, ub)) => {
             dependency_bounds::create_interval_bounds(&g, *lb, *ub)
         }
-        DependencyBoundsType::Custom(lb, ub) => {
-            dependency_bounds::create_from_custom_bounds(lb, ub)
+        DependencyBoundsType::Custom(lb_param, ub_param) => {
+            dependency_bounds::create_from_custom_bounds(&g, &d, lb_param, ub_param)
         }
     };
 
