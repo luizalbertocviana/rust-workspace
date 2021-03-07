@@ -62,13 +62,27 @@ pub fn create_from_custom_bounds(
 
         let l = match lb_param {
             LowerBoundDependencyType::Interval((min_l, max_l)) => rng.gen_range(*min_l..*max_l),
-            LowerBoundDependencyType::NearlyStrong => rng.gen_range(0..num_deps),
+            LowerBoundDependencyType::NearlyStrong => {
+                if 0 >= num_deps {
+                    0
+                } else {
+                    rng.gen_range(0..num_deps)
+                }
+            }
             LowerBoundDependencyType::Strong => num_deps,
         };
 
         let u = match ub_param {
-            UpperBoundDependencyType::Interval((min_u, max_u)) => rng.gen_range(max(l, *min_u)..*max_u),
-            UpperBoundDependencyType::NearlyWeak => rng.gen_range(l..num_deps),
+            UpperBoundDependencyType::Interval((min_u, max_u)) => {
+                rng.gen_range(max(l, *min_u)..*max_u)
+            }
+            UpperBoundDependencyType::NearlyWeak => {
+                if l >= num_deps {
+                    l
+                } else {
+                    rng.gen_range(l..num_deps)
+                }
+            }
             UpperBoundDependencyType::Weak => num_deps,
         };
 
