@@ -2,7 +2,7 @@ use std::{cmp::max, collections::HashMap};
 
 use rand::Rng;
 
-use graph::{Digraph, GraphImpl, properties::num_in_neighbors};
+use graph::{properties::num_in_neighbors, Digraph, GraphImpl};
 
 use crate::{
     generator::{LowerBoundDependencyType, UpperBoundDependencyType},
