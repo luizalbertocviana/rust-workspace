@@ -1,6 +1,6 @@
 * DONE parallel branch-and-bound
   CLOSED: [2020-11-19 qui 17:33]
-* TODO instance representation [2/5]
+* TODO instance representation [4/5]
   (G = (V, E), D, l, u)
   w : E -> R? min violated constraints? min num components?
 ** DONE w choosen from [0, 50]: [2/2]
@@ -21,10 +21,14 @@
 *** DONE arbitrary dag
     CLOSED: [2021-02-26 sex 16:25]
 *** TODO k-distant dependencies
-** TODO l and u [0/2]
-*** TODO l, u: (0, 0), ({0, 1}, {0, 1}), ({0, 1}, < dep), (< dep, = dep)
-*** TODO l, u: (= dep, = dep), as long as it is not hard to generate feasible instances
-** TODO for each parameter combination, generate at least five instances
+** DONE l and u [2/2]
+   CLOSED: [2021-03-08 seg 10:34]
+*** DONE l, u: (0, 0), ({0, 1}, {0, 1}), ({0, 1}, < dep), (< dep, = dep)
+    CLOSED: [2021-03-08 seg 10:25]
+*** DONE l, u: (= dep, = dep), as long as it is not hard to generate feasible instances
+    CLOSED: [2021-03-08 seg 10:34]
+** DONE for each parameter combination, generate at least five instances
+   CLOSED: [2021-03-08 seg 10:26]
 * DONE utilities for reading graphs from files
   CLOSED: [2020-11-20 sex 18:14]
 * TODO utility to write a solution and its solving process status to a file
