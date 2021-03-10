@@ -11,7 +11,7 @@ use instance_generators::generator::{
 
 fn main() {
     let weighting = WeightingDistribution::Uniform((0, 50));
-    let ns = [30, 60, 90, 120, 150];
+    let ns = [30, 60, 90, 120];
     let densities = [0.25, 0.50, 0.75];
     let dag_densities = [0.25, 0.50, 0.75];
 
