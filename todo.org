@@ -1,6 +1,7 @@
 * DONE parallel branch-and-bound
   CLOSED: [2020-11-19 qui 17:33]
-* TODO instance representation [4/5]
+* DONE instance representation [5/5]
+  CLOSED: [2021-03-16 ter 10:08]
   (G = (V, E), D, l, u)
   w : E -> R? min violated constraints? min num components?
 ** DONE w choosen from [0, 50]: [2/2]
@@ -15,12 +16,14 @@
     CLOSED: [2021-03-05 sex 11:29]
 *** DONE density (0.25, 0.50, 0.75)
     CLOSED: [2021-03-05 sex 11:29]
-** TODO D structures: [2/3]
+** DONE D structures: [3/3]
+   CLOSED: [2021-03-16 ter 10:07]
 *** DONE arborescence with controlled branching factor
     CLOSED: [2021-02-26 sex 16:15]
 *** DONE arbitrary dag
     CLOSED: [2021-02-26 sex 16:25]
-*** TODO k-distant dependencies
+*** DONE k-distant dependencies
+    CLOSED: [2021-03-16 ter 10:08]
 ** DONE l and u [2/2]
    CLOSED: [2021-03-08 seg 10:34]
 *** DONE l, u: (0, 0), ({0, 1}, {0, 1}), ({0, 1}, < dep), (< dep, = dep)
