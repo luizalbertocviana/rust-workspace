@@ -112,3 +112,18 @@ impl Instance {
         }
     }
 }
+// getters
+impl Instance {
+    pub fn graph(&self) -> &WGraph {
+        &self.graph
+    }
+    pub fn dependencies(&self) -> &Digraph {
+        &self.dependencies
+    }
+    pub fn dep_lb(&self) -> &DependencyBound {
+        &self.dep_lb
+    }
+    pub fn dep_ub(&self) -> &DependencyBound {
+        &self.dep_ub
+    }
+}
