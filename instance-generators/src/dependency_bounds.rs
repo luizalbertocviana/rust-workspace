@@ -4,9 +4,10 @@ use rand::Rng;
 
 use graph::{properties::num_in_neighbors, Digraph, GraphImpl};
 
+use instance::{WGraph, DependencyBound};
+
 use crate::{
     generator::{LowerBoundDependencyType, UpperBoundDependencyType},
-    instance::{DependencyBound, WGraph},
 };
 
 pub fn create_constant_bounds(

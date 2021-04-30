@@ -1,6 +1,6 @@
 use graph::{properties::is_connected, random, GraphImpl};
 
-use crate::instance::Instance;
+use instance::Instance;
 
 use crate::dependency_bounds;
 

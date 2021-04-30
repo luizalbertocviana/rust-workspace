@@ -35,10 +35,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "instance"
+version = "0.1.0"
+dependencies = [
+ "graph",
+]
+
+[[package]]
 name = "instance-generators"
 version = "0.1.0"
 dependencies = [
  "graph",
+ "instance",
  "rand",
 ]
 
