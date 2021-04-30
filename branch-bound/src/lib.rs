@@ -7,7 +7,7 @@ mod serial;
 // parallel branch and bound
 mod parallel;
 // some exported traits
-pub use crate::traits::{BBProblem, RelaxedProblemPool, Solution, SolutionCost};
+pub use crate::traits::{BBProblem, RelaxedProblemPool, Solution, SolutionCost, Variable};
 // alias to return type of functions that can return an error
 type Result<'a> = std::result::Result<(), &'a str>;
 
