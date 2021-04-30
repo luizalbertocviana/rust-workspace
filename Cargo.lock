@@ -42,6 +42,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "instance-bb"
+version = "0.1.0"
+dependencies = [
+ "branch-bound",
+ "graph",
+ "instance",
+]
+
+[[package]]
 name = "instance-generators"
 version = "0.1.0"
 dependencies = [
