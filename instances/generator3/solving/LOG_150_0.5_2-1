@@ -1,0 +1,45 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 5692 rows and 78 columns.
+MIP Presolve modified 11149 coefficients.
+Aggregator did 2852 substitutions.
+Reduced MIP has 19594 rows, 14059 columns, and 66647 nonzeros.
+Reduced MIP has 13910 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.06 sec. (100.26 ticks)
+Found incumbent of value 3840.000000 after 0.12 sec. (163.62 ticks)
+Probing time = 0.03 sec. (7.54 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 19594 rows, 14059 columns, and 66647 nonzeros.
+Reduced MIP has 13910 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.04 sec. (45.97 ticks)
+Probing time = 0.03 sec. (6.90 ticks)
+Clique table members: 39239.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.11 sec. (157.35 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                         3840.0000        0.0000           100.00%
+*     0+    0                         1614.0000        0.0000           100.00%
+*     0+    0                         1584.0000        0.0000           100.00%
+      0     0      164.0000   145     1584.0000      164.0000     3129   89.65%
+*     0+    0                          164.0000      164.0000             0.00%
+      0     0        cutoff            164.0000      164.0000     3129    0.00%
+Elapsed time = 0.43 sec. (478.21 ticks, tree = 0.01 MB, solutions = 4)
+
+Root node processing (before b&c):
+  Real time             =    0.44 sec. (479.43 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.44 sec. (479.43 ticks)
