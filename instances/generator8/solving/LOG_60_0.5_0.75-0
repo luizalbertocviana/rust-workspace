@@ -1,0 +1,53 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 511 rows and 38 columns.
+MIP Presolve modified 3342 coefficients.
+Aggregator did 34 substitutions.
+Reduced MIP has 3941 rows, 2664 columns, and 458043 nonzeros.
+Reduced MIP has 2605 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.37 sec. (640.13 ticks)
+Found incumbent of value 1266.000000 after 0.57 sec. (889.12 ticks)
+Probing time = 0.01 sec. (5.81 ticks)
+Cover probing fixed 0 vars, tightened 2 bounds.
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve modified 56 coefficients.
+Reduced MIP has 3941 rows, 2664 columns, and 458043 nonzeros.
+Reduced MIP has 2605 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.12 sec. (201.06 ticks)
+Probing time = 0.01 sec. (5.68 ticks)
+Cover probing fixed 0 vars, tightened 1 bounds.
+Clique table members: 986.
+Tightened 1 constraints.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.28 sec. (154.59 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                         1266.0000        0.0000           100.00%
+      0     0       87.4301    54     1266.0000       87.4301      668   93.09%
+*     0+    0                           93.0000       87.4301             5.99%
+      0     0        cutoff             93.0000       93.0000      798    0.00%
+Elapsed time = 1.38 sec. (2008.88 ticks, tree = 0.01 MB, solutions = 2)
+
+Cover cuts applied:  2
+Implied bound cuts applied:  2
+Mixed integer rounding cuts applied:  3
+Zero-half cuts applied:  1
+Gomory fractional cuts applied:  2
+
+Root node processing (before b&c):
+  Real time             =    1.38 sec. (2010.32 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    1.38 sec. (2010.32 ticks)
