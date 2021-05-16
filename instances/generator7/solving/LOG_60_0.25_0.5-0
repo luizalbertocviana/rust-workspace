@@ -1,0 +1,109 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 284 rows and 34 columns.
+MIP Presolve modified 2964 coefficients.
+Aggregator did 15 substitutions.
+Reduced MIP has 2151 rows, 1457 columns, and 91224 nonzeros.
+Reduced MIP has 1398 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.15 sec. (272.11 ticks)
+Probing fixed 9 vars, tightened 0 bounds.
+Probing time = 0.04 sec. (59.20 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve eliminated 9 rows and 9 columns.
+MIP Presolve modified 237 coefficients.
+Reduced MIP has 2142 rows, 1448 columns, and 90884 nonzeros.
+Reduced MIP has 1389 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.04 sec. (88.84 ticks)
+Probing time = 0.01 sec. (11.55 ticks)
+Clique table members: 46411.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.04 sec. (46.50 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0      223.6630   207                    223.6630      496         
+      0     0      364.8515   207                   Cuts: 635     1084         
+      0     0      387.0251   207                   Cuts: 420     1477         
+      0     0      398.2674   207                   Cuts: 604     1749         
+      0     0      402.5923   207                   Cuts: 421     1988         
+      0     0      405.8541   207                   Cuts: 466     2168         
+Detecting symmetries...
+      0     0      407.8710   207                   Cuts: 395     2346         
+      0     0      409.7486   207                   Cuts: 357     2499         
+      0     0      411.1125   207                   Cuts: 466     2629         
+      0     0      412.4544   207                   Cuts: 269     2787         
+      0     0      413.5306   207                   Cuts: 264     2905         
+      0     0      413.9569   207                   Cuts: 184     3024         
+      0     0      415.0042   207                   Cuts: 283     3134         
+      0     0      415.5587   207                   Cuts: 269     3291         
+      0     0      415.7990   207                   Cuts: 297     3377         
+      0     0      416.9817   207                   Cuts: 262     3495         
+      0     0      417.4153   207                   Cuts: 207     3584         
+      0     0      417.7762   207                   Cuts: 222     3660         
+      0     0      418.1041   207                   Cuts: 228     3743         
+      0     0      418.5151   207                   Cuts: 227     3827         
+      0     0      418.8759   207                   Cuts: 272     3914         
+      0     0      419.0068   207                   Cuts: 212     3966         
+      0     0      419.1656   207                   Cuts: 192     4034         
+      0     0      419.5904   207                   Cuts: 286     4144         
+      0     0      419.8708   207                   Cuts: 167     4270         
+      0     0      420.1530   207                   Cuts: 393     4353         
+      0     0      420.3370   207                   Cuts: 191     4499         
+      0     0      420.8140   207                   Cuts: 168     4642         
+      0     0      421.2046   207                   Cuts: 205     4764         
+      0     0      421.3752   207                   Cuts: 389     4848         
+      0     0      421.6058   207                   Cuts: 135     4909         
+      0     0      421.7981   207                   Cuts: 301     4986         
+      0     0      422.0100   207                   Cuts: 211     5160         
+      0     0      422.2337   207                   Cuts: 112     5258         
+      0     0      422.3306   207                   Cuts: 287     5314         
+      0     0      422.4469   207                   Cuts: 165     5372         
+Detecting symmetries...
+      0     2      422.4469   331                    422.4469     5372         
+Elapsed time = 9.83 sec. (9594.82 ticks, tree = 0.02 MB, solutions = 0)
+     18     7      769.6604   199                    422.8221     7344         
+     73    38      792.0505   196                    424.6768    19800         
+    128    56      571.6657   226                    424.6768    30844         
+    165    83      530.3912   225                    424.6768    42473         
+    249   107      429.1752   274                    425.2050    54063         
+    294   130      448.3335   247                    425.2050    63376         
+    355   165    infeasible                          425.2050    83328         
+    369   174      486.9671   232                    425.2050    84500         
+    374   179      434.4933   303                    425.2050    86990         
+    516   202      575.8807   232                    425.2050   117969         
+Elapsed time = 13.01 sec. (12803.62 ticks, tree = 0.47 MB, solutions = 0)
+    768   313      580.1619   221                    425.2050   155075         
+    998   354    infeasible                          425.2050   199104         
+   1345   439    infeasible                          425.2050   239623         
+   1568   415      716.9149   206                    456.3582   285417         
+   1905   507      876.5935   200                    458.0758   320048         
+   2104   528      733.5133   223                    458.0758   370442         
+   2372   521    infeasible                          601.3399   403528         
+   2482   446    infeasible                          642.6562   443617         
+   2644   268    infeasible                          688.2844   493078         
+   2943   158    infeasible                          747.8556   518386         
+Elapsed time = 22.92 sec. (22451.71 ticks, tree = 0.12 MB, solutions = 0)
+
+GUB cover cuts applied:  1
+Clique cuts applied:  65
+Implied bound cuts applied:  793
+Mixed integer rounding cuts applied:  157
+Zero-half cuts applied:  9
+Gomory fractional cuts applied:  3
+
+Root node processing (before b&c):
+  Real time             =    9.78 sec. (9517.83 ticks)
+Parallel b&c, 8 threads:
+  Real time             =   13.25 sec. (13176.48 ticks)
+  Sync time (average)   =    1.21 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =   23.04 sec. (22694.31 ticks)

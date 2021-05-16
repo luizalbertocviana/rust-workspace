@@ -1,0 +1,128 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 536 rows and 23 columns.
+MIP Presolve modified 4808 coefficients.
+Aggregator did 22 substitutions.
+Reduced MIP has 4655 rows, 3132 columns, and 607020 nonzeros.
+Reduced MIP has 3043 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.79 sec. (1433.49 ticks)
+Probing fixed 253 vars, tightened 0 bounds.
+Probing time = 0.48 sec. (659.62 ticks)
+Cover probing fixed 0 vars, tightened 37 bounds.
+Tried aggregator 2 times.
+Detecting symmetries...
+MIP Presolve eliminated 310 rows and 253 columns.
+MIP Presolve modified 1386 coefficients.
+Aggregator did 4 substitutions.
+Reduced MIP has 4341 rows, 2875 columns, and 544806 nonzeros.
+Reduced MIP has 2786 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.47 sec. (839.34 ticks)
+Probing fixed 30 vars, tightened 0 bounds.
+Probing time = 0.21 sec. (305.14 ticks)
+Cover probing fixed 0 vars, tightened 10 bounds.
+Clique table members: 289677.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.39 sec. (424.16 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0      237.8261   309                    237.8261      932         
+      0     0      387.3784   309                  Cuts: 1185     1824         
+      0     0      431.6879   309                   Cuts: 559     2606         
+      0     0      439.8644   309                   Cuts: 724     2921         
+      0     0      442.1362   309                   Cuts: 500     3167         
+      0     0      443.5323   309                   Cuts: 528     3332         
+Detecting symmetries...
+      0     0      443.9227   309                   Cuts: 438     3467         
+      0     0      444.4731   309                   Cuts: 473     3604         
+      0     0      445.0302   309                   Cuts: 446     3728         
+      0     0      445.4315   309                   Cuts: 507     3839         
+      0     0      445.7512   309                   Cuts: 429     3940         
+      0     0      445.9141   309                   Cuts: 433     4030         
+      0     0      446.4565   309                   Cuts: 297     4169         
+      0     0      446.8623   309                   Cuts: 409     4258         
+      0     0      447.4938   309                   Cuts: 354     4396         
+      0     0      447.9384   309                   Cuts: 430     4524         
+      0     0      448.1301   309                   Cuts: 331     4639         
+      0     0      448.3217   309                   Cuts: 324     4793         
+      0     0      448.4445   309                   Cuts: 379     4902         
+      0     0      448.6630   309                   Cuts: 261     5049         
+      0     0      448.7678   309                   Cuts: 546     5104         
+      0     0      448.8283   309                   Cuts: 259     5158         
+      0     0      449.0805   309                   Cuts: 472     5279         
+      0     0      449.2259   309                   Cuts: 177     5367         
+      0     0      449.5490   309                   Cuts: 317     5527         
+      0     0      449.7705   309                   Cuts: 228     5669         
+      0     0      449.9707   309                   Cuts: 237     5800         
+      0     0      450.3048   309                   Cuts: 167     5938         
+      0     0      450.5140   309                   Cuts: 259     6025         
+      0     0      450.6397   309                   Cuts: 264     6089         
+Detecting symmetries...
+      0     2      450.6397   434                    450.6397     6089         
+Elapsed time = 27.15 sec. (40149.31 ticks, tree = 0.02 MB, solutions = 0)
+      2     4      453.7380   430                    450.6491     6503         
+      5     6      835.5964   325                    450.9816     8483         
+     16    12      887.1955   328                    453.7401    10234         
+     26    16      933.0579   329                    453.7401    10481         
+     34     9      978.2577   317                    453.7401    11579         
+     45     6      489.3485   382                    453.7401     7740         
+     52    23      494.6506   383                    453.7401    12752         
+     58     5      690.9442   336                    453.7401     9603         
+     71    24      810.3432   342                    455.8943    23066         
+    113    27    infeasible                          455.8943    30152         
+Elapsed time = 34.73 sec. (44476.40 ticks, tree = 0.04 MB, solutions = 0)
+    177    27      499.1008   386                    458.8719    47558         
+    201    23      756.4282   325                    458.8719    59957         
+    206    19    infeasible                          458.8719    54023         
+    213    26    infeasible                          458.8719    67748         
+    228    15    infeasible                          458.8719    92302         
+    233    12     1069.3924   303                    458.8719    94747         
+    236    30     1188.2443   311                    458.8719    72715         
+    250    10    infeasible                          458.8719   101517         
+    262     6    infeasible                          460.7854   115847         
+    276     8    infeasible                          460.7854   123792         
+Elapsed time = 47.96 sec. (55233.99 ticks, tree = 0.02 MB, solutions = 0)
+    295     4      977.2067   327                    460.7854   127498         
+    319    28      486.2640   417                    462.9125   130661         
+    366    20      987.1992   322                    462.9125   132745         
+    413    23    infeasible                          462.9125   138452         
+    448    59      573.5413   363                    462.9125   145252         
+    463    52    infeasible                          463.7413   156114         
+    488    55    infeasible                          463.7413   169277         
+    552    81    infeasible                          463.7413   186599         
+    646    94      944.5088   335                    466.6482   180704         
+    761    95    infeasible                          471.3851   186251         
+Elapsed time = 60.89 sec. (66156.45 ticks, tree = 0.11 MB, solutions = 0)
+    857   117    infeasible                          473.1846   212208         
+    977   160    infeasible                          479.7757   230959         
+   1085   161      523.6930   379                    479.9887   242238         
+   1132   161    infeasible                          487.8641   271642         
+   1190   171    infeasible                          487.8641   280473         
+   1220   128    infeasible                          487.8641   288496         
+   1267    73    infeasible                          487.8733   313945         
+   1322    82    infeasible                          725.4477   310465         
+   1333   104    infeasible                          725.4477   306931         
+
+GUB cover cuts applied:  5
+Clique cuts applied:  50
+Cover cuts applied:  25
+Implied bound cuts applied:  89
+Flow cuts applied:  1
+Mixed integer rounding cuts applied:  177
+Gomory fractional cuts applied:  18
+
+Root node processing (before b&c):
+  Real time             =   26.94 sec. (39871.74 ticks)
+Parallel b&c, 8 threads:
+  Real time             =   45.32 sec. (35946.53 ticks)
+  Sync time (average)   =    9.02 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =   72.26 sec. (75818.27 ticks)
