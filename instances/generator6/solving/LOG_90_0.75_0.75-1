@@ -1,0 +1,81 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 3071 rows and 73 columns.
+MIP Presolve modified 22780 coefficients.
+Aggregator did 72 substitutions.
+Reduced MIP has 11859 rows, 8936 columns, and 3402043 nonzeros.
+Reduced MIP has 8847 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 3.11 sec. (5366.71 ticks)
+Probing time = 0.14 sec. (198.34 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 11859 rows, 8936 columns, and 3402043 nonzeros.
+Reduced MIP has 8847 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 1.02 sec. (1461.77 ticks)
+Probing time = 0.13 sec. (198.02 ticks)
+Clique table members: 1700858.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 6.31 sec. (1782.13 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0       65.8301   309                     65.8301     4162         
+      0     0      226.0769   309                  Cuts: 2473     8685         
+      0     0      299.6464   309                  Cuts: 2732    10550         
+      0     0      354.7648   309                  Cuts: 1988    14727         
+      0     0      390.9582   309                  Cuts: 2174    18402         
+      0     0      421.5517   309                  Cuts: 1769    21122         
+Detecting symmetries...
+      0     0      440.8332   309                  Cuts: 1377    23686         
+      0     0      451.3104   309                  Cuts: 1397    25763         
+      0     0      462.5662   309                  Cuts: 1581    28158         
+      0     0      470.0267   309                  Cuts: 1361    31061         
+      0     0      474.6596   309                  Cuts: 1263    32717         
+      0     0      478.5370   309                   Cuts: 915    33946         
+      0     0      481.7976   309                   Cuts: 940    36835         
+      0     0      484.7356   309                  Cuts: 1024    38346         
+      0     0      487.9582   309                  Cuts: 1368    39974         
+      0     0      490.1459   309                  Cuts: 1339    41064         
+      0     0      492.5499   309                  Cuts: 1250    42519         
+      0     0      495.8335   309                  Cuts: 1397    43475         
+      0     0      499.1466   309                  Cuts: 1058    45275         
+      0     0      500.6726   309                  Cuts: 1207    47144         
+      0     0      501.9370   309                  Cuts: 1109    48129         
+      0     0      503.0865   309                   Cuts: 877    49059         
+      0     0      505.4629   309                  Cuts: 1126    50006         
+      0     0      507.4068   309                   Cuts: 742    50863         
+      0     0      508.5514   309                  Cuts: 1496    51609         
+      0     0      509.4651   309                   Cuts: 754    52498         
+      0     0      511.2660   309                  Cuts: 1405    53227         
+      0     0      513.6261   309                   Cuts: 913    54356         
+      0     0      515.1687   309                  Cuts: 1647    55207         
+      0     0      516.4492   309                  Cuts: 1274    55893         
+      0     0      517.3645   309                  Cuts: 1507    56594         
+      0     0      518.5561   309                  Cuts: 1571    57422         
+      0     0      520.2331   309                  Cuts: 1054    58325         
+      0     0      521.4087   309                  Cuts: 1439    59010         
+      0     0        cutoff                                      59717         
+Elapsed time = 381.87 sec. (379104.78 ticks, tree = 0.01 MB, solutions = 0)
+
+Clique cuts applied:  884
+Cover cuts applied:  297
+Implied bound cuts applied:  2
+Flow cuts applied:  111
+Mixed integer rounding cuts applied:  817
+Zero-half cuts applied:  120
+
+Root node processing (before b&c):
+  Real time             =  381.89 sec. (379114.75 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =  381.89 sec. (379114.75 ticks)
