@@ -1,0 +1,33 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 922 rows and 28 columns.
+MIP Presolve modified 19009 coefficients.
+Aggregator did 27 substitutions.
+Reduced MIP has 3543 rows, 2681 columns, and 308601 nonzeros.
+Reduced MIP has 2622 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.87 sec. (1582.13 ticks)
+Probing fixed 1120 vars, tightened 0 bounds.
+Probing time = 0.74 sec. (1312.41 ticks)
+Tried aggregator 2 times.
+MIP Presolve eliminated 1245 rows and 1120 columns.
+MIP Presolve modified 14323 coefficients.
+Aggregator did 120 substitutions.
+Reduced MIP has 2178 rows, 1441 columns, and 156716 nonzeros.
+Reduced MIP has 1382 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.60 sec. (988.63 ticks)
+Probing fixed 1366 vars, tightened 2 bounds.
+Probing time = 0.12 sec. (251.50 ticks)
+Presolve time = 0.00 sec. (4.23 ticks)
+
+Root node processing (before b&c):
+  Real time             =    2.53 sec. (4410.79 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    2.53 sec. (4410.79 ticks)

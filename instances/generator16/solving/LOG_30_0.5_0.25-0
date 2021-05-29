@@ -1,0 +1,83 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 241 rows and 19 columns.
+MIP Presolve modified 1593 coefficients.
+Aggregator did 18 substitutions.
+Reduced MIP has 854 rows, 656 columns, and 8522 nonzeros.
+Reduced MIP has 627 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.01 sec. (19.94 ticks)
+Probing time = 0.00 sec. (3.86 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 854 rows, 656 columns, and 8522 nonzeros.
+Reduced MIP has 627 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (4.94 ticks)
+Probing time = 0.00 sec. (3.90 ticks)
+Clique table members: 4806.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.01 sec. (5.86 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0      344.4588    94                    344.4588      228         
+      0     0      455.9131    94                   Cuts: 305      615         
+      0     0      472.5718    94                   Cuts: 281      854         
+      0     0      481.4065    94                   Cuts: 117     1024         
+      0     0      489.9273    94                   Cuts: 156     1177         
+      0     0      496.8777    94                   Cuts: 166     1363         
+Detecting symmetries...
+      0     0      499.4997    94                   Cuts: 171     1521         
+      0     0      503.9306    94                   Cuts: 120     1715         
+      0     0      506.2086    94                   Cuts: 105     1974         
+      0     0      507.6588    94                   Cuts: 113     2080         
+      0     0      508.8400    94                    Cuts: 87     2222         
+      0     0      509.8634    94                   Cuts: 116     2413         
+      0     0      510.3052    94                    Cuts: 70     2507         
+      0     0      510.4900    94                    Cuts: 90     2636         
+      0     0      510.7128    94                    Cuts: 56     2729         
+      0     0      511.3850    94                    Cuts: 54     2881         
+      0     0      511.7450    94                   Cuts: 123     3021         
+      0     0      512.1130    94                   Cuts: 114     3146         
+      0     0      512.3397    94                    Cuts: 48     3314         
+      0     0      512.5038    94                   Cuts: 113     3447         
+      0     0      512.6023    94                   Cuts: 111     3670         
+      0     0      512.7920    94                   Cuts: 102     3832         
+      0     0      512.8767    94                    Cuts: 54     3903         
+Detecting symmetries...
+      0     2      512.8767   241                    512.8767     3903         
+Elapsed time = 1.46 sec. (1093.95 ticks, tree = 0.02 MB, solutions = 0)
+    534   268      552.0391   138                    513.4154    28474         
+    876   357    infeasible                          513.7123    55844         
+   1272   356      549.9262   150                    513.7123    75927         
+   1697   579      564.4577   128                    513.7123   106278         
+   2116   917      624.1941   103                    513.7123   143123         
+   2627  1061      529.5763   172                    513.7123   166926         
+   3041  1341      558.4430   139                    526.2253   206292         
+   3410  1528      561.3079   121                    526.4980   235401         
+   3916  1722    infeasible                          536.4814   270688         
+   5413  1635    infeasible                          561.0218   396162         
+Elapsed time = 4.41 sec. (4205.29 ticks, tree = 1.47 MB, solutions = 0)
+
+GUB cover cuts applied:  12
+Clique cuts applied:  77
+Implied bound cuts applied:  483
+Flow cuts applied:  1
+Mixed integer rounding cuts applied:  67
+Zero-half cuts applied:  19
+Multi commodity flow cuts applied:  3
+
+Root node processing (before b&c):
+  Real time             =    1.45 sec. (1080.23 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    3.54 sec. (3759.44 ticks)
+  Sync time (average)   =    0.32 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    4.99 sec. (4839.67 ticks)

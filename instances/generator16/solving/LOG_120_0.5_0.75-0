@@ -1,0 +1,76 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 3677 rows and 60 columns.
+MIP Presolve modified 24728 coefficients.
+Aggregator did 59 substitutions.
+Reduced MIP has 14395 rows, 10843 columns, and 4937139 nonzeros.
+Reduced MIP has 10724 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 4.80 sec. (8719.31 ticks)
+Probing time = 0.14 sec. (202.28 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 14395 rows, 10843 columns, and 4937139 nonzeros.
+Reduced MIP has 10724 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 1.51 sec. (2113.56 ticks)
+Probing time = 0.14 sec. (201.31 ticks)
+Clique table members: 2469259.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 7.56 sec. (1826.62 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0      350.9185   410                    350.9185     3425         
+      0     0     1013.9463   410                  Cuts: 3698     9576         
+      0     0     1210.1204   410                  Cuts: 1445    15020         
+      0     0     1309.3315   410                  Cuts: 2635    19769         
+      0     0     1355.5668   410                  Cuts: 1636    24220         
+      0     0     1387.3891   410                  Cuts: 1681    33810         
+Detecting symmetries...
+      0     0     1403.2675   410                  Cuts: 2282    40226         
+      0     0     1414.1698   410                  Cuts: 1537    43702         
+      0     0     1422.0723   410                  Cuts: 1893    47772         
+      0     0     1428.2050   410                  Cuts: 1692    51760         
+      0     0     1433.0121   410                  Cuts: 2283    56772         
+      0     0     1436.2367   410                  Cuts: 1517    63472         
+      0     0     1439.6320   410                  Cuts: 1248    65713         
+      0     0     1442.5266   410                  Cuts: 1782    70472         
+      0     0     1444.5096   410                  Cuts: 1630    72171         
+      0     0     1446.7101   410                  Cuts: 1296    75031         
+      0     0     1450.6460   410                  Cuts: 1852    76977         
+      0     0     1451.7964   410                  Cuts: 1290    78465         
+      0     0     1452.8364   410                  Cuts: 1230    79639         
+      0     0     1453.9811   410                   Cuts: 682    80952         
+      0     0     1454.6436   410                  Cuts: 1074    82205         
+      0     0     1456.1278   410                  Cuts: 1167    85810         
+      0     0     1458.0588   410                  Cuts: 1247    87534         
+      0     0     1459.3875   410                  Cuts: 2001    90526         
+      0     0     1460.7916   410                   Cuts: 937    91737         
+      0     0     1461.4899   410                  Cuts: 1534    92755         
+      0     0     1462.1235   410                  Cuts: 1064    95243         
+      0     0     1462.5394   410                   Cuts: 900    96312         
+      0     0        cutoff                                      96979         
+Elapsed time = 852.44 sec. (919515.37 ticks, tree = 0.01 MB, solutions = 0)
+
+Clique cuts applied:  1195
+Cover cuts applied:  292
+Implied bound cuts applied:  1
+Flow cuts applied:  84
+Mixed integer rounding cuts applied:  1442
+Zero-half cuts applied:  75
+Multi commodity flow cuts applied:  3
+
+Root node processing (before b&c):
+  Real time             =  852.47 sec. (919529.79 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =  852.47 sec. (919529.79 ticks)

@@ -1,0 +1,57 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Tried aggregator 2 times.
+MIP Presolve eliminated 227 rows and 15 columns.
+MIP Presolve modified 2258 coefficients.
+Aggregator did 14 substitutions.
+Reduced MIP has 819 rows, 628 columns, and 13178 nonzeros.
+Reduced MIP has 599 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.03 sec. (47.19 ticks)
+Probing fixed 68 vars, tightened 0 bounds.
+Probing time = 0.01 sec. (19.19 ticks)
+Cover probing fixed 0 vars, tightened 5 bounds.
+Tried aggregator 2 times.
+MIP Presolve eliminated 68 rows and 69 columns.
+MIP Presolve modified 931 coefficients.
+Aggregator did 3 substitutions.
+Reduced MIP has 748 rows, 556 columns, and 11804 nonzeros.
+Reduced MIP has 527 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (25.29 ticks)
+Probing fixed 41 vars, tightened 0 bounds.
+Probing time = 0.01 sec. (15.24 ticks)
+Cover probing fixed 0 vars, tightened 3 bounds.
+Tried aggregator 2 times.
+Detecting symmetries...
+MIP Presolve eliminated 39 rows and 41 columns.
+MIP Presolve modified 1144 coefficients.
+Aggregator did 6 substitutions.
+Reduced MIP has 703 rows, 509 columns, and 10548 nonzeros.
+Reduced MIP has 480 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (22.11 ticks)
+Probing fixed 96 vars, tightened 0 bounds.
+Probing time = 0.01 sec. (12.46 ticks)
+Cover probing fixed 0 vars, tightened 6 bounds.
+Clique table members: 5156.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.01 sec. (8.75 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0      398.8744    95                    398.8744      254         
+      0     0        cutoff                                        254         
+Elapsed time = 0.14 sec. (174.21 ticks, tree = 0.01 MB, solutions = 0)
+
+Root node processing (before b&c):
+  Real time             =    0.14 sec. (174.24 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =    0.14 sec. (174.24 ticks)
