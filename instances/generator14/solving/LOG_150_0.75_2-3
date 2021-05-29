@@ -1,0 +1,54 @@
+Version identifier: 12.10.0.0 | 2019-11-26 | 843d4de
+CPXPARAM_Read_DataCheck                          1
+CPXPARAM_RandomSeed                              201903125
+CPXPARAM_TimeLimit                               7200
+CPXPARAM_MIP_Limits_TreeMemory                   32768
+Found incumbent of value 3468.000000 after 0.00 sec. (4.70 ticks)
+Tried aggregator 2 times.
+MIP Presolve eliminated 16871 rows and 112 columns.
+MIP Presolve modified 16649 coefficients.
+Aggregator did 110 substitutions.
+Reduced MIP has 24956 rows, 25065 columns, and 91068 nonzeros.
+Reduced MIP has 24916 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.07 sec. (131.90 ticks)
+Probing time = 0.06 sec. (12.34 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 24956 rows, 25065 columns, and 91068 nonzeros.
+Reduced MIP has 24916 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.05 sec. (64.35 ticks)
+Probing time = 0.06 sec. (12.30 ticks)
+Clique table members: 8418.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: deterministic, using up to 8 threads.
+Root relaxation solution time = 0.26 sec. (277.91 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                         3468.0000        0.0000           100.00%
+*     0+    0                         3405.0000        0.0000           100.00%
+      0     0      180.0000   158     3405.0000      180.0000     3587   94.71%
+*     0+    0                          181.0000      180.0000             0.55%
+      0     0      180.0000   158      181.0000     Cuts: 201     4309    0.55%
+Detecting symmetries...
+
+Repeating presolve.
+Tried aggregator 3 times.
+MIP Presolve eliminated 24661 rows and 24794 columns.
+MIP Presolve modified 182 coefficients.
+Aggregator did 118 substitutions.
+Reduced MIP has 177 rows, 153 columns, and 539 nonzeros.
+Reduced MIP has 95 binaries, 0 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.01 sec. (29.53 ticks)
+Represolve time = 0.04 sec. (148.94 ticks)
+
+Root node processing (before b&c):
+  Real time             =   10.66 sec. (7913.08 ticks)
+Parallel b&c, 8 threads:
+  Real time             =    0.00 sec. (0.00 ticks)
+  Sync time (average)   =    0.00 sec.
+  Wait time (average)   =    0.00 sec.
+                          ------------
+Total (root+branch&cut) =   10.66 sec. (7913.08 ticks)
