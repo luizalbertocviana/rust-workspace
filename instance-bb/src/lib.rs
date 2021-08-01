@@ -1,7 +1,12 @@
+use std::collections::HashSet;
+
 use branch_bound::{SolutionCost, Variable};
+use branch_bound as bb;
 use graph::Subgraph;
+use graph::properties;
 use instance::WGraph;
 
+#[derive(PartialEq, Eq, Hash)]
 struct Edge {
     u: usize,
     v: usize,
@@ -13,6 +18,7 @@ struct EdgeWeight {
 }
 
 struct Solution<'a> {
+    edges: HashSet<Edge>,
     subgraph: Subgraph<'a, WGraph>
 }
 
@@ -21,3 +27,27 @@ impl Variable for Edge {
 }
 
 impl SolutionCost for EdgeWeight {}
+
+impl<'a> bb::Solution for Solution<'a> {
+    type Var = Edge;
+    type SolCost = EdgeWeight;
+
+    fn is_feasible(&self) -> bool {
+        properties::is_spanning_tree(&self.subgraph)
+    }
+
+    fn get_cost(&self) -> EdgeWeight {
+        let wg = self.subgraph.parent();
+
+        let mut cost = 0;
+        for edge in &self.edges {
+            cost += wg.get_edge_weight(edge.u, edge.v).unwrap();
+        }
+
+        EdgeWeight { weight: cost }
+    }
+
+    fn get_value(&self, var: &Edge) -> bool {
+        self.edges.contains(var)
+    }
+}
