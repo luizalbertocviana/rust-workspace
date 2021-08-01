@@ -23,7 +23,7 @@ pub trait Solution {
     /// returns cost of solution
     fn get_cost(&self) -> Self::SolCost;
     /// returns value assigned to var
-    fn get_value(var: &Self::Var) -> ValType<Self>;
+    fn get_value(&self, var: &Self::Var) -> ValType<Self>;
 }
 /// trait for types representing problem instances suitable for branch
 /// and bound
