@@ -1,10 +1,10 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
-use branch_bound::{SolutionCost, Variable};
 use branch_bound as bb;
-use graph::Subgraph;
-use graph::properties;
-use instance::WGraph;
+use branch_bound::{SolutionCost, Variable, BBProblem};
+use graph::{neighbors, properties};
+use graph::{GraphImpl, Subgraph};
+use instance::{Instance, WGraph};
 
 #[derive(PartialEq, Eq, Hash)]
 struct Edge {
