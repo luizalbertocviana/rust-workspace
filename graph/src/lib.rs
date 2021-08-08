@@ -18,6 +18,8 @@ mod utils;
 pub mod algorithms;
 /// properties module: contains functions regarding some graph properties
 pub mod properties;
+/// neighbors module: contains definitions regarding vertex neighbors
+pub mod neighbors;
 // a digraph representation
 pub use crate::digraph::Digraph;
 // a graph representation

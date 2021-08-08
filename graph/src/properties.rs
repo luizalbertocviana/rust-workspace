@@ -64,29 +64,3 @@ pub fn is_spanning_tree<'a, T: GraphImpl<'a>>(graph: &'a T) -> bool {
     // one component, it is also connected, thus a spanning tree
     components.num_sets() == 1
 }
-/// returns number of in-neighbors of vertex v in graph. This is
-/// equivalent to num_out_neighbors when graph is undirected
-pub fn num_in_neighbors<'a, T: GraphImpl<'a>>(graph: &T, v: usize) -> usize {
-    let mut num = 0;
-
-    for u in 0..graph.num_verts() {
-        if graph.has_edge(u, v) {
-            num += 1;
-        }
-    }
-
-    num
-}
-/// returns number of out-neighbors of vertex u in graph. This is
-/// equivalent to num_in_neighbors when graph is undirected
-pub fn num_out_neighbors<'a, T: GraphImpl<'a>>(graph: &T, u: usize) -> usize {
-    let mut num = 0;
-
-    for v in 0..graph.num_verts() {
-        if graph.has_edge(u, v) {
-            num += 1;
-        }
-    }
-
-    num
-}
