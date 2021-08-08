@@ -196,19 +196,26 @@ fn properties_test() {
 fn num_neighbors_test() {
     let mut d = Digraph::new(4);
 
-    assert_eq!(properties::num_in_neighbors(&d, 0), 0);
+    assert_eq!(neighbors::num_in_neighbors(&d, 0), 0);
 
     d.add_edge(1, 0).unwrap();
-    assert_eq!(properties::num_in_neighbors(&d, 0), 1);
+    assert_eq!(neighbors::num_in_neighbors(&d, 0), 1);
 
     d.add_edge(2, 0).unwrap();
     d.add_edge(3, 0).unwrap();
-    assert_eq!(properties::num_in_neighbors(&d, 0), 3);
+    assert_eq!(neighbors::num_in_neighbors(&d, 0), 3);
 
-    assert_eq!(properties::num_out_neighbors(&d, 0), 0);
-    assert_eq!(properties::num_out_neighbors(&d, 1), 1);
-    assert_eq!(properties::num_out_neighbors(&d, 2), 1);
-    assert_eq!(properties::num_out_neighbors(&d, 3), 1);
+    let mut in_it = neighbors::in_neighbors(&d, 0);
+
+    assert_eq!(Some(1), in_it.next());
+    assert_eq!(Some(2), in_it.next());
+    assert_eq!(Some(3), in_it.next());
+    assert_eq!(None, in_it.next());
+
+    assert_eq!(neighbors::num_out_neighbors(&d, 0), 0);
+    assert_eq!(neighbors::num_out_neighbors(&d, 1), 1);
+    assert_eq!(neighbors::num_out_neighbors(&d, 2), 1);
+    assert_eq!(neighbors::num_out_neighbors(&d, 3), 1);
 }
 #[test]
 fn algorithms_test() {
