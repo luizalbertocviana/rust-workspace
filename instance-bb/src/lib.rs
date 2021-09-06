@@ -62,21 +62,7 @@ impl<'a> Solution<'a> {
             .iter()
             .all(|edge| self.edge_status(edge) == EdgeStatus::Feasible)
     }
-}
 
-fn num_deps(sol: &Solution, edge: &Edge) -> usize {
-    let e_idx = sol
-        .parent_problem
-        .edge_to_index
-        .get(edge)
-        .expect("instance does not contain such an edge");
-
-    neighbors::in_neighbors(sol.parent_problem.instance.dependencies(), *e_idx)
-        .filter(|dep_idx| {
-            sol.edges
-                .contains(&sol.parent_problem.index_to_edge[*dep_idx])
-        })
-        .count()
     fn deps(&self, edge: &Edge) -> Vec<&Edge> {
         let e_idx = self
             .parent_problem
@@ -93,6 +79,9 @@ fn num_deps(sol: &Solution, edge: &Edge) -> usize {
             .collect()
     }
 
+    fn num_deps(&self, edge: &Edge) -> usize {
+        self.deps(edge).len()
+    }
 }
 
 struct BaseProblem<'a> {
