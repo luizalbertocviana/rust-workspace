@@ -77,6 +77,22 @@ fn num_deps(sol: &Solution, edge: &Edge) -> usize {
                 .contains(&sol.parent_problem.index_to_edge[*dep_idx])
         })
         .count()
+    fn deps(&self, edge: &Edge) -> Vec<&Edge> {
+        let e_idx = self
+            .parent_problem
+            .edge_to_index
+            .get(edge)
+            .expect("instance does not contain such an edge");
+
+        neighbors::in_neighbors(self.parent_problem.instance.dependencies(), *e_idx)
+            .filter(|dep_idx| {
+                self.edges
+                    .contains(&self.parent_problem.index_to_edge[*dep_idx])
+            })
+            .map(|dep_idx| &self.parent_problem.index_to_edge[dep_idx])
+            .collect()
+    }
+
 }
 
 struct BaseProblem<'a> {
