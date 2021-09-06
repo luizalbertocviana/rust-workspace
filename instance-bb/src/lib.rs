@@ -33,7 +33,7 @@ enum EdgeStatus {
 
 impl<'a> Solution<'a> {
     fn edge_status(&self, edge: &Edge) -> EdgeStatus {
-        let num_deps = num_deps(self, edge);
+        let num_deps = self.num_deps(edge);
         let edge_tuple = (edge.u, edge.v);
         let lb = *self
             .parent_problem
