@@ -6,7 +6,7 @@ use graph::{neighbors, properties};
 use graph::{GraphImpl, Subgraph};
 use instance::{Instance, WGraph};
 
-#[derive(PartialEq, Eq, Hash)]
+#[derive(PartialEq, Eq, Hash, Clone)]
 struct Edge {
     u: usize,
     v: usize,
