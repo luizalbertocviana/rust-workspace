@@ -92,15 +92,6 @@ struct BaseProblem<'a> {
     relaxed_solution: Option<Solution<'a>>,
 }
 
-struct Subproblem<'a> {
-    base: &'a BaseProblem<'a>,
-
-    added_edges: HashSet<Edge>,
-    removed_edges: HashSet<Edge>,
-
-    relaxed_solution: Option<Solution<'a>>,
-}
-
 impl<'a> BaseProblem<'a> {
     fn new(instance: &'a Instance) -> Self {
         let mut edge_to_index = HashMap::new();
@@ -126,6 +117,16 @@ impl<'a> BaseProblem<'a> {
     }
 }
 
+struct Subproblem<'a> {
+    base: &'a BaseProblem<'a>,
+
+    added_edges: HashSet<Edge>,
+    removed_edges: HashSet<Edge>,
+
+    relaxed_solution: Option<Solution<'a>>,
+}
+
+#[derive(PartialEq)]
 enum Problem<'a> {
     Base(BaseProblem<'a>),
     Derived(Subproblem<'a>),
