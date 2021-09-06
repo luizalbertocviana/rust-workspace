@@ -133,6 +133,54 @@ enum Derivation {
     NoChanges,
 }
 
+impl<'a> Subproblem<'a> {
+    fn new(
+        base: &'a BaseProblem,
+        added_edges: HashSet<Edge>,
+        removed_edges: HashSet<Edge>,
+    ) -> Self {
+        let relaxed_solution = None;
+
+        Self {
+            base,
+            added_edges,
+            removed_edges,
+            relaxed_solution,
+        }
+    }
+
+    fn from_base_problem(base: &'a BaseProblem) -> Self {
+        Self::new(base, HashSet::new(), HashSet::new())
+    }
+
+    fn from_subproblem(subproblem: &Subproblem<'a>) -> Self {
+        let base = subproblem.base;
+        let added_edges = subproblem.added_edges.clone();
+        let removed_edges = subproblem.removed_edges.clone();
+
+        Self::new(base, added_edges, removed_edges)
+    }
+
+    fn from_problem(problem: &'a Problem, derivation: &Derivation, edges: HashSet<Edge>) -> Self {
+        let mut base = match problem {
+            Problem::Base(base_problem) => Self::from_base_problem(base_problem),
+            Problem::Derived(subproblem) => Self::from_subproblem(subproblem),
+        };
+
+        if *derivation == Derivation::AddingEdges {
+            for edge in edges {
+                base.added_edges.insert(edge);
+            }
+        } else {
+            for edge in edges {
+                base.removed_edges.insert(edge);
+            }
+        }
+
+        base
+    }
+}
+
 enum Problem<'a> {
     Base(BaseProblem<'a>),
     Derived(Subproblem<'a>),
