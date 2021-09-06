@@ -235,7 +235,33 @@ impl<'a> SubproblemIterator<'a> {
             .find(|edge| parent_solution.edge_status(edge) != EdgeStatus::Feasible)
             .expect("SubproblemIterator instantiated for a feasible problem");
 
-        let subproblems = Vec::new();
+        let mut subproblems = Vec::new();
+
+        let mut add_subproblem = |subproblem| subproblems.push(Box::new(Problem::Derived(subproblem)));
+
+        let subproblem_without_infeasible_edge = Subproblem::from_problem(
+            parent_problem,
+            &Derivation::RemovingEdges,
+            HashSet::from_iter(once(infeasible_edge.clone())),
+        );
+
+        add_subproblem(subproblem_without_infeasible_edge);
+
+        let derivation_strategy = match parent_solution.edge_status(infeasible_edge) {
+            EdgeStatus::TooManyDeps => Derivation::RemovingEdges,
+            EdgeStatus::TooFewDeps => Derivation::AddingEdges,
+            EdgeStatus::Feasible => Derivation::NoChanges,
+        };
+
+        for infeasible_edge_dep in parent_solution.deps(infeasible_edge) {
+            let derived_subproblem = Subproblem::from_problem(
+                parent_problem,
+                &derivation_strategy,
+                HashSet::from_iter(once(infeasible_edge_dep.clone())),
+            );
+
+            add_subproblem(derived_subproblem);
+        }
 
         Self {
             parent_problem,
