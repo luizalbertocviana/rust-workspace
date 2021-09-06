@@ -127,6 +127,12 @@ struct Subproblem<'a> {
 }
 
 #[derive(PartialEq)]
+enum Derivation {
+    AddingEdges,
+    RemovingEdges,
+    NoChanges,
+}
+
 enum Problem<'a> {
     Base(BaseProblem<'a>),
     Derived(Subproblem<'a>),
