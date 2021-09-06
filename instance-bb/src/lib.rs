@@ -1,7 +1,8 @@
 use std::collections::{HashMap, HashSet};
+use std::iter::{once, FromIterator};
 
 use branch_bound as bb;
-use branch_bound::{BBProblem, SolutionCost, Variable};
+use branch_bound::{SolutionCost, Variable};
 use graph::{neighbors, properties};
 use graph::{GraphImpl, Subgraph};
 use instance::{Instance, WGraph};
