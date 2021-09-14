@@ -231,7 +231,7 @@ impl<'a> SubproblemIterator<'a> {
             .edges
             .iter()
             .find(|edge| parent_solution.edge_status(edge) != EdgeStatus::Feasible)
-            .expect("SubproblemIterator instantiated for a feasible problem");
+            .expect("SubproblemIterator instantiated for a problem whose edges are all feasible");
 
         let mut subproblems = Vec::new();
 
