@@ -13,10 +13,16 @@ struct Edge {
     v: usize,
 }
 
+impl Variable for Edge {
+    type ValueType = bool;
+}
+
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
 struct EdgeWeight {
     weight: usize,
 }
+
+impl SolutionCost for EdgeWeight {}
 
 struct Solution<'a> {
     edges: HashSet<Edge>,
@@ -81,6 +87,31 @@ impl<'a> Solution<'a> {
 
     fn num_deps(&self, edge: &Edge) -> usize {
         self.deps(edge).len()
+    }
+}
+
+impl<'a> bb::Solution for Solution<'a> {
+    type Var = Edge;
+    type SolCost = EdgeWeight;
+
+    fn is_feasible(&self) -> bool {
+        properties::is_spanning_tree(&self.subgraph) && self.satisfies_dependencies()
+    }
+
+    fn get_cost(&self) -> EdgeWeight {
+        let wg = self.subgraph.parent();
+
+        EdgeWeight {
+            weight: self
+                .edges
+                .iter()
+                .map(|edge| wg.get_edge_weight(edge.u, edge.v).unwrap())
+                .sum(),
+        }
+    }
+
+    fn get_value(&self, var: &Edge) -> bool {
+        self.edges.contains(var)
     }
 }
 
@@ -184,37 +215,6 @@ impl<'a> Subproblem<'a> {
 enum Problem<'a> {
     Base(BaseProblem<'a>),
     Derived(Subproblem<'a>),
-}
-
-impl Variable for Edge {
-    type ValueType = bool;
-}
-
-impl SolutionCost for EdgeWeight {}
-
-impl<'a> bb::Solution for Solution<'a> {
-    type Var = Edge;
-    type SolCost = EdgeWeight;
-
-    fn is_feasible(&self) -> bool {
-        properties::is_spanning_tree(&self.subgraph) && self.satisfies_dependencies()
-    }
-
-    fn get_cost(&self) -> EdgeWeight {
-        let wg = self.subgraph.parent();
-
-        EdgeWeight {
-            weight: self
-                .edges
-                .iter()
-                .map(|edge| wg.get_edge_weight(edge.u, edge.v).unwrap())
-                .sum(),
-        }
-    }
-
-    fn get_value(&self, var: &Edge) -> bool {
-        self.edges.contains(var)
-    }
 }
 
 struct SubproblemIterator<'a> {
