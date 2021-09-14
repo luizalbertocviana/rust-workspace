@@ -222,12 +222,6 @@ enum Problem<'a> {
 }
 
 struct SubproblemIterator<'a> {
-    parent_problem: &'a Problem<'a>,
-
-    parent_solution: &'a Solution<'a>,
-
-    infeasible_edge: &'a Edge,
-
     subproblems: Vec<Box<Problem<'a>>>,
 }
 
@@ -268,9 +262,6 @@ impl<'a> SubproblemIterator<'a> {
         }
 
         Self {
-            parent_problem,
-            parent_solution,
-            infeasible_edge,
             subproblems,
         }
     }
