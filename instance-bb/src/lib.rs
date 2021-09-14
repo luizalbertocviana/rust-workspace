@@ -235,7 +235,8 @@ impl<'a> SubproblemIterator<'a> {
 
         let mut subproblems = Vec::new();
 
-        let mut add_subproblem = |subproblem| subproblems.push(Box::new(Problem::Derived(subproblem)));
+        let mut add_subproblem =
+            |subproblem| subproblems.push(Box::new(Problem::Derived(subproblem)));
 
         let subproblem_without_infeasible_edge = Subproblem::from_problem(
             parent_problem,
