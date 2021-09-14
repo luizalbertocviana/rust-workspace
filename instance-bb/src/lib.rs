@@ -198,14 +198,18 @@ impl<'a> Subproblem<'a> {
             Problem::Derived(subproblem) => Self::from_subproblem(subproblem),
         };
 
-        if *derivation == Derivation::AddingEdges {
-            for edge in edges {
-                base.added_edges.insert(edge);
+        match derivation {
+            Derivation::AddingEdges => {
+                for edge in edges {
+                    base.added_edges.insert(edge);
+                }
             }
-        } else {
-            for edge in edges {
-                base.removed_edges.insert(edge);
+            Derivation::RemovingEdges => {
+                for edge in edges {
+                    base.removed_edges.insert(edge);
+                }
             }
+            Derivation::NoChanges => (),
         }
 
         base
