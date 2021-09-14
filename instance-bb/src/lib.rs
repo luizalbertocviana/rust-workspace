@@ -1,6 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::{once, FromIterator};
 
+use bb::BBProblem;
 use branch_bound as bb;
 use branch_bound::{SolutionCost, Variable};
 use graph::{neighbors, properties};
