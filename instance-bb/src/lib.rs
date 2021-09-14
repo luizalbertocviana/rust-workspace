@@ -268,13 +268,13 @@ impl<'a> SubproblemIterator<'a> {
     }
 }
 
-// impl<'a> Iterator for SubproblemIterator<'a> {
-//     type Item = Box<Problem<'a>>;
+impl<'a> Iterator for SubproblemIterator<'a> {
+    type Item = Box<Problem<'a>>;
 
-//     fn next(&mut self) -> Option<Self::Item> {
-//         todo!()
-//     }
-// }
+    fn next(&mut self) -> Option<Self::Item> {
+        self.subproblems.pop()
+    }
+}
 
 // impl<'a> BBProblem for Problem<'a> {
 //     type Sol = Solution<'a>;
