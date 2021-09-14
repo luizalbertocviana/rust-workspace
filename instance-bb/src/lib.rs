@@ -279,10 +279,10 @@ impl<'a> Iterator for SubproblemIterator<'a> {
 // impl<'a> BBProblem for Problem<'a> {
 //     type Sol = Solution<'a>;
 
-//     type SubproblemIterator;
+//     type SubproblemIterator = SubproblemIterator<'a>;
 
 //     fn solve_relaxation(&self) -> Self::Sol {
-//         todo!()
+
 //     }
 
 //     fn get_subproblems(&self) -> Self::SubproblemIterator {
