@@ -31,15 +31,20 @@ pub fn custom_kruskal<W: Ord + Default>(
 
     sorted_initial_edges.into_iter().for_each(&mut kruskal_step);
 
-    let remaining_edges: HashSet<Edge> = graph.edges().collect();
-    let mut sorted_remaining_non_forbidden_edges: Vec<&Edge> =
-        remaining_edges.difference(forbidden_edges).collect();
+    let sorted_remaining_edges: Vec<Edge> = {
+        let mut edges: Vec<Edge> = graph
+            .edges()
+            .filter(|edge| !initial_edges.contains(edge))
+            .filter(|edge| !forbidden_edges.contains(edge))
+            .collect();
 
-    sorted_remaining_non_forbidden_edges
-        .sort_unstable_by_key(|(u, v)| graph.get_edge_weight(*u, *v));
+        edges.sort_unstable_by_key(|(u, v)| graph.get_edge_weight(*u, *v));
 
-    sorted_remaining_non_forbidden_edges
-        .into_iter()
+        edges
+    };
+
+    sorted_remaining_edges
+        .iter()
         .for_each(&mut kruskal_step);
 
     mst_edges
