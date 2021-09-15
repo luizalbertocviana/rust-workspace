@@ -14,14 +14,19 @@ pub fn custom_kruskal<W: Ord + Default>(
     let mut components = DisjointSet::new(graph.num_verts());
     let mut mst_edges = HashSet::new();
 
-    let mut sorted_initial_edges: Vec<&Edge> = initial_edges.iter().collect();
-    sorted_initial_edges.sort_unstable_by_key(|(u, v)| graph.get_edge_weight(*u, *v));
-
     let mut kruskal_step = |(u, v): &Edge| {
         if components.representative(*u) != components.representative(*v) {
             mst_edges.insert((*u, *v));
             components.join(*u, *v).unwrap();
         }
+    };
+
+    let sorted_initial_edges: Vec<&Edge> = {
+        let mut edges: Vec<&Edge> = initial_edges.iter().collect();
+
+        edges.sort_unstable_by_key(|(u, v)| graph.get_edge_weight(*u, *v));
+
+        edges
     };
 
     sorted_initial_edges.into_iter().for_each(&mut kruskal_step);
