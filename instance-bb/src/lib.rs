@@ -277,7 +277,30 @@ impl<'a> Iterator for SubproblemIterator<'a> {
 //     type SubproblemIterator = SubproblemIterator<'a>;
 
 //     fn solve_relaxation(&self) -> Self::Sol {
+//         let edges = match self {
+//             Problem::Base(base_problem) => algorithms::kruskal(base_problem.instance.graph()),
+//             Problem::Derived(subproblem) => {
+//                 let edge_tuple_set = |edge_struct_set: HashSet<Edge>| {
+//                     edge_struct_set
+//                         .iter()
+//                         .map(|edge| (edge.u, edge.v))
+//                         .collect()
+//                 };
 
+//                 let initial_edges: HashSet<EdgeTuple> = edge_tuple_set(subproblem.added_edges);
+//                 let forbidden_edges: HashSet<EdgeTuple> = edge_tuple_set(subproblem.removed_edges);
+
+//                 algorithms::custom_kruskal(
+//                     subproblem.base.instance.graph(),
+//                     &initial_edges,
+//                     &forbidden_edges,
+//                 )
+//             }
+//         };
+
+//         let subgraph = {
+//             let mut subgraph = 
+//         };
 //     }
 
 //     fn get_subproblems(&self) -> Self::SubproblemIterator {
