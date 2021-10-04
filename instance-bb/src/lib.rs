@@ -14,6 +14,8 @@ struct Edge {
     v: usize,
 }
 
+type EdgeTuple = (usize, usize);
+
 impl Variable for Edge {
     type ValueType = bool;
 }
