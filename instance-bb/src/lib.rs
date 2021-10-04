@@ -4,9 +4,9 @@ use std::iter::once;
 use bb::BBProblem;
 use branch_bound as bb;
 use branch_bound::{SolutionCost, Variable};
-use graph::{algorithms, neighbors, properties};
-use graph::{GraphImpl, Subgraph};
-use instance::{Instance, WGraph};
+use graph::{Graph, algorithms, neighbors, properties};
+use graph::{GraphImpl};
+use instance::{Instance};
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct Edge {
