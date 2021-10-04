@@ -185,7 +185,11 @@ impl<'a> Subproblem<'a> {
         Self::new(base, added_edges, removed_edges)
     }
 
-    fn from_problem(problem: &'a Problem, derivation: &Derivation, edges: HashSet<Edge>) -> Self {
+    fn from_problem<I: Iterator<Item = Edge>>(
+        problem: &'a Problem,
+        derivation: &Derivation,
+        edges: I,
+    ) -> Self {
         let mut base = match problem {
             Problem::Base(base_problem) => Self::from_base_problem(base_problem),
             Problem::Derived(subproblem) => Self::from_subproblem(subproblem),
@@ -234,7 +238,7 @@ impl<'a> SubproblemIterator<'a> {
         let subproblem_without_infeasible_edge = Subproblem::from_problem(
             parent_problem,
             &Derivation::RemovingEdges,
-            HashSet::from_iter(once(infeasible_edge.clone())),
+            once(infeasible_edge.clone()),
         );
 
         add_subproblem(subproblem_without_infeasible_edge);
@@ -249,7 +253,7 @@ impl<'a> SubproblemIterator<'a> {
             let derived_subproblem = Subproblem::from_problem(
                 parent_problem,
                 &derivation_strategy,
-                HashSet::from_iter(once(infeasible_edge_dep.clone())),
+                once(infeasible_edge_dep.clone()),
             );
 
             add_subproblem(derived_subproblem);
