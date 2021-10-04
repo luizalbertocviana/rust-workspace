@@ -259,9 +259,7 @@ impl<'a> SubproblemIterator<'a> {
             add_subproblem(derived_subproblem);
         }
 
-        Self {
-            subproblems,
-        }
+        Self { subproblems }
     }
 }
 
