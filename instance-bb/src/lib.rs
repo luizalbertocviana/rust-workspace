@@ -122,8 +122,6 @@ struct BaseProblem<'a> {
     instance: &'a Instance,
     edge_to_index: HashMap<Edge, usize>,
     index_to_edge: Vec<Edge>,
-
-    relaxed_solution: Option<Solution<'a>>,
 }
 
 impl<'a> BaseProblem<'a> {
@@ -140,13 +138,10 @@ impl<'a> BaseProblem<'a> {
             i += 1;
         }
 
-        let relaxed_solution = None;
-
         BaseProblem {
             instance,
             edge_to_index,
             index_to_edge,
-            relaxed_solution,
         }
     }
 }
@@ -156,8 +151,6 @@ struct Subproblem<'a> {
 
     added_edges: HashSet<Edge>,
     removed_edges: HashSet<Edge>,
-
-    relaxed_solution: Option<Solution<'a>>,
 }
 
 #[derive(PartialEq)]
@@ -173,13 +166,10 @@ impl<'a> Subproblem<'a> {
         added_edges: HashSet<Edge>,
         removed_edges: HashSet<Edge>,
     ) -> Self {
-        let relaxed_solution = None;
-
         Self {
             base,
             added_edges,
             removed_edges,
-            relaxed_solution,
         }
     }
 
