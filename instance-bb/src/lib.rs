@@ -1,10 +1,10 @@
 use std::collections::{HashMap, HashSet};
-use std::iter::{once, FromIterator};
+use std::iter::once;
 
 use bb::BBProblem;
 use branch_bound as bb;
 use branch_bound::{SolutionCost, Variable};
-use graph::{neighbors, properties};
+use graph::{algorithms, neighbors, properties};
 use graph::{GraphImpl, Subgraph};
 use instance::{Instance, WGraph};
 
