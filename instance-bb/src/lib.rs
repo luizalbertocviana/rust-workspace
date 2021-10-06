@@ -1,11 +1,12 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::once;
+use std::rc::Rc;
 
 use branch_bound as bb;
 use branch_bound::{SolutionCost, Variable};
-use graph::{Graph, neighbors, properties};
 use graph::GraphImpl;
-use instance::{Instance};
+use graph::{algorithms, neighbors, properties, Graph};
+use instance::Instance;
 
 #[derive(PartialEq, Eq, Hash, Clone)]
 struct Edge {
