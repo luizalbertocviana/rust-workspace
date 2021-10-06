@@ -36,7 +36,7 @@ pub trait BBProblem {
     /// solves problem relaxation, returning its relaxed solution
     fn solve_relaxation(&self) -> Self::Sol;
     /// returns iterator to subproblems
-    fn get_subproblems(&self) -> Self::SubproblemIterator;
+    fn get_subproblems(&self, solution: &Self::Sol) -> Self::SubproblemIterator;
 }
 /// trait for types representing data structures capable of managing
 /// subproblems for a branch and bound procedure

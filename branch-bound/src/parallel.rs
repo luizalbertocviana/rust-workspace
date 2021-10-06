@@ -76,7 +76,7 @@ fn worker<'a, T: BBProblem>(
                     let mut relaxed_problems = Vec::new();
                     // for each subproblem, store it and its
                     // relaxed solution in relaxed_problems
-                    for subproblem in problem.get_subproblems() {
+                    for subproblem in problem.get_subproblems(&relaxed_solution) {
                         let relaxed_sol = subproblem.solve_relaxation();
 
                         relaxed_problems.push((*subproblem, relaxed_sol));

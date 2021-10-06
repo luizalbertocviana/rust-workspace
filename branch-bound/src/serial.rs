@@ -36,7 +36,7 @@ pub fn branch_and_bound<T: BBProblem, P: RelaxedProblemPool<Prob = T>>(
                 }
             } else {
                 // in case relaxed_sol is infeasible, we branch problem
-                for subproblem in problem.get_subproblems() {
+                for subproblem in problem.get_subproblems(&relaxed_sol) {
                     // solves relaxation of each subproblem
                     let relaxed_sol = subproblem.solve_relaxation();
                     // if a best solution is known
