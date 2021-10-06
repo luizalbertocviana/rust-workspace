@@ -271,57 +271,64 @@ impl Iterator for SubproblemIterator {
     }
 }
 
-// impl<'a> BBProblem for Problem<'a> {
-//     type Sol = Solution;
+impl bb::BBProblem for Problem {
+    type Sol = Solution;
 
-//     type SubproblemIterator = SubproblemIterator<'a>;
+    type SubproblemIterator = SubproblemIterator;
 
-//     fn solve_relaxation(&self) -> Self::Sol {
-//         let tuple_edges = match self {
-//             Problem::Base(base_problem) => algorithms::kruskal(base_problem.instance.graph()),
-//             Problem::Derived(subproblem) => {
-//                 let edge_tuple_set = |edge_struct_set: HashSet<Edge>| {
-//                     edge_struct_set
-//                         .iter()
-//                         .map(|edge| (edge.u, edge.v))
-//                         .collect()
-//                 };
+    fn solve_relaxation(&self) -> Self::Sol {
+        let tuple_edges = match self {
+            Problem::Base(base_problem) => algorithms::kruskal(base_problem.instance.graph()),
+            Problem::Derived(subproblem) => {
+                let edge_tuple_set = |edge_struct_set: &HashSet<Edge>| {
+                    edge_struct_set
+                        .iter()
+                        .map(|edge| (edge.u, edge.v))
+                        .collect()
+                };
 
-//                 let initial_edges: HashSet<EdgeTuple> = edge_tuple_set(subproblem.added_edges);
-//                 let forbidden_edges: HashSet<EdgeTuple> = edge_tuple_set(subproblem.removed_edges);
+                let initial_edges: HashSet<EdgeTuple> = edge_tuple_set(&subproblem.added_edges);
+                let forbidden_edges: HashSet<EdgeTuple> = edge_tuple_set(&subproblem.removed_edges);
 
-//                 algorithms::custom_kruskal(
-//                     subproblem.base.instance.graph(),
-//                     &initial_edges,
-//                     &forbidden_edges,
-//                 )
-//             }
-//         };
+                algorithms::custom_kruskal(
+                    subproblem.base.instance.graph(),
+                    &initial_edges,
+                    &forbidden_edges,
+                )
+            }
+        };
 
-//         let edges = tuple_edges.iter().map(|(u, v)| Edge {u: *u, v: *v}).collect();
+        let edges = tuple_edges
+            .iter()
+            .map(|(u, v)| Edge { u: *u, v: *v })
+            .collect();
 
-//         let subgraph = {
-//             let mut subgraph = Graph::new(match self {
-//                 Problem::Base(base_problem) => base_problem.instance.graph().num_verts(),
-//                 Problem::Derived(subproblem) => subproblem.base.instance.graph().num_verts(),
-//             });
+        let subgraph = {
+            let mut subgraph = Graph::new(match self {
+                Problem::Base(base_problem) => base_problem.instance.graph().num_verts(),
+                Problem::Derived(subproblem) => subproblem.base.instance.graph().num_verts(),
+            });
 
-//             for (u, v) in tuple_edges {
-//                 subgraph.add_edge(u, v);
-//             }
+            for (u, v) in tuple_edges {
+                subgraph.add_edge(u, v).unwrap();
+            }
 
-//             subgraph
-//         };
+            subgraph
+        };
 
-//         let parent_problem = match self {
-//             Problem::Base(base_problem) => base_problem,
-//             Problem::Derived(subproblem) => subproblem.base,
-//         };
+        let parent_problem = match self {
+            Problem::Base(base_problem) => base_problem.clone(),
+            Problem::Derived(subproblem) => subproblem.base.clone(),
+        };
 
-//         Solution { edges, subgraph, parent_problem }
-//     }
+        Solution {
+            edges,
+            subgraph,
+            parent_problem,
+        }
+    }
 
-//     fn get_subproblems(&self) -> Self::SubproblemIterator {
-//         todo!()
-//     }
-// }
+    fn get_subproblems(&self, solution: &Self::Sol) -> Self::SubproblemIterator {
+        SubproblemIterator::new(self, solution)
+    }
+}
