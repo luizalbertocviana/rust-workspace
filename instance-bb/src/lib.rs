@@ -1,11 +1,10 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::once;
 
-use bb::BBProblem;
 use branch_bound as bb;
 use branch_bound::{SolutionCost, Variable};
-use graph::{Graph, algorithms, neighbors, properties};
-use graph::{GraphImpl};
+use graph::{Graph, neighbors, properties};
+use graph::GraphImpl;
 use instance::{Instance};
 
 #[derive(PartialEq, Eq, Hash, Clone)]
@@ -29,7 +28,7 @@ impl SolutionCost for EdgeWeight {}
 
 struct Solution<'a> {
     edges: HashSet<Edge>,
-    subgraph: Subgraph<'a, WGraph>,
+    subgraph: Graph,
     parent_problem: &'a BaseProblem<'a>,
 }
 
@@ -102,7 +101,7 @@ impl<'a> bb::Solution for Solution<'a> {
     }
 
     fn get_cost(&self) -> EdgeWeight {
-        let wg = self.subgraph.parent();
+        let wg = self.parent_problem.instance.graph();
 
         EdgeWeight {
             weight: self
