@@ -27,10 +27,10 @@ struct EdgeWeight {
 
 impl SolutionCost for EdgeWeight {}
 
-struct Solution<'a> {
+struct Solution {
     edges: HashSet<Edge>,
     subgraph: Graph,
-    parent_problem: &'a BaseProblem<'a>,
+    parent_problem: Rc<BaseProblem>,
 }
 
 #[derive(PartialEq)]
@@ -40,7 +40,7 @@ enum EdgeStatus {
     TooManyDeps,
 }
 
-impl<'a> Solution<'a> {
+impl Solution {
     fn edge_status(&self, edge: &Edge) -> EdgeStatus {
         let num_deps = self.num_deps(edge);
         let edge_tuple = (edge.u, edge.v);
@@ -93,7 +93,7 @@ impl<'a> Solution<'a> {
     }
 }
 
-impl<'a> bb::Solution for Solution<'a> {
+impl bb::Solution for Solution {
     type Var = Edge;
     type SolCost = EdgeWeight;
 
@@ -118,14 +118,14 @@ impl<'a> bb::Solution for Solution<'a> {
     }
 }
 
-struct BaseProblem<'a> {
-    instance: &'a Instance,
+struct BaseProblem {
+    instance: Box<Instance>,
     edge_to_index: HashMap<Edge, usize>,
     index_to_edge: Vec<Edge>,
 }
 
-impl<'a> BaseProblem<'a> {
-    fn new(instance: &'a Instance) -> Self {
+impl BaseProblem {
+    fn new(instance: Instance) -> Self {
         let mut edge_to_index = HashMap::new();
         let mut index_to_edge = Vec::new();
 
@@ -139,15 +139,15 @@ impl<'a> BaseProblem<'a> {
         }
 
         BaseProblem {
-            instance,
+            instance: Box::new(instance),
             edge_to_index,
             index_to_edge,
         }
     }
 }
 
-struct Subproblem<'a> {
-    base: &'a BaseProblem<'a>,
+struct Subproblem {
+    base: Rc<BaseProblem>,
 
     added_edges: HashSet<Edge>,
     removed_edges: HashSet<Edge>,
@@ -160,9 +160,9 @@ enum Derivation {
     NoChanges,
 }
 
-impl<'a> Subproblem<'a> {
+impl Subproblem {
     fn new(
-        base: &'a BaseProblem,
+        base: Rc<BaseProblem>,
         added_edges: HashSet<Edge>,
         removed_edges: HashSet<Edge>,
     ) -> Self {
@@ -173,12 +173,12 @@ impl<'a> Subproblem<'a> {
         }
     }
 
-    fn from_base_problem(base: &'a BaseProblem) -> Self {
+    fn from_base_problem(base: Rc<BaseProblem>) -> Self {
         Self::new(base, HashSet::new(), HashSet::new())
     }
 
-    fn from_subproblem(subproblem: &Subproblem<'a>) -> Self {
-        let base = subproblem.base;
+    fn from_subproblem(subproblem: &Subproblem) -> Self {
+        let base = subproblem.base.clone();
         let added_edges = subproblem.added_edges.clone();
         let removed_edges = subproblem.removed_edges.clone();
 
@@ -186,12 +186,12 @@ impl<'a> Subproblem<'a> {
     }
 
     fn from_problem<I: Iterator<Item = Edge>>(
-        problem: &'a Problem,
+        problem: &Problem,
         derivation: &Derivation,
         edges: I,
     ) -> Self {
         let mut base = match problem {
-            Problem::Base(base_problem) => Self::from_base_problem(base_problem),
+            Problem::Base(base_problem) => Self::from_base_problem(base_problem.clone()),
             Problem::Derived(subproblem) => Self::from_subproblem(subproblem),
         };
 
@@ -213,17 +213,17 @@ impl<'a> Subproblem<'a> {
     }
 }
 
-enum Problem<'a> {
-    Base(BaseProblem<'a>),
-    Derived(Subproblem<'a>),
+enum Problem {
+    Base(Rc<BaseProblem>),
+    Derived(Subproblem),
 }
 
-struct SubproblemIterator<'a> {
-    subproblems: Vec<Box<Problem<'a>>>,
+struct SubproblemIterator {
+    subproblems: Vec<Box<Problem>>,
 }
 
-impl<'a> SubproblemIterator<'a> {
-    fn new(parent_problem: &'a Problem, parent_solution: &'a Solution<'a>) -> Self {
+impl SubproblemIterator {
+    fn new(parent_problem: &Problem, parent_solution: &Solution) -> Self {
         let infeasible_edge = parent_solution
             .edges
             .iter()
@@ -263,8 +263,8 @@ impl<'a> SubproblemIterator<'a> {
     }
 }
 
-impl<'a> Iterator for SubproblemIterator<'a> {
-    type Item = Box<Problem<'a>>;
+impl Iterator for SubproblemIterator {
+    type Item = Box<Problem>;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.subproblems.pop()
