@@ -1,5 +1,5 @@
 [workspace]
 
 members = [
-        "matrix", "graph", "branch-bound", "disjoint-set", "instance-generators", "instance", "instance-bb"
+        "matrix", "graph", "branch-bound", "disjoint-set", "instance-generators", "instance", "instance-bb", "solving-manager"
 ]
