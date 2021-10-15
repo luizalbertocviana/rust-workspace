@@ -1,7 +1,7 @@
 use std::{collections::HashSet, rc::Rc};
 
 use branch_bound as bb;
-use graph::{neighbors, properties, Graph};
+use graph::{neighbors, properties, Graph, GraphImpl};
 
 use crate::problem::BaseProblem;
 
@@ -27,6 +27,19 @@ impl Solution {
             subgraph,
             parent_problem,
         }
+    }
+
+    pub fn cost(&self) -> usize {
+        self.subgraph
+            .edges()
+            .map(|(u, v)| {
+                self.parent_problem
+                    .instance()
+                    .graph()
+                    .get_edge_weight(u, v)
+                    .unwrap()
+            })
+            .sum()
     }
 
     pub fn edges(&self) -> &HashSet<Edge> {
