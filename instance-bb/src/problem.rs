@@ -1,10 +1,17 @@
-use std::{collections::{HashMap, HashSet}, rc::Rc};
+use std::{
+    collections::{HashMap, HashSet},
+    rc::Rc,
+};
 
 use branch_bound::BBProblem;
-use graph::{Graph, GraphImpl, algorithms};
+use graph::{algorithms, Graph, GraphImpl};
 use instance::Instance;
 
-use crate::{edge::{Edge, EdgeTuple}, solution::Solution, subproblem_iterator::SubproblemIterator};
+use crate::{
+    edge::{Edge, EdgeTuple},
+    solution::Solution,
+    subproblem_iterator::SubproblemIterator,
+};
 
 pub struct BaseProblem {
     instance: Box<Instance>,
@@ -13,7 +20,7 @@ pub struct BaseProblem {
 }
 
 impl BaseProblem {
-    fn new(instance: Instance) -> Self {
+    pub fn new(instance: Instance) -> Self {
         let mut edge_to_index = HashMap::new();
         let mut index_to_edge = Vec::new();
 
@@ -151,7 +158,8 @@ impl BBProblem for Problem {
                 };
 
                 let initial_edges: HashSet<EdgeTuple> = edge_tuple_set(&subproblem.added_edges());
-                let forbidden_edges: HashSet<EdgeTuple> = edge_tuple_set(&subproblem.removed_edges());
+                let forbidden_edges: HashSet<EdgeTuple> =
+                    edge_tuple_set(&subproblem.removed_edges());
 
                 algorithms::custom_kruskal(
                     subproblem.base().instance().graph(),
