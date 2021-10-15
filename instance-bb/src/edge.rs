@@ -12,7 +12,7 @@ impl Variable for Edge {
     type ValueType = bool;
 }
 
-#[derive(PartialEq, Eq, PartialOrd, Ord)]
+#[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone)]
 pub struct EdgeWeight {
     pub weight: usize,
 }
