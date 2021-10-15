@@ -1,7 +1,4 @@
-use std::{
-    collections::{HashMap, HashSet},
-    rc::Rc,
-};
+use std::{collections::{HashMap, HashSet}, sync::Arc};
 
 use branch_bound::BBProblem;
 use graph::{algorithms, Graph, GraphImpl};
@@ -14,13 +11,13 @@ use crate::{
 };
 
 pub struct BaseProblem {
-    instance: Box<Instance>,
+    instance: Arc<Instance>,
     edge_to_index: HashMap<Edge, usize>,
     index_to_edge: Vec<Edge>,
 }
 
 impl BaseProblem {
-    pub fn new(instance: Instance) -> Self {
+    pub fn new(instance: Arc<Instance>) -> Self {
         let mut edge_to_index = HashMap::new();
         let mut index_to_edge = Vec::new();
 
@@ -33,8 +30,8 @@ impl BaseProblem {
             i += 1;
         }
 
-        BaseProblem {
-            instance: Box::new(instance),
+        Self {
+            instance: instance.clone(),
             edge_to_index,
             index_to_edge,
         }
@@ -54,7 +51,7 @@ impl BaseProblem {
 }
 
 pub struct Subproblem {
-    base: Rc<BaseProblem>,
+    base: Arc<BaseProblem>,
 
     added_edges: HashSet<Edge>,
     removed_edges: HashSet<Edge>,
@@ -69,7 +66,7 @@ pub enum Derivation {
 
 impl Subproblem {
     fn new(
-        base: Rc<BaseProblem>,
+        base: Arc<BaseProblem>,
         added_edges: HashSet<Edge>,
         removed_edges: HashSet<Edge>,
     ) -> Self {
@@ -88,11 +85,11 @@ impl Subproblem {
         &self.removed_edges
     }
 
-    pub fn base(&self) -> Rc<BaseProblem> {
+    pub fn base(&self) -> Arc<BaseProblem> {
         self.base.clone()
     }
 
-    fn from_base_problem(base: Rc<BaseProblem>) -> Self {
+    fn from_base_problem(base: Arc<BaseProblem>) -> Self {
         Self::new(base, HashSet::new(), HashSet::new())
     }
 
@@ -137,7 +134,7 @@ impl Subproblem {
 }
 
 pub enum Problem {
-    Base(Rc<BaseProblem>),
+    Base(Arc<BaseProblem>),
     Derived(Subproblem),
 }
 

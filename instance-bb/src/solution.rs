@@ -1,4 +1,5 @@
-use std::{collections::HashSet, rc::Rc};
+use std::sync::Arc;
+use std::collections::HashSet;
 
 use branch_bound as bb;
 use graph::{neighbors, properties, Graph, GraphImpl};
@@ -10,7 +11,7 @@ use crate::edge::{Edge, EdgeWeight};
 pub struct Solution {
     edges: HashSet<Edge>,
     subgraph: Graph,
-    parent_problem: Rc<BaseProblem>,
+    parent_problem: Arc<BaseProblem>,
 }
 
 #[derive(PartialEq)]
@@ -21,7 +22,7 @@ pub enum EdgeStatus {
 }
 
 impl Solution {
-    pub fn new(edges: HashSet<Edge>, subgraph: Graph, parent_problem: Rc<BaseProblem>) -> Self {
+    pub fn new(edges: HashSet<Edge>, subgraph: Graph, parent_problem: Arc<BaseProblem>) -> Self {
         Self {
             edges,
             subgraph,
