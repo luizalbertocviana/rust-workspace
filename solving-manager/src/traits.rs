@@ -1,4 +1,7 @@
-use std::{fmt::Display, time::{Duration, Instant}};
+use std::{
+    fmt::Display,
+    time::{Duration, Instant},
+};
 
 pub trait Header {
     fn header() -> String;
@@ -31,6 +34,6 @@ pub type ReadingInfo<R> = <R as ReadBenchmark>::ReadingInfo;
 pub trait ReadBenchmark {
     type Benchmark: Benchmark;
     type ReadingInfo;
-    
+
     fn read_benchmark(reading_info: Self::ReadingInfo) -> Self::Benchmark;
 }
