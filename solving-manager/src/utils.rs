@@ -20,15 +20,13 @@ where
 
     let augmented_header = format!("Time {}\n", B::SolvingInfo::header());
 
-    file.write_all(augmented_header.as_bytes()).expect(&format!(
+    writeln!(file, "{}", augmented_header).expect(&format!(
         "error while writing the header of file {}",
         filename
     ));
 
     for (duration, info) in multiple_benchmark(benchs) {
-        let bench_str = format!("{} {}\n", duration.as_secs_f64(), info);
-
-        file.write_all(bench_str.as_bytes()).expect(&format!(
+        writeln!(file, "{} {}", duration.as_secs_f64(), info).expect(&format!(
             "error while writing benchmark line in file {}",
             filename
         ));
