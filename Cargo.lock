@@ -53,6 +53,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "instance-bb-solver"
+version = "0.1.0"
+dependencies = [
+ "branch-bound",
+ "instance",
+ "instance-bb",
+ "solving-manager",
+]
+
+[[package]]
 name = "instance-generators"
 version = "0.1.0"
 dependencies = [

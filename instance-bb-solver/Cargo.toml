@@ -1,0 +1,12 @@
+[package]
+name = "instance-bb-solver"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+branch-bound    = {path = "../branch-bound"}
+instance        = {path = "../instance"}
+instance-bb     = {path = "../instance-bb"}
+solving-manager = {path = "../solving-manager"}
