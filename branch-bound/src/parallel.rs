@@ -123,7 +123,7 @@ where
     // decreases the count of lb
     fn discard_lower_bound(&mut self, lb: SolCost<T>) {
         // we need to clone the return of get, otherwise count becomes
-        // a const ref forbiding us from call insert
+        // a const ref forbidding us from call insert
         match self.lower_bounds.get(&lb).cloned() {
             None => (),
             Some(count) => {
