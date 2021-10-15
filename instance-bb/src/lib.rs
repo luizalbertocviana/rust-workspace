@@ -1,4 +1,4 @@
 mod edge;
 pub mod problem;
-mod solution;
+pub mod solution;
 mod subproblem_iterator;
