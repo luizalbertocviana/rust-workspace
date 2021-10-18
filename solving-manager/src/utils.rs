@@ -10,7 +10,7 @@ where
     benchs.map(|bench| bench.benchmark())
 }
 
-pub fn write_multiple_benchmark<B, IB>(benchs: IB, filename: &String)
+fn write_multiple_benchmarks<B, IB>(benchs: IB, filename: &String)
 where
     B: Benchmark,
     IB: Iterator<Item = B>,
