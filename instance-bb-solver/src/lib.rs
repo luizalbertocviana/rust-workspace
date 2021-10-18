@@ -49,6 +49,14 @@ impl Header for SolvingInfo {
 
 impl Display for SolvingInfo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.solution_cost)
+        let status = match self.status {
+            SolutionStatus::Feasible => "feasible",
+            SolutionStatus::Infeasible => "infeasible",
+        };
+
+        write!(f, "{} {}", status, self.solution_cost)
+    }
+}
+
     }
 }
