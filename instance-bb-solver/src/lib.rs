@@ -58,5 +58,30 @@ impl Display for SolvingInfo {
     }
 }
 
+struct ReadingInfo {
+    graph_file: String,
+    deps_file: String,
+    bounds_file: String,
+    num_workers: usize,
+}
+
+struct ReadBenchmarkImpl;
+
+impl ReadBenchmark for ReadBenchmarkImpl {
+    type Benchmark = SolvableInstance;
+
+    type ReadingInfo = ReadingInfo;
+
+    fn read_benchmark(reading_info: Self::ReadingInfo) -> Self::Benchmark {
+        let instance = Instance::from_files(
+            &reading_info.graph_file,
+            &reading_info.deps_file,
+            &reading_info.bounds_file,
+        );
+
+        SolvableInstance {
+            instance: Arc::new(instance),
+            num_workers: reading_info.num_workers,
+        }
     }
 }
