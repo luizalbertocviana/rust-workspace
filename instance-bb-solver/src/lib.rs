@@ -2,7 +2,7 @@ use std::{fmt::Display, sync::Arc};
 
 use instance::Instance;
 use instance_bb::problem::{BaseProblem, Problem};
-use solving_manager::traits::{Header, Solve};
+use solving_manager::traits::{Benchmark, Header, ReadBenchmark, Solve};
 
 struct SolvableInstance {
     instance: Arc<Instance>,
