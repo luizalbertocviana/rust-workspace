@@ -29,6 +29,8 @@ impl Solve for SolvableInstance {
     }
 }
 
+impl Benchmark for SolvableInstance {}
+
 enum SolutionStatus {
     Feasible,
     Infeasible,
