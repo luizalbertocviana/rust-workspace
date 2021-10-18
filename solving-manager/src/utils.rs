@@ -18,7 +18,7 @@ where
     let mut file =
         File::create(filename).expect(&format!("error while creating file {}", filename));
 
-    let augmented_header = format!("Time {}\n", B::SolvingInfo::header());
+    let augmented_header = format!("{} Time", B::SolvingInfo::header());
 
     writeln!(file, "{}", augmented_header).expect(&format!(
         "error while writing the header of file {}",
@@ -26,7 +26,7 @@ where
     ));
 
     for (duration, info) in multiple_benchmark(benchs) {
-        writeln!(file, "{} {}", duration.as_secs_f64(), info).expect(&format!(
+        writeln!(file, "{} {}", info, duration.as_secs_f64()).expect(&format!(
             "error while writing benchmark line in file {}",
             filename
         ));
