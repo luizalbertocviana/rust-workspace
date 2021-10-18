@@ -43,7 +43,7 @@ struct SolvingInfo {
 
 impl Header for SolvingInfo {
     fn header() -> String {
-        "solution_cost".to_string()
+        "status solution_cost".to_string()
     }
 }
 
