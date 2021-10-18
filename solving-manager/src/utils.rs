@@ -40,5 +40,5 @@ where
 {
     let benchs = reading_infos.map(|reading_info| R::read_benchmark(reading_info));
 
-    write_multiple_benchmark(benchs, filename)
+    write_multiple_benchmarks(benchs, filename)
 }
