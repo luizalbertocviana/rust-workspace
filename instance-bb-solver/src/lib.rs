@@ -1,4 +1,4 @@
-use std::{fmt::Display, sync::Arc};
+use std::{fmt::Display, rc::Rc, sync::Arc};
 
 use instance::Instance;
 use instance_bb::problem::{BaseProblem, Problem};
@@ -6,7 +6,7 @@ use solving_manager::traits::{Benchmark, Header, ReadBenchmark, Solve};
 
 struct SolvableInstance {
     instance: Arc<Instance>,
-    num_workers: usize,
+    info: Rc<ReadingInfo>,
 }
 
 impl Solve for SolvableInstance {
@@ -15,7 +15,7 @@ impl Solve for SolvableInstance {
     fn solve(&self) -> Self::SolvingInfo {
         let problem = Problem::Base(Arc::new(BaseProblem::new(self.instance.clone())));
 
-        let solution = branch_bound::parallel(problem, self.num_workers);
+        let solution = branch_bound::parallel(problem, self.info.num_workers);
 
         let (status, solution_cost) = match solution {
             Some(sol) => (SolutionStatus::Feasible, sol.cost()),
@@ -25,6 +25,7 @@ impl Solve for SolvableInstance {
         SolvingInfo {
             status,
             solution_cost,
+            info: self.info.clone(),
         }
     }
 }
@@ -39,11 +40,12 @@ enum SolutionStatus {
 struct SolvingInfo {
     status: SolutionStatus,
     solution_cost: usize,
+    info: Rc<ReadingInfo>,
 }
 
 impl Header for SolvingInfo {
     fn header() -> String {
-        "status solution_cost".to_string()
+        "description status solution_cost".to_string()
     }
 }
 
@@ -54,7 +56,7 @@ impl Display for SolvingInfo {
             SolutionStatus::Infeasible => "infeasible",
         };
 
-        write!(f, "{} {}", status, self.solution_cost)
+        write!(f, "{} {} {}", self.info.description, status, self.solution_cost)
     }
 }
 
@@ -62,6 +64,7 @@ struct ReadingInfo {
     graph_file: String,
     deps_file: String,
     bounds_file: String,
+    description: String,
     num_workers: usize,
 }
 
@@ -81,7 +84,7 @@ impl ReadBenchmark for ReadBenchmarkImpl {
 
         SolvableInstance {
             instance: Arc::new(instance),
-            num_workers: reading_info.num_workers,
+            info: Rc::new(reading_info),
         }
     }
 }
