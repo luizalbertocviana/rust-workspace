@@ -4,7 +4,7 @@ use instance::Instance;
 use instance_bb::problem::{BaseProblem, Problem};
 use solving_manager::traits::{Benchmark, Header, ReadBenchmark, Solve};
 
-struct SolvableInstance {
+pub struct SolvableInstance {
     instance: Arc<Instance>,
     info: Rc<ReadingInfo>,
 }
@@ -37,7 +37,7 @@ enum SolutionStatus {
     Infeasible,
 }
 
-struct SolvingInfo {
+pub struct SolvingInfo {
     status: SolutionStatus,
     solution_cost: usize,
     info: Rc<ReadingInfo>,
@@ -60,15 +60,15 @@ impl Display for SolvingInfo {
     }
 }
 
-struct ReadingInfo {
-    graph_file: String,
-    deps_file: String,
-    bounds_file: String,
-    description: String,
-    num_workers: usize,
+pub struct ReadingInfo {
+    pub graph_file: String,
+    pub deps_file: String,
+    pub bounds_file: String,
+    pub description: String,
+    pub num_workers: usize,
 }
 
-struct ReadBenchmarkImpl;
+pub struct ReadBenchmarkImpl;
 
 impl ReadBenchmark for ReadBenchmarkImpl {
     type Benchmark = SolvableInstance;
