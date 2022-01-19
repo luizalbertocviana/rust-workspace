@@ -1,3 +1,4 @@
+use std::io::ErrorKind;
 pub use std::{fs::File, io::Write};
 
 use crate::traits::{Benchmark, BenchmarkInfo, Header, ReadBenchmark, ReadingInfo};
@@ -15,15 +16,25 @@ where
     B: Benchmark,
     IB: Iterator<Item = B>,
 {
-    let mut file =
-        File::create(filename).expect(&format!("error while creating file {}", filename));
+    let mut file = {
+        match File::options().append(true).open(filename) {
+            Ok(file) => file,
+            Err(err) if err.kind() == ErrorKind::NotFound => {
+                let mut file =
+                    File::create(filename).expect(&format!("unable to create file {}", filename));
 
-    let augmented_header = format!("{} Time", B::SolvingInfo::header());
+                let augmented_header = format!("{} Time", B::SolvingInfo::header());
 
-    writeln!(file, "{}", augmented_header).expect(&format!(
-        "error while writing the header of file {}",
-        filename
-    ));
+                writeln!(file, "{}", augmented_header).expect(&format!(
+                    "error while writing the header of file {}",
+                    filename
+                ));
+
+                file
+            }
+            Err(_) => panic!("unknown error when trying to append or create {}", filename),
+        }
+    };
 
     for (duration, info) in multiple_benchmark(benchs) {
         writeln!(file, "{} {}", info, duration.as_secs_f64()).expect(&format!(
