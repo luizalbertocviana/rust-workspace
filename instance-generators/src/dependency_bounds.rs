@@ -2,7 +2,7 @@ use std::{cmp::max, collections::HashMap};
 
 use rand::Rng;
 
-use graph::{properties::num_in_neighbors, Digraph, GraphImpl};
+use graph::{neighbors::num_in_neighbors, Digraph, GraphImpl};
 
 use instance::{WGraph, DependencyBound};
 
