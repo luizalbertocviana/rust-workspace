@@ -31,6 +31,8 @@ fn main() {
 
     let output_file = "parallel_branch_bound".to_string();
 
+    let already_solved_instances = already_solved_instances(&output_file);
+
     let files: Vec<DirEntry> = read_dir("./")
         .expect("error while reading current directory contents")
         .map(|entry| entry.expect("error while reading a particular entry in current directory"))
@@ -52,17 +54,23 @@ fn main() {
         })
         .collect();
 
-    let reading_infos: Vec<ReadingInfo> = g_files
+    let common_suffixes: Vec<String> = g_files
         .iter()
-        .map(|graph_file| -> ReadingInfo {
-            let common_suffix: String = graph_file
+        .map(|graph_file| {
+            graph_file
                 .file_name()
                 .to_str()
                 .unwrap()
                 .chars()
                 .skip(2)
-                .collect();
+                .collect()
+        })
+        .filter(|instance_suffix| !already_solved_instances.contains(instance_suffix))
+        .collect();
 
+    let reading_infos: Vec<ReadingInfo> = common_suffixes
+        .iter()
+        .map(|common_suffix| {
             let graph_file = "G_".to_string() + &common_suffix;
             let deps_file = "D_".to_string() + &common_suffix;
             let bounds_file = "B_".to_string() + &common_suffix;
@@ -71,10 +79,11 @@ fn main() {
                 graph_file,
                 deps_file,
                 bounds_file,
-                description: common_suffix,
+                description: common_suffix.to_string(),
                 num_workers,
             }
-        }).collect();
+        })
+        .collect();
 
     perform_multiple_benchmarks::<ReadBenchmarkImpl, _>(reading_infos.into_iter(), &output_file);
 }
