@@ -7,6 +7,25 @@ use std::{
 use instance_bb_solver::{ReadBenchmarkImpl, ReadingInfo};
 use solving_manager::utils::perform_multiple_benchmarks;
 
+fn already_solved_instances(log_file: &String) -> HashSet<String> {
+    let file = File::open(log_file).expect(&format!("error while opening file {}", log_file));
+
+    let file_lines = BufReader::new(file).lines();
+
+    let instance_lines = file_lines.skip(1);
+
+    instance_lines
+        .map(|instance_line| {
+            instance_line
+                .expect(&format!("error while reading a line from {}", log_file))
+                .split_whitespace()
+                .next()
+                .expect(&format!("unexpected malformed line in {}", log_file))
+                .to_string()
+        })
+        .collect()
+}
+
 fn main() {
     let num_workers = 4;
 
