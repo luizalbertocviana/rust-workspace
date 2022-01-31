@@ -1,29 +1,35 @@
 use std::{
     collections::HashSet,
     fs::{read_dir, DirEntry, File},
-    io::{BufRead, BufReader},
+    io::{BufRead, BufReader, ErrorKind},
 };
 
 use instance_bb_solver::{ReadBenchmarkImpl, ReadingInfo};
 use solving_manager::utils::perform_multiple_benchmarks;
 
 fn already_solved_instances(log_file: &String) -> HashSet<String> {
-    let file = File::open(log_file).expect(&format!("error while opening file {}", log_file));
+    let file = File::open(log_file);
 
-    let file_lines = BufReader::new(file).lines();
+    match file {
+        Ok(file) => {
+            let file_lines = BufReader::new(file).lines();
 
-    let instance_lines = file_lines.skip(1);
+            let instance_lines = file_lines.skip(1);
 
-    instance_lines
-        .map(|instance_line| {
-            instance_line
-                .expect(&format!("error while reading a line from {}", log_file))
-                .split_whitespace()
-                .next()
-                .expect(&format!("unexpected malformed line in {}", log_file))
-                .to_string()
-        })
-        .collect()
+            instance_lines
+                .map(|instance_line| {
+                    instance_line
+                        .expect(&format!("error while reading a line from {}", log_file))
+                        .split_whitespace()
+                        .next()
+                        .expect(&format!("unexpected malformed line in {}", log_file))
+                        .to_string()
+                })
+                .collect()
+        }
+        Err(err) if err.kind() == ErrorKind::NotFound => HashSet::new(),
+        Err(err) => panic!("{}", err),
+    }
 }
 
 fn main() {
