@@ -1,5 +1,6 @@
 use std::{
     collections::HashSet,
+    env,
     fs::{read_dir, DirEntry, File},
     io::{BufRead, BufReader, ErrorKind},
 };
@@ -33,13 +34,25 @@ fn already_solved_instances(log_file: &String) -> HashSet<String> {
 }
 
 fn main() {
-    let num_workers = 4;
+    let mut args = env::args().skip(1);
 
-    let output_file = "parallel_branch_bound".to_string();
+    let num_workers = args
+        .next()
+        .expect("at least three arguments should be provided")
+        .parse()
+        .expect("first argument should be the number of workers");
+
+    let output_file = args
+        .next()
+        .expect("at least three arguments should be proided");
+
+    let instances_directory = args
+        .next()
+        .expect("at least three arguments should be provided");
 
     let already_solved_instances = already_solved_instances(&output_file);
 
-    let files: Vec<DirEntry> = read_dir("./")
+    let files: Vec<DirEntry> = read_dir(instances_directory)
         .expect("error while reading current directory contents")
         .map(|entry| entry.expect("error while reading a particular entry in current directory"))
         .filter(|entry| {
