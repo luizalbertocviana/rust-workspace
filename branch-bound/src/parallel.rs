@@ -245,12 +245,12 @@ where
                     // accounts for a subproblem sent to the
                     // worker threads
                     open_subproblems += 1;
+                    // updates lower bound to be the minimum active lower bound
+                    if let Some(min_lb) = lb_manager.min_lower_bound().cloned() {
+                        status.set_lower_bound(min_lb).unwrap();
+                    }
                 }
             }
-        }
-        // updates lower bound to be the minimum active lower bound
-        if let Some(min_lb) = lb_manager.min_lower_bound().cloned() {
-            status.set_lower_bound(min_lb).unwrap();
         }
     }
     // once the solving process has ended, sends a finishing message
