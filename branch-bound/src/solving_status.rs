@@ -38,7 +38,7 @@ impl<T: BBProblem> SolvingStatus<T> {
         match (&self.lower_bound, &self.upper_bound) {
             (None, _) => false,
             (_, None) => false,
-            (Some(lb), Some(ub)) => *lb == *ub,
+            (Some(lb), Some(ub)) => *lb >= *ub,
         }
     }
     /// gets reference to Option possibly containing best solution
@@ -49,12 +49,12 @@ impl<T: BBProblem> SolvingStatus<T> {
 
 // modifiers
 impl<T: BBProblem> SolvingStatus<T> {
-    /// sets lower bound. Returns error in case lb is greater than
-    /// upper bound
+    /// sets lower bound. Returns error in case lb is less than
+    /// current lower bound
     pub fn set_lower_bound(&mut self, lb: SolCost<T>) -> Result {
-        if let Some(ub) = &self.upper_bound {
-            if lb > *ub {
-                Err("SolvingStatus: attempt to set a lower bound greater than current upper bound")
+        if let Some(current_lb) = &self.lower_bound {
+            if lb < *current_lb {
+                Err("SolvingStatus: attempt to set a lower bound less than current lower bound")
             } else {
                 self.lower_bound.replace(lb);
 
