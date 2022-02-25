@@ -45,6 +45,10 @@ impl<T: BBProblem> SolvingStatus<T> {
     pub fn best_solution(&self) -> &Option<Sol<T>> {
         &self.best_solution
     }
+    /// gets reference to Option possibly containing upper bound
+    pub fn upper_bound(&self) -> &Option<SolCost<T>> {
+        &self.upper_bound
+    }
 }
 
 // modifiers
