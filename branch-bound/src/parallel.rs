@@ -235,16 +235,21 @@ where
                 // for each of its subprolems and the
                 // corresponding relaxed solution
                 for (problem, relaxed_sol) in relaxed_subproblems {
-                    // takes the relaxed solution cost into
-                    // account as a lower bound
-                    lb_manager.register_lower_bound(relaxed_sol.get_cost());
-                    // sends the subproblem and the
-                    // corresponding relaxed solution to the
-                    // worker threads
-                    cyclic_send(Message::Treat(problem, relaxed_sol));
-                    // accounts for a subproblem sent to the
-                    // worker threads
-                    open_subproblems += 1;
+                    let relaxed_sol_cost = relaxed_sol.get_cost();
+                    if status.upper_bound().is_none()
+                        || relaxed_sol_cost < *status.upper_bound().as_ref().unwrap()
+                    {
+                        // takes the relaxed solution cost into
+                        // account as a lower bound
+                        lb_manager.register_lower_bound(relaxed_sol_cost);
+                        // sends the subproblem and the
+                        // corresponding relaxed solution to the
+                        // worker threads
+                        cyclic_send(Message::Treat(problem, relaxed_sol));
+                        // accounts for a subproblem sent to the
+                        // worker threads
+                        open_subproblems += 1;
+                    }
                 }
                 // updates lower bound to be the minimum active lower bound
                 if let Some(min_lb) = lb_manager.min_lower_bound().cloned() {
