@@ -221,8 +221,8 @@ where
             // compares its solution with the best solution
             // found so far
             SolvingInformation::Feasible(solution) => {
-                if let Some(best_sol) = status.best_solution() {
-                    if solution.get_cost() < best_sol.get_cost() {
+                if let Some(current_ub) = status.upper_bound() {
+                    if solution.get_cost() < *current_ub {
                         status.set_best_solution(solution).unwrap();
                     }
                 } else {
