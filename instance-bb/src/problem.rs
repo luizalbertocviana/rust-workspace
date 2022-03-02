@@ -60,13 +60,6 @@ pub struct Subproblem {
     removed_edges: HashSet<Edge>,
 }
 
-#[derive(PartialEq)]
-pub enum Derivation {
-    AddingEdges,
-    RemovingEdges,
-    NoChanges,
-}
-
 impl Subproblem {
     fn new(
         base: Arc<BaseProblem>,
@@ -104,28 +97,22 @@ impl Subproblem {
         Self::new(base, added_edges, removed_edges)
     }
 
-    pub fn from_problem<I: Iterator<Item = Edge>>(
+    pub fn from_problem<I1: Iterator<Item = Edge>, I2: Iterator<Item = Edge>>(
         problem: &Problem,
-        derivation: &Derivation,
-        edges: I,
+        added_edges: I1,
+        removed_edges: I2,
     ) -> Self {
         let mut base = match problem {
             Problem::Base(base_problem) => Self::from_base_problem(base_problem.clone()),
             Problem::Derived(subproblem) => Self::from_subproblem(subproblem),
         };
 
-        match derivation {
-            Derivation::AddingEdges => {
-                for edge in edges {
-                    base.added_edges.insert(edge);
-                }
-            }
-            Derivation::RemovingEdges => {
-                for edge in edges {
-                    base.removed_edges.insert(edge);
-                }
-            }
-            Derivation::NoChanges => (),
+        for edge in added_edges {
+            base.added_edges.insert(edge);
+        }
+
+        for edge in removed_edges {
+            base.removed_edges.insert(edge);
         }
 
         base
