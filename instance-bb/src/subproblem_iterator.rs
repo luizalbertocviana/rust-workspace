@@ -11,18 +11,18 @@ pub struct SubproblemIterator {
 
 impl SubproblemIterator {
     pub fn new(parent_problem: &Problem, parent_solution: &Solution) -> Self {
-        let infeasible_edge = match parent_problem {
+        let non_fixed_infeasible_edge = match parent_problem {
             Problem::Base(_base_problem) => parent_solution
                 .edges()
                 .iter()
                 .find(|edge| parent_solution.edge_status(edge) != EdgeStatus::Feasible)
-                .expect("SubproblemIterator instantiated for a problem whose edges are all feasible"),
+                .expect("SubproblemIterator instantiated for a base problem whose solution edges are all feasible"),
             Problem::Derived(subproblem) => parent_solution
                 .edges()
                 .iter()
                 .filter(|edge| !subproblem.fixed_edge(edge))
                 .find(|edge| parent_solution.edge_status(edge) != EdgeStatus::Feasible)
-                .expect("SubproblemIterator instantiated for a subproblem whose free edges are all feasible")
+                .expect("SubproblemIterator instantiated for a subproblem whose solution free edges are all feasible")
         };
 
         let mut subproblems = Vec::new();
@@ -32,24 +32,47 @@ impl SubproblemIterator {
 
         let subproblem_without_infeasible_edge = Subproblem::from_problem(
             parent_problem,
-            &Derivation::RemovingEdges,
-            once(infeasible_edge.clone()),
+            iter::empty(),
+            iter::once(non_fixed_infeasible_edge.clone()),
         );
 
         add_subproblem(subproblem_without_infeasible_edge);
 
-        let derivation_strategy = match parent_solution.edge_status(infeasible_edge) {
-            EdgeStatus::TooManyDeps => Derivation::RemovingEdges,
-            EdgeStatus::TooFewDeps => Derivation::AddingEdges,
-            EdgeStatus::Feasible => Derivation::NoChanges,
+        let non_fixed_infeasible_edge_status =
+            parent_solution.edge_status(non_fixed_infeasible_edge);
+
+        let non_fixed_deps_of_infeasible_edge = {
+            let deps = parent_solution.deps(non_fixed_infeasible_edge);
+
+            match parent_problem {
+                Problem::Base(_base_problem) => deps,
+                Problem::Derived(subproblem) => deps
+                    .into_iter()
+                    .filter(|edge| !subproblem.fixed_edge(edge))
+                    .collect(),
+            }
         };
 
-        for infeasible_edge_dep in parent_solution.deps(infeasible_edge) {
-            let derived_subproblem = Subproblem::from_problem(
-                parent_problem,
-                &derivation_strategy,
-                once(infeasible_edge_dep.clone()),
-            );
+        for non_fixed_infeasible_edge_dep in non_fixed_deps_of_infeasible_edge {
+            let derived_subproblem = match non_fixed_infeasible_edge_status {
+                EdgeStatus::Feasible => {
+                    Subproblem::from_problem(parent_problem, iter::empty(), iter::empty())
+                }
+                EdgeStatus::TooFewDeps => Subproblem::from_problem(
+                    parent_problem,
+                    vec![
+                        non_fixed_infeasible_edge.clone(),
+                        non_fixed_infeasible_edge_dep.clone(),
+                    ]
+                    .into_iter(),
+                    iter::empty(),
+                ),
+                EdgeStatus::TooManyDeps => Subproblem::from_problem(
+                    parent_problem,
+                    iter::once(non_fixed_infeasible_edge.clone()),
+                    iter::once(non_fixed_infeasible_edge_dep.clone()),
+                ),
+            };
 
             add_subproblem(derived_subproblem);
         }
