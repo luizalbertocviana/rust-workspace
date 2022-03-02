@@ -1,6 +1,9 @@
-use std::iter::once;
+use std::iter;
 
-use crate::{problem::{Derivation, Problem, Subproblem}, solution::{EdgeStatus, Solution}};
+use crate::{
+    problem::{Problem, Subproblem},
+    solution::{EdgeStatus, Solution},
+};
 
 pub struct SubproblemIterator {
     subproblems: Vec<Box<Problem>>,
