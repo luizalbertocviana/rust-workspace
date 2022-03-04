@@ -21,35 +21,44 @@ type Sol<T> = <T as BBProblem>::Sol;
 type SolCost<T> = <Sol<T> as Solution>::SolCost;
 // message to be delivired to a worker thread: instructs worker to
 // either finish execution or treat a relaxed subproblem
-enum Message<T: BBProblem> {
+enum MessageToWorker<T: BBProblem> {
     Finish,
     Treat(T, T::Sol),
+}
+// information regarding a subproblem of an infeasible problem
+struct InfeasibleProblemSubproblemInformation<T: BBProblem> {
+    subproblem: T,
+    relaxed_solution: T::Sol,
+    relaxed_sol_is_feasible: bool,
 }
 // message to be delivred from a worker thread to the main thread:
 // indicates that either a feasible solution was found or a subproblem
 // has been branched into some other subproblems
-enum SolvingInformation<T: BBProblem> {
-    Feasible(T::Sol),
-    Branched(Vec<(T, T::Sol)>),
+struct MessageFromWorker<T: BBProblem> {
+    paremt_problem_relaxed_sol_cost: SolCost<T>,
+    infeasible_subproblems_infos: Vec<InfeasibleProblemSubproblemInformation<T>>,
 }
 // type alias for a pair of sender and receiver representing a channel
 // from a worker thread to the main thread. Besides
 // SolvingInformation, the solution cost of the relaxed solution of
 // the subproblem just treated is part of the message to the main thread
 type ChannelFromWorker<T> = (
-    mpsc::Sender<(SolCost<T>, SolvingInformation<T>)>,
-    mpsc::Receiver<(SolCost<T>, SolvingInformation<T>)>,
+    mpsc::Sender<MessageFromWorker<T>>,
+    mpsc::Receiver<MessageFromWorker<T>>,
 );
 // type alias for a pair of sender and receiver representing a channel
 // from the main thread to a worker thread
-type ChannelToWorker<T> = (mpsc::Sender<Message<T>>, mpsc::Receiver<Message<T>>);
+type ChannelToWorker<T> = (
+    mpsc::Sender<MessageToWorker<T>>,
+    mpsc::Receiver<MessageToWorker<T>>,
+);
 // this function represents the behavior of a worker thread. Its
 // arguments are a sender to the main thread and a receiver to get
 // messages from the main thread. Returns an error in case something
 // goes wrong while sending or receiving messages
 fn worker<'a, T: BBProblem>(
-    sender: mpsc::Sender<(SolCost<T>, SolvingInformation<T>)>,
-    receiver: mpsc::Receiver<Message<T>>,
+    sender: mpsc::Sender<MessageFromWorker<T>>,
+    receiver: mpsc::Receiver<MessageToWorker<T>>,
 ) -> Result<'a> {
     // this thread only finishes when it receives the corresponding message
     loop {
@@ -59,36 +68,33 @@ fn worker<'a, T: BBProblem>(
         );
         match msg {
             // if message tells to finish execution, returns Ok
-            Message::Finish => return Ok(()),
+            MessageToWorker::Finish => return Ok(()),
             // if message brings a problem and its relaxed
             // solution, treat that information
-            Message::Treat(problem, relaxed_solution) => {
-                // if the relaxed solution is feasible
-                if relaxed_solution.is_feasible() {
-                    // send a message to the main thread telling
-                    // just that
-                    sender.send((relaxed_solution.get_cost(), SolvingInformation::Feasible(relaxed_solution))).expect(
-                        "worker: something went wrong when sending a message to parallel::branch_and_bound"
-                    );
-                } else {
-                    // in case relaxed solution is infeasible,
-                    // prepare to branch the subproblem
-                    let mut relaxed_problems = Vec::new();
-                    // for each subproblem, store it and its
-                    // relaxed solution in relaxed_problems
-                    for subproblem in problem.get_subproblems(&relaxed_solution) {
-                        let relaxed_sol = subproblem.solve_relaxation();
+            MessageToWorker::Treat(infeasible_problem, relaxed_solution) => {
+                // in case relaxed solution is infeasible,
+                // prepare to branch the subproblem
+                let mut infeasible_subproblems_infos = Vec::new();
+                // for each subproblem, store it and its
+                // relaxed solution in relaxed_problems
+                for subproblem in infeasible_problem.get_subproblems(&relaxed_solution) {
+                    let relaxed_solution = subproblem.solve_relaxation();
 
-                        relaxed_problems.push((*subproblem, relaxed_sol));
-                    }
-                    // send a message to the main thread
-                    // containing new subproblems (and their
-                    // relaxad solutions) to be distributed among
-                    // worker threads
-                    sender.send((relaxed_solution.get_cost(), SolvingInformation::Branched(relaxed_problems))).expect(
-                        "worker: something went wrong when sending a message to parallel::branch_and_bound"
-                    );
+                    infeasible_subproblems_infos.push(InfeasibleProblemSubproblemInformation {
+                        subproblem: *subproblem,
+                        relaxed_sol_is_feasible: relaxed_solution.is_feasible(),
+                        relaxed_solution,
+                    });
                 }
+                // send a message to the main thread
+                // containing new subproblems (and their
+                // relaxad solutions) to be distributed among
+                // worker threads
+                sender.send(MessageFromWorker {
+                    paremt_problem_relaxed_sol_cost: relaxed_solution.get_cost(),
+                    infeasible_subproblems_infos }).expect(
+                    "worker: something went wrong when sending a message to parallel::branch_and_bound"
+                );
             }
         }
     }
@@ -197,71 +203,68 @@ where
     // registers its relaxed solution cost as our initial lower bound
     lb_manager.register_lower_bound(root_relaxed_sol.get_cost());
     status.set_lower_bound(root_relaxed_sol.get_cost()).unwrap();
-    // sends problem and its relaxed solution to be treated by the
-    // worker threads
-    cyclic_send(Message::Treat(problem, root_relaxed_sol));
-    // accounts for problem that has just been sent to the worker threads
-    open_subproblems += 1;
+    // if its relaxed solution is feasible, registers it as as the best known solution
+    if root_relaxed_sol.is_feasible() {
+        status.set_best_solution(root_relaxed_sol).unwrap();
+    } else {
+        // otherwise sends problem and its relaxed solution to be treated by the
+        // worker threads
+        cyclic_send(MessageToWorker::Treat(problem, root_relaxed_sol));
+        // accounts for problem that has just been sent to the worker threads
+        open_subproblems += 1;
+    }
     // while solving is not finished and there are subproblems to be
     // treated by the worker threads
     while !status.finished() && open_subproblems > 0 {
         // tries to receive a message from the working threads
-        let (parent_relaxed_sol_cost, solving_information) = main_receiver.recv().expect(
+        let solving_information = main_receiver.recv().expect(
             "parallel::branch_and_bound: something went wrong when receiving a message from a worker thread"
         );
         // accounsts from a subproblem that has been reported
         // back by the worker threads
         open_subproblems -= 1;
+        // treats solving_information
         // since this reported subproblem has been closed,
         // discard its relaxed solution cost
-        lb_manager.discard_lower_bound(parent_relaxed_sol_cost);
-        // treats solving_information
-        match solving_information {
-            // in case reported subproblem is feasible,
-            // compares its solution with the best solution
-            // found so far
-            SolvingInformation::Feasible(solution) => {
+        lb_manager.discard_lower_bound(solving_information.paremt_problem_relaxed_sol_cost);
+        // for each of its subprolems and the
+        // corresponding relaxed solution
+        for subproblem_info in solving_information.infeasible_subproblems_infos {
+            let relaxed_sol_cost = subproblem_info.relaxed_solution.get_cost();
+            if subproblem_info.relaxed_sol_is_feasible {
                 if let Some(current_ub) = status.upper_bound() {
-                    if solution.get_cost() < *current_ub {
-                        status.set_best_solution(solution).unwrap();
+                    if relaxed_sol_cost < *current_ub {
+                        status.set_best_solution(subproblem_info.relaxed_solution).unwrap();
                     }
                 } else {
-                    status.set_best_solution(solution).unwrap();
+                    status.set_best_solution(subproblem_info.relaxed_solution).unwrap();
+                }
+            } else {
+                if status.upper_bound().is_none()
+                    || relaxed_sol_cost < *status.upper_bound().as_ref().unwrap()
+                {
+                    // takes the relaxed solution cost into
+                    // account as a lower bound
+                    lb_manager.register_lower_bound(relaxed_sol_cost);
+                    // sends the subproblem and the
+                    // corresponding relaxed solution to the
+                    // worker threads
+                    cyclic_send(MessageToWorker::Treat(subproblem_info.subproblem, subproblem_info.relaxed_solution));
+                    // accounts for a subproblem sent to the
+                    // worker threads
+                    open_subproblems += 1;
                 }
             }
-            // in case reported problem is infeasible, treat
-            // its subproblems
-            SolvingInformation::Branched(relaxed_subproblems) => {
-                // for each of its subprolems and the
-                // corresponding relaxed solution
-                for (problem, relaxed_sol) in relaxed_subproblems {
-                    let relaxed_sol_cost = relaxed_sol.get_cost();
-                    if status.upper_bound().is_none()
-                        || relaxed_sol_cost < *status.upper_bound().as_ref().unwrap()
-                    {
-                        // takes the relaxed solution cost into
-                        // account as a lower bound
-                        lb_manager.register_lower_bound(relaxed_sol_cost);
-                        // sends the subproblem and the
-                        // corresponding relaxed solution to the
-                        // worker threads
-                        cyclic_send(Message::Treat(problem, relaxed_sol));
-                        // accounts for a subproblem sent to the
-                        // worker threads
-                        open_subproblems += 1;
-                    }
-                }
-                // updates lower bound to be the minimum active lower bound
-                if let Some(min_lb) = lb_manager.min_lower_bound().cloned() {
-                    status.set_lower_bound(min_lb).unwrap();
-                }
-            }
+        }
+        // updates lower bound to be the minimum active lower bound
+        if let Some(min_lb) = lb_manager.min_lower_bound().cloned() {
+            status.set_lower_bound(min_lb).unwrap();
         }
     }
     // once the solving process has ended, sends a finishing message
     // to each worker thread
     for _ in 0..num_workers {
-        cyclic_send(Message::Finish);
+        cyclic_send(MessageToWorker::Finish);
     }
     // waits for each worker thread to finish
     for handler in worker_handler {
