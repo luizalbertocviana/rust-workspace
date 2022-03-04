@@ -53,6 +53,8 @@ impl SubproblemIterator {
             }
         };
 
+        let mut treated_non_fixed_infeasible_edge_deps = Vec::new();
+
         for non_fixed_infeasible_edge_dep in non_fixed_deps_of_infeasible_edge {
             let derived_subproblem = match non_fixed_infeasible_edge_status {
                 EdgeStatus::Feasible => {
@@ -65,16 +67,20 @@ impl SubproblemIterator {
                         non_fixed_infeasible_edge_dep.clone(),
                     ]
                     .into_iter(),
-                    iter::empty(),
+                    treated_non_fixed_infeasible_edge_deps.iter().cloned(),
                 ),
                 EdgeStatus::TooManyDeps => Subproblem::from_problem(
                     parent_problem,
-                    iter::once(non_fixed_infeasible_edge.clone()),
+                    iter::once(non_fixed_infeasible_edge)
+                        .chain(treated_non_fixed_infeasible_edge_deps.iter())
+                        .cloned(),
                     iter::once(non_fixed_infeasible_edge_dep.clone()),
                 ),
             };
 
             add_subproblem(derived_subproblem);
+
+            treated_non_fixed_infeasible_edge_deps.push(non_fixed_infeasible_edge_dep.clone());
         }
 
         Self { subproblems }
